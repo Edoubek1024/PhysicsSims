@@ -4,8 +4,10 @@ import { Link } from 'react-router-dom';
 
 type Vec2 = { x: number; y: number };
 
+const MAX_INCLINE_ANGLE_DEG = 30;
+
 type ControlsState = {
-  angleDeg: number; // 0 -> 60
+  angleDeg: number; // 0 … 30°
   muS: number; // 0 -> 1
   muK: number; // 0 -> 1
 };
@@ -24,6 +26,13 @@ const METERS_PER_PX = 0.05;
 
 /** Matches the rounded-rect + grid inset in `render` (same as stroke at 6,6 … w-12,h-12). */
 const GRID_INSET_PX = 6;
+
+/** Canvas stroke width for the incline line — box must sit on the outer surface, not the stroke center. */
+const PLANE_STROKE_PX = 16;
+
+/** Extra inset so the full triangle + thick stroke stay inside the rounded view (avoids right-edge clip). */
+const TRIANGLE_MARGIN_RIGHT_PX = 28;
+const TRIANGLE_MARGIN_TOP_PX = 8;
 
 const SIMULATION_SPEED = 1;
 const TARGET_FPS = 60;
@@ -297,10 +306,13 @@ export function BoxOnIncline() {
   useEffect(() => {
     // Enforce constraint even if user edits values programmatically.
     setControls((prev) => {
+      const nextAngleDeg = clamp(prev.angleDeg, 0, MAX_INCLINE_ANGLE_DEG);
       const nextMuK = clamp(prev.muK, 0, 1);
       const nextMuS = clamp(prev.muS, 0, 1);
-      if (nextMuS < nextMuK) return { ...prev, muS: nextMuK, muK: nextMuK };
-      return { ...prev, muS: nextMuS, muK: nextMuK };
+      if (nextMuS < nextMuK) {
+        return { ...prev, angleDeg: nextAngleDeg, muS: nextMuK, muK: nextMuK };
+      }
+      return { ...prev, angleDeg: nextAngleDeg, muS: nextMuS, muK: nextMuK };
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -351,13 +363,13 @@ export function BoxOnIncline() {
 
     const derived = derivedForcesRef.current;
     const posPx = posS_mRef.current / METERS_PER_PX;
-    const contactPx = {
-      x: geom.topPx.x + geom.uDownSlope.x * posPx,
-      y: geom.topPx.y + geom.uDownSlope.y * posPx,
+    const contactOnSurfacePx = {
+      x: geom.topPx.x + geom.uDownSlope.x * posPx + geom.nOutward.x * (PLANE_STROKE_PX / 2),
+      y: geom.topPx.y + geom.uDownSlope.y * posPx + geom.nOutward.y * (PLANE_STROKE_PX / 2),
     };
     const boxCenterPx = {
-      x: contactPx.x + geom.nOutward.x * (BOX_SIZE_PX / 2),
-      y: contactPx.y + geom.nOutward.y * (BOX_SIZE_PX / 2),
+      x: contactOnSurfacePx.x + geom.nOutward.x * (BOX_SIZE_PX / 2),
+      y: contactOnSurfacePx.y + geom.nOutward.y * (BOX_SIZE_PX / 2),
     };
 
     setUiSnapshot({
@@ -439,22 +451,22 @@ export function BoxOnIncline() {
     ctx.save();
     ctx.lineCap = 'round';
     ctx.strokeStyle = 'rgba(4,120,87,0.72)';
-    ctx.lineWidth = 16;
+    ctx.lineWidth = PLANE_STROKE_PX;
     ctx.beginPath();
     ctx.moveTo(geom.topPx.x, geom.topPx.y);
     ctx.lineTo(geom.baseRightPx.x, geom.baseRightPx.y);
     ctx.stroke();
     ctx.restore();
 
-    // Box
+    // Box (contact on outer surface of ramp stroke, not centerline)
     const posPx = posS_mRef.current / METERS_PER_PX;
-    const contactPx = {
-      x: geom.topPx.x + geom.uDownSlope.x * posPx,
-      y: geom.topPx.y + geom.uDownSlope.y * posPx,
+    const contactOnSurfacePx = {
+      x: geom.topPx.x + geom.uDownSlope.x * posPx + geom.nOutward.x * (PLANE_STROKE_PX / 2),
+      y: geom.topPx.y + geom.uDownSlope.y * posPx + geom.nOutward.y * (PLANE_STROKE_PX / 2),
     };
     const centerPx = {
-      x: contactPx.x + geom.nOutward.x * (BOX_SIZE_PX / 2),
-      y: contactPx.y + geom.nOutward.y * (BOX_SIZE_PX / 2),
+      x: contactOnSurfacePx.x + geom.nOutward.x * (BOX_SIZE_PX / 2),
+      y: contactOnSurfacePx.y + geom.nOutward.y * (BOX_SIZE_PX / 2),
     };
 
     ctx.save();
@@ -495,8 +507,8 @@ export function BoxOnIncline() {
     // Right triangle: base along the bottom inner edge (left → right), incline from left apex
     // down to bottom-right. The angle at bottom-right between the base and the incline is θ.
     const innerLeft = GRID_INSET_PX;
-    const innerRight = geomW - GRID_INSET_PX;
-    const innerTop = GRID_INSET_PX;
+    const innerRight = geomW - GRID_INSET_PX - TRIANGLE_MARGIN_RIGHT_PX;
+    const innerTop = GRID_INSET_PX + TRIANGLE_MARGIN_TOP_PX;
     const innerBottom = geomH - GRID_INSET_PX;
     const baseW = Math.max(1, innerRight - innerLeft);
     const maxRise = Math.max(1, innerBottom - innerTop - 28);
@@ -513,7 +525,8 @@ export function BoxOnIncline() {
     const planeLengthM = planeLengthPx * METERS_PER_PX;
 
     const uDownSlope = { x: runPx / planeLengthPx, y: riseAlongPx / planeLengthPx };
-    const nOutward = { x: -uDownSlope.y, y: uDownSlope.x };
+    // Perpendicular to the ramp, pointing from the surface toward the open air above the wedge (screen y decreases).
+    const nOutward = { x: uDownSlope.y, y: -uDownSlope.x };
     const sinTheta = riseAlongPx / planeLengthPx;
     const cosTheta = runPx / planeLengthPx;
     const angleRad = Math.atan2(riseAlongPx, runPx);
@@ -681,7 +694,7 @@ export function BoxOnIncline() {
   const handleControlChange = (field: keyof ControlsState, value: number) => {
     setControls((prev) => {
       if (field === 'angleDeg') {
-        return { ...prev, angleDeg: clamp(value, 0, 60) };
+        return { ...prev, angleDeg: clamp(value, 0, MAX_INCLINE_ANGLE_DEG) };
       }
       if (field === 'muK') {
         const muK = clamp(value, 0, 1);
@@ -822,7 +835,7 @@ export function BoxOnIncline() {
     ) : null;
 
   return (
-    <div className="mx-auto flex min-h-screen max-w-6xl flex-col px-4 py-8 text-slate-100">
+    <div className="mx-auto flex min-h-screen max-w-[90rem] flex-col px-4 py-8 text-slate-100">
       <header className="mb-6 flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-4">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-400">
@@ -851,7 +864,64 @@ export function BoxOnIncline() {
         </div>
       </header>
 
-      <main className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+      <section className="mb-6 rounded-2xl border border-slate-800 bg-slate-900/80 p-5 shadow-lg shadow-slate-950/40">
+        <h2 className="text-sm font-semibold tracking-wide text-sky-300">Color key</h2>
+        <p className="mt-1 text-xs text-slate-300">
+          Arrow colors indicate each force (and gravity components) drawn on the incline canvas.
+        </p>
+        <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-3">
+          <div className="flex items-center gap-2">
+            <span
+              className="h-3 w-8 shrink-0 rounded border border-slate-500/50 opacity-60"
+              style={{ backgroundColor: '#a78bfa' }}
+              aria-hidden
+            />
+            <span className="text-xs text-slate-200">Gravity (mg)</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span
+              className="h-3 w-8 shrink-0 rounded border border-slate-500/50"
+              style={{ backgroundColor: '#22c55e' }}
+              aria-hidden
+            />
+            <span className="text-xs text-slate-200">Normal force (N)</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span
+              className="h-3 w-8 shrink-0 rounded border border-slate-500/50"
+              style={{ backgroundColor: '#f97316' }}
+              aria-hidden
+            />
+            <span className="text-xs text-slate-200">Friction (f)</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span
+              className="h-3 w-8 shrink-0 rounded border border-slate-500/50"
+              style={{ backgroundColor: '#38bdf8' }}
+              aria-hidden
+            />
+            <span className="text-xs text-slate-200">Gravity parallel (mg sinθ)</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span
+              className="h-3 w-8 shrink-0 rounded border border-slate-500/50"
+              style={{ backgroundColor: '#eab308' }}
+              aria-hidden
+            />
+            <span className="text-xs text-slate-200">Gravity perpendicular (mg cosθ)</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span
+              className="h-3 w-8 shrink-0 rounded border border-red-400/60"
+              style={{ backgroundColor: '#f97373' }}
+              aria-hidden
+            />
+            <span className="text-xs text-slate-200">Net force (parallel)</span>
+          </div>
+        </div>
+      </section>
+
+      <main className="grid gap-6 lg:grid-cols-[minmax(0,2.75fr)_minmax(0,1fr)]">
         <section className="relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/80 p-5 shadow-lg shadow-slate-950/40">
           <div className="pointer-events-none absolute inset-0 -z-10 opacity-70">
             <div className="absolute -left-32 top-0 h-64 w-64 rounded-full bg-sky-700/30 blur-3xl" />
@@ -864,7 +934,7 @@ export function BoxOnIncline() {
             acceleration (kinetic). All arrows originate from the box&apos;s center.
           </p>
 
-          <div className="mt-5 grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_14rem] lg:items-start">
+          <div className="mt-5 grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(10rem,12rem)] lg:items-start">
             <div className="relative isolate min-h-[24rem] h-[30rem] min-w-0 overflow-hidden rounded-xl border border-slate-800 bg-gradient-to-tr from-slate-950 via-slate-950/95 to-slate-900/80 p-4">
               <div className="relative h-full w-full">
                 <canvas ref={canvasRef} className="h-full w-full rounded-lg bg-slate-950/60" />
@@ -944,7 +1014,7 @@ export function BoxOnIncline() {
                 }
                 units="°"
                 min={0}
-                max={60}
+                max={MAX_INCLINE_ANGLE_DEG}
                 step={1}
                 value={controls.angleDeg}
                 onChange={(v) => handleControlChange('angleDeg', v)}

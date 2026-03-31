@@ -23,9 +23,9 @@ const MAX_WIDTH_METERS = 100;
 function roundTo2(n: number): number {
   return Math.round(n * 100) / 100;
 }
-const SIMULATION_SPEED = 0.6;
-const TARGET_FPS = 30;
-const FRAME_INTERVAL_MS = 1000 / TARGET_FPS;
+/** 1 = one simulated second per real second */
+const SIMULATION_SPEED = 1;
+const MAX_SIM_DT_S = 1 / 30;
 const DISPLAY_ACCURACY_PERCENT = 1;
 
 function totalFlightTime2D(g: number, vy: number, h0: number): number {
@@ -95,7 +95,6 @@ export function Kinematics2DDemo() {
   const animationFrameIdRef = useRef<number | null>(null);
   const lastTimestampRef = useRef<number | null>(null);
   const simTimeRef = useRef(0);
-  const lastVisualUpdateRef = useRef<number | null>(null);
   const isRunningRef = useRef(isRunning);
   const controlsRef = useRef<ControlsState>(controls);
 
@@ -134,7 +133,7 @@ export function Kinematics2DDemo() {
       }
       const realDt = (timestamp - lastTimestampRef.current) / 1000;
       lastTimestampRef.current = timestamp;
-      const dt = realDt * SIMULATION_SPEED;
+      const dt = Math.min(realDt * SIMULATION_SPEED, MAX_SIM_DT_S);
       const nextTime = simTimeRef.current + dt;
       simTimeRef.current = nextTime;
       const { gravity, initialHeight, vx, vy } = controlsRef.current;
@@ -154,15 +153,8 @@ export function Kinematics2DDemo() {
         lastTimestampRef.current = null;
         return;
       }
-      const now = performance.now();
-      if (
-        lastVisualUpdateRef.current === null ||
-        now - lastVisualUpdateRef.current >= FRAME_INTERVAL_MS
-      ) {
-        lastVisualUpdateRef.current = now;
-        setPos({ x, y });
-        setHistory((prev) => [...prev, { t: nextTime, x, y, vx, vy: vyNow, a }]);
-      }
+      setPos({ x, y });
+      setHistory((prev) => [...prev, { t: nextTime, x, y, vx, vy: vyNow, a }]);
       animationFrameIdRef.current = requestAnimationFrame(step);
     };
     animationFrameIdRef.current = requestAnimationFrame(step);
@@ -188,7 +180,6 @@ export function Kinematics2DDemo() {
   const handleLaunch = () => {
     simTimeRef.current = 0;
     lastTimestampRef.current = null;
-    lastVisualUpdateRef.current = null;
     const { gravity, initialHeight, vx, vy } = controlsRef.current;
     const duration = Math.max(0.1, totalFlightTime2D(gravity, vy, initialHeight));
     setTotalDuration(duration);
@@ -466,8 +457,8 @@ export function Kinematics2DDemo() {
             x, y, v<sub>x</sub>, v<sub>y</sub>, and acceleration over the course of the simulation.
           </p>
           <p className="mt-1 text-[0.65rem] text-slate-500">
-            Based on how the simulation is conducted (discrete time steps at {TARGET_FPS} FPS),
-            values are only accurate to approximately {DISPLAY_ACCURACY_PERCENT}%.
+            Position is updated every animation frame (typically about 60 times per second); readouts
+            are only accurate to approximately {DISPLAY_ACCURACY_PERCENT}%.
           </p>
           <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-start">
             <div className="min-w-0 flex-1 space-y-4">
