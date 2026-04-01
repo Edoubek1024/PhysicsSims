@@ -8,6 +8,7 @@ import { SimpleGravityAndFriction } from './pages/SimpleGravityAndFriction';
 import { BoxOnIncline } from './pages/BoxOnIncline';
 import { SpringForce } from './pages/SpringForce';
 import { PulleySystem } from './pages/PulleySystem';
+import { EnergyHills } from './pages/EnergyHills';
 
 const navLinkClass = ({ isActive }: { isActive: boolean }) =>
   `text-[0.7rem] transition ${isActive ? 'font-semibold text-sky-300' : 'text-slate-300 hover:text-sky-300'}`;
@@ -45,6 +46,7 @@ export function App() {
         <Route path="/box-incline" element={<BoxOnIncline />} />
         <Route path="/spring-force" element={<SpringForce />} />
         <Route path="/pulley-system" element={<PulleySystem />} />
+        <Route path="/energy-hills" element={<EnergyHills />} />
       </Routes>
     </div>
   );
