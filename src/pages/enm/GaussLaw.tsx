@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { type ChangeEvent } from 'react';
 import { Link } from 'react-router-dom';
 
 type SurfaceShape = 'sphere' | 'cylinder' | 'cube';
@@ -377,12 +378,12 @@ function ControlRow({
 	onChange: (value: number) => void;
 	disabled?: boolean;
 }) {
-	const handleSliderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+	const handleSliderChange = (event: ChangeEvent<HTMLInputElement>) => {
 		if (disabled) return;
 		onChange(Number(event.target.value));
 	};
 
-	const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+	const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
 		if (disabled) return;
 		const parsed = Number(event.target.value);
 		if (Number.isNaN(parsed)) return;

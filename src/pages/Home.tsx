@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 /** Shown when a referenced PNG is missing from `public/thumbnails/`. */
@@ -35,7 +36,7 @@ const mechanicsSims = [
   },
   {
     title: '2-D Kinematics',
-    path: '/mag-field',
+    path: '/kinematics-2d',
     status: 'Available now',
     description: 'Projectile and planar motion.',
     preview: '/thumbnails/kinematics2d.png',
@@ -61,7 +62,7 @@ const mechanicsSims = [
   {
     title: 'Spring Force',
     path: '/spring-force',
-    description: "Hooke's Law and spring dynamics.",
+    description: 'Hooke\'s Law and spring dynamics.',
     preview: '/thumbnails/spring.png',
   },
   {
@@ -80,7 +81,7 @@ const mechanicsSims = [
 
 const enmSims = [
   {
-    title: 'Columb\'s Law Explorer',
+    title: "Columb's Law Explorer",
     description: 'Map field lines and force vectors around charges.',
     path: '/columbs-law',
     status: 'Available now',
@@ -134,10 +135,28 @@ const staticsSims = [
     status: 'Available now',
     preview: '/thumbnails/beambalance.png',
   },
+  {
+    title: 'Beam Load and Support Analyzer',
+    description: 'Set end supports, apply forces/moments/UDLs, and inspect reactions, shear, and moment.',
+    path: '/distributed-load',
+    status: 'Available now',
+    preview: '/thumbnails/preview.png',
+  },
 
 ];
 
 export function Home() {
+  const [viewMode, setViewMode] = useState<'grid' | 'compact'>('grid');
+  const isCompact = viewMode === 'compact';
+  const sectionGridClass = isCompact
+    ? 'grid gap-3 sm:grid-cols-2 lg:grid-cols-3'
+    : 'grid gap-6 md:grid-cols-2 xl:grid-cols-3';
+  const baseCardClass = isCompact
+    ? 'group rounded-2xl border bg-slate-900/80 p-4 shadow-md shadow-slate-950/35 transition'
+    : 'group rounded-2xl border bg-slate-900/80 p-6 shadow-lg shadow-slate-950/40 transition';
+  const previewClass = isCompact
+    ? 'mb-3 h-28 w-full rounded-xl object-cover border border-slate-800'
+    : 'mb-4 h-40 w-full rounded-xl object-cover border border-slate-800';
 
   return (
     <div className="relative flex min-h-screen flex-col bg-slate-950 text-white">
@@ -147,27 +166,31 @@ export function Home() {
       </div>
 
       <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-10">
-        <header className="mb-10 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
-          <div className="w-full">
-            <div className="mb-6 border-b border-slate-800/80 pb-4">
-              <Link
-                to="/simulations"
-                className="inline-flex items-center gap-2 rounded-full bg-sky-500 px-4 py-2 text-sm font-medium text-slate-950 shadow-md shadow-sky-900/50 transition hover:bg-sky-400"
-              >
-                Browse all simulations
-                <span className="text-xs">→</span>
-              </Link>
-            </div>
-
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-400">
-              Welcome to
-            </p>
-            <h1 className="mt-2 bg-[linear-gradient(90deg,#fca5a5_0%,#fdba74_22%,#fde68a_40%,#86efac_58%,#93c5fd_78%,#c4b5fd_100%)] bg-clip-text text-3xl font-semibold tracking-tight text-transparent sm:text-4xl md:text-5xl">
-              PhysicsSimsssssssssssssssssssssssssssssssssssssssssssss
-            </h1>
-            <p className="mt-4 max-w-2xl text-sm text-slate-300 sm:text-base">
-              Interactive simulations for mechanics and core physics topics, all in the browser.
-            </p>
+        <header className="mb-10">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-400 ">
+            Welcome to
+          </p>
+          <h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-50 sm:text-4xl md:text-5xl bg-[linear-gradient(90deg,#fca5a5_0%,#fdba74_22%,#fde68a_40%,#86efac_58%,#93c5fd_78%,#c4b5fd_100%)] bg-clip-text text-transparent">
+            PhysicsSimsssssssssssssssssssssssssssssssssssssssssssss
+          </h1>
+          <p className="mt-4 max-w-2xl text-sm text-slate-300 sm:text-base">
+            Interactive simulations for mechanics and core physics topics, all in the browser.
+          </p>
+          <div className="mt-4 inline-flex rounded-full border border-slate-700 bg-slate-900/70 p-1 text-[0.72rem]">
+            <button
+              type="button"
+              onClick={() => setViewMode('grid')}
+              className={`rounded-full px-3 py-1 transition ${viewMode === 'grid' ? 'bg-sky-500/25 text-sky-100' : 'text-slate-300 hover:text-slate-100'}`}
+            >
+              Grid mode
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode('compact')}
+              className={`rounded-full px-3 py-1 transition ${viewMode === 'compact' ? 'bg-sky-500/25 text-sky-100' : 'text-slate-300 hover:text-slate-100'}`}
+            >
+              Compact mode
+            </button>
           </div>
         </header>
 
@@ -177,29 +200,42 @@ export function Home() {
             <h2 className="mt-1 text-xl font-semibold text-slate-50">Kinematics and Dynamics</h2>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {mechanicsSims.map((sim) => (
-              <Link
-                key={sim.path}
-                to={sim.path}
-                className="group rounded-2xl border border-slate-800/80 bg-slate-900/80 p-6 shadow-lg shadow-slate-950/40 transition hover:-translate-y-1 hover:border-sky-500/60 hover:bg-slate-900"
-              >
-                <SimPreviewImg
-                  src={sim.preview}
-                  alt={`${sim.title} preview`}
-                  className="mb-4 h-40 w-full rounded-xl object-cover border border-slate-800"
-                />
-                <h2 className="text-lg font-semibold text-slate-50 transition group-hover:text-sky-300">
-                  {sim.title}
-                </h2>
-                <p className="mt-2 text-sm text-slate-400">{sim.description}</p>
-                <div className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-sky-400">
-                  Open simulation
-                  <span className="transition group-hover:translate-x-1">→</span>
-                </div>
-              </Link>
-            ))}
-          </div>
+          {isCompact ? (
+            <ul className="divide-y divide-slate-800 rounded-xl border border-slate-800 bg-slate-900/50">
+              {mechanicsSims.map((sim) => (
+                <li key={sim.path}>
+                  <Link to={sim.path} className="block px-4 py-3 transition hover:bg-slate-900/80">
+                    <p className="text-sm font-semibold text-slate-100">{sim.title}</p>
+                    <p className="mt-0.5 text-xs text-slate-400">{sim.description}</p>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div className={sectionGridClass}>
+              {mechanicsSims.map((sim) => (
+                <Link
+                  key={sim.path}
+                  to={sim.path}
+                  className={`${baseCardClass} border-slate-800/80 hover:-translate-y-1 hover:border-sky-500/60 hover:bg-slate-900`}
+                >
+                  <SimPreviewImg
+                    src={sim.preview}
+                    alt={`${sim.title} preview`}
+                    className={previewClass}
+                  />
+                  <h2 className="text-lg font-semibold text-slate-50 transition group-hover:text-sky-300">
+                    {sim.title}
+                  </h2>
+                  <p className="mt-2 text-sm text-slate-400">{sim.description}</p>
+                  <div className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-sky-400">
+                    Open simulation
+                    <span className="transition group-hover:translate-x-1">→</span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
         </section>
 
         <section id="enm" data-hash="enm" className="mt-12">
@@ -208,52 +244,77 @@ export function Home() {
             <h2 className="mt-1 text-xl font-semibold text-slate-50">Electricity and Magnetism</h2>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {enmSims.map((sim) => {
-              const cardClass =
-                'rounded-2xl border border-emerald-900/60 bg-slate-900/60 p-6 shadow-lg shadow-slate-950/30 transition';
-
-              if (sim.path) {
+          {isCompact ? (
+            <ul className="divide-y divide-slate-800 rounded-xl border border-slate-800 bg-slate-900/50">
+              {enmSims.map((sim) => {
+                if (sim.path) {
+                  return (
+                    <li key={sim.title}>
+                      <Link to={sim.path} className="block px-4 py-3 transition hover:bg-slate-900/80">
+                        <p className="text-sm font-semibold text-slate-100">{sim.title}</p>
+                        <p className="mt-0.5 text-xs text-emerald-300/90">{sim.status}</p>
+                        <p className="mt-0.5 text-xs text-slate-400">{sim.description}</p>
+                      </Link>
+                    </li>
+                  );
+                }
                 return (
-                  <Link
-                    key={sim.title}
-                    to={sim.path}
-                    className={`${cardClass} hover:-translate-y-1 hover:border-emerald-500/60 hover:bg-slate-900`}
-                  >
-                    <div className="mb-4 inline-flex rounded-full border border-emerald-700/50 bg-emerald-900/30 px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.08em] text-emerald-200">
-                      {sim.status}
-                    </div>
+                  <li key={sim.title} className="px-4 py-3">
+                    <p className="text-sm font-semibold text-slate-100">{sim.title}</p>
+                    <p className="mt-0.5 text-xs text-emerald-300/90">{sim.status}</p>
+                    <p className="mt-0.5 text-xs text-slate-400">{sim.description}</p>
+                  </li>
+                );
+              })}
+            </ul>
+          ) : (
+            <div className={sectionGridClass}>
+              {enmSims.map((sim) => {
+                const cardClass =
+                  `${baseCardClass} border-emerald-900/60 bg-slate-900/60 shadow-slate-950/30`;
+
+                if (sim.path) {
+                  return (
+                    <Link
+                      key={sim.title}
+                      to={sim.path}
+                      className={`${cardClass} hover:-translate-y-1 hover:border-emerald-500/60 hover:bg-slate-900`}
+                    >
+                      <div className="mb-4 inline-flex rounded-full border border-emerald-700/50 bg-emerald-900/30 px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.08em] text-emerald-200">
+                        {sim.status}
+                      </div>
+                      <SimPreviewImg
+                        src={sim.preview}
+                        alt=""
+                        className={previewClass}
+                      />
+                      <h3 className="text-lg font-semibold text-slate-100">{sim.title}</h3>
+                      <p className="mt-2 text-sm text-slate-400">{sim.description}</p>
+                      <div className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-emerald-300">
+                        Open simulation
+                        <span className="transition">→</span>
+                      </div>
+                    </Link>
+                  );
+                }
+
+                return (
+                  <article key={sim.title} className={cardClass}>
                     <SimPreviewImg
                       src={sim.preview}
                       alt=""
-                      className="mb-4 h-40 w-full rounded-xl object-cover border border-slate-800"
+                      className={previewClass}
                     />
+                    <div className="mb-4 inline-flex rounded-full border border-emerald-700/50 bg-emerald-900/30 px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.08em] text-emerald-200">
+                      {sim.status}
+                    </div>
                     <h3 className="text-lg font-semibold text-slate-100">{sim.title}</h3>
                     <p className="mt-2 text-sm text-slate-400">{sim.description}</p>
-                    <div className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-emerald-300">
-                      Open simulation
-                      <span className="transition">→</span>
-                    </div>
-                  </Link>
+                  </article>
                 );
-              }
-
-              return (
-                <article key={sim.title} className={cardClass}>
-                  <SimPreviewImg
-                    src={sim.preview}
-                    alt=""
-                    className="mb-4 h-40 w-full rounded-xl object-cover border border-slate-800"
-                  />
-                  <div className="mb-4 inline-flex rounded-full border border-emerald-700/50 bg-emerald-900/30 px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.08em] text-emerald-200">
-                    {sim.status}
-                  </div>
-                  <h3 className="text-lg font-semibold text-slate-100">{sim.title}</h3>
-                  <p className="mt-2 text-sm text-slate-400">{sim.description}</p>
-                </article>
-              );
-            })}
-          </div>
+              })}
+            </div>
+          )}
         </section>
 
         <section id="statics" className="mt-16" data-hash="statics">
@@ -262,52 +323,77 @@ export function Home() {
             <h2 className="mt-1 text-xl font-semibold text-slate-50">Equilibrium and Statics</h2>
           </div>
           
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {staticsSims.map((sim) => {
-              const cardClass =
-                'rounded-2xl border border-red-900/60 bg-slate-900/60 p-6 shadow-lg shadow-slate-950/30 transition';
-
-              if (sim.path) {
+          {isCompact ? (
+            <ul className="divide-y divide-slate-800 rounded-xl border border-slate-800 bg-slate-900/50">
+              {staticsSims.map((sim) => {
+                if (sim.path) {
+                  return (
+                    <li key={sim.title}>
+                      <Link to={sim.path} className="block px-4 py-3 transition hover:bg-slate-900/80">
+                        <p className="text-sm font-semibold text-slate-100">{sim.title}</p>
+                        <p className="mt-0.5 text-xs text-red-300/90">{sim.status}</p>
+                        <p className="mt-0.5 text-xs text-slate-400">{sim.description}</p>
+                      </Link>
+                    </li>
+                  );
+                }
                 return (
-                  <Link
-                    key={sim.title}
-                    to={sim.path}
-                    className={`${cardClass} hover:-translate-y-1 hover:border-red-500/60 hover:bg-slate-900`}
-                  >
-                    <div className="mb-4 inline-flex rounded-full border border-red-700/50 bg-red-900/30 px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.08em] text-red-200">
-                      {sim.status}
-                    </div>
+                  <li key={sim.title} className="px-4 py-3">
+                    <p className="text-sm font-semibold text-slate-100">{sim.title}</p>
+                    <p className="mt-0.5 text-xs text-red-300/90">{sim.status}</p>
+                    <p className="mt-0.5 text-xs text-slate-400">{sim.description}</p>
+                  </li>
+                );
+              })}
+            </ul>
+          ) : (
+            <div className={sectionGridClass}>
+              {staticsSims.map((sim) => {
+                const cardClass =
+                  `${baseCardClass} border-red-900/60 bg-slate-900/60 shadow-slate-950/30`;
+
+                if (sim.path) {
+                  return (
+                    <Link
+                      key={sim.title}
+                      to={sim.path}
+                      className={`${cardClass} hover:-translate-y-1 hover:border-red-500/60 hover:bg-slate-900`}
+                    >
+                      <div className="mb-4 inline-flex rounded-full border border-red-700/50 bg-red-900/30 px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.08em] text-red-200">
+                        {sim.status}
+                      </div>
+                      <SimPreviewImg
+                        src={sim.preview}
+                        alt=""
+                        className={previewClass}
+                      />
+                      <h3 className="text-lg font-semibold text-slate-100">{sim.title}</h3>
+                      <p className="mt-2 text-sm text-slate-400">{sim.description}</p>
+                      <div className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-red-300">
+                        Open simulation
+                        <span className="transition">→</span>
+                      </div>
+                    </Link>
+                  );
+                }
+
+                return (
+                  <article key={sim.title} className={cardClass}>
                     <SimPreviewImg
                       src={sim.preview}
                       alt=""
-                      className="mb-4 h-40 w-full rounded-xl object-cover border border-slate-800"
+                      className={previewClass}
                     />
+                    <div className="mb-4 inline-flex rounded-full border border-red-700/50 bg-red-900/30 px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.08em] text-red-200">
+                      {sim.status}
+                    </div>
                     <h3 className="text-lg font-semibold text-slate-100">{sim.title}</h3>
                     <p className="mt-2 text-sm text-slate-400">{sim.description}</p>
-                    <div className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-red-300">
-                      Open simulation
-                      <span className="transition">→</span>
-                    </div>
-                  </Link>
+                  </article>
                 );
-              }
-
-              return (
-                <article key={sim.title} className={cardClass}>
-                  <SimPreviewImg
-                    src={sim.preview}
-                    alt=""
-                    className="mb-4 h-40 w-full rounded-xl object-cover border border-slate-800"
-                  />
-                  <div className="mb-4 inline-flex rounded-full border border-red-700/50 bg-red-900/30 px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.08em] text-red-200">
-                    {sim.status}
-                  </div>
-                  <h3 className="text-lg font-semibold text-slate-100">{sim.title}</h3>
-                  <p className="mt-2 text-sm text-slate-400">{sim.description}</p>
-                </article>
-              );
-            })}
-          </div>
+              })}
+            </div>
+          )}
 
         </section>
 

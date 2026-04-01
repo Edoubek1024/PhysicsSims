@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { useMemo, useState } from 'react';
+import { type ChangeEvent, useMemo, useState } from 'react';
 
 type Controls = {
 	leftMassKg: number;
@@ -313,11 +313,11 @@ function ControlRow({
 	value: number;
 	onChange: (value: number) => void;
 }) {
-	const handleSliderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+	const handleSliderChange = (event: ChangeEvent<HTMLInputElement>) => {
 		onChange(Number(event.target.value));
 	};
 
-	const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+	const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
 		const parsed = Number(event.target.value);
 		if (Number.isNaN(parsed)) return;
 		onChange(clamp(parsed, min, max));

@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+// this is the old version of the Simulations page, which is just a directory of links to the various simulations. The new version is more of a "home base" for the simulations, with a nicer layout and descriptions for each sim.
 
 type SimLink = {
   to: string;
@@ -61,9 +62,10 @@ export function Simulations() {
       <header className="mb-10">
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-400">Browse labs</p>
         <h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-50 sm:text-4xl">
-          Simulations
+          Physics 211
         </h1>
         <p className="mt-3 max-w-2xl text-sm text-slate-300 sm:text-base">
+          This page focus on materials for PHYS211, the algebra-based introductory physics course. The simulations are organized by unit, but feel free to jump around!
           Pick a unit, then open a lab. Kinematics comes first (motion without worrying about why
           the acceleration is what it is); forces builds on that with pushes, pulls, and contact
           forces.

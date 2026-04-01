@@ -8,13 +8,14 @@ import { Kinematics2DDemo } from './pages/mechanics/Kinematics2DDemo';
 import { ForceSimulator } from './pages/mechanics/ForceSimulator';
 import { SimpleGravityAndFriction } from './pages/mechanics/SimpleGravityAndFriction';
 import { BoxOnIncline } from './pages/mechanics/BoxOnIncline';
-import { SpringForce } from './pages/SpringForce';
+import { SpringForce } from './pages/mechanics/SpringForce';
 import { ColumbsLaw } from './pages/enm/ColumbsLaw';
 import { GaussLaw } from './pages/enm/GaussLaw';
 import { MagField } from './pages/enm/MagField';
-import { BeamBalance } from './pages/statics/BeamBalance';
-import { PulleySystem } from './pages/PulleySystem';
+import { BeamBalance } from './pages/statics/BeamBalance';  
 import { EnergyHills } from './pages/EnergyHills';
+import { PulleySystem } from './pages/mechanics/PulleySystem';
+import { DistributedLoad } from './pages/statics/DistributedLoad';
 
 export function App() {
   const location = useLocation();
@@ -82,7 +83,7 @@ export function App() {
               to="/simulations"
               className="text-[0.9rem] text-slate-300 transition hover:text-sky-300"
             >
-              Simulations
+              PHYS211
             </Link>
           </nav>
         </div>
@@ -104,6 +105,7 @@ export function App() {
         <Route path="/gauss-law" element={<GaussLaw />} />
         <Route path="/mag-field" element={<MagField />} />
         <Route path="/beam-balance" element={<BeamBalance />} />
+        <Route path="/distributed-load" element={<DistributedLoad />} />
         <Route path="/pulley-system" element={<PulleySystem />} />
         <Route path="/energy-hills" element={<EnergyHills />} />
       </Routes>

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { type PointerEvent, useEffect, useMemo, useRef, useState } from 'react';
 
 type Vec2 = { x: number; y: number };
 
@@ -60,6 +60,7 @@ export function MagField() {
 
 		drawElectricField(ctx, w, h, charges, magnets, fieldDensity);
 		drawMagnets(ctx, magnets);
+		drawMagnetInteractionVectors(ctx, magnets);
 		drawCharges(ctx, charges);
 	};
 
@@ -73,16 +74,12 @@ export function MagField() {
 		if (!canvas) return;
 
 		const resize = () => {
-			const parent = canvas.parentElement;
-			if (!parent) return;
-			const rect = parent.getBoundingClientRect();
+			const rect = canvas.getBoundingClientRect();
 			const dpr = Math.max(1, window.devicePixelRatio || 1);
 			const nextW = Math.max(320, Math.floor(rect.width));
 			const nextH = Math.max(240, Math.floor(rect.height));
 			canvas.width = Math.floor(nextW * dpr);
 			canvas.height = Math.floor(nextH * dpr);
-			canvas.style.width = `${nextW}px`;
-			canvas.style.height = `${nextH}px`;
 			const ctx = canvas.getContext('2d');
 			if (ctx) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 			drawSceneRef.current?.();
@@ -90,7 +87,7 @@ export function MagField() {
 
 		resize();
 		const ro = new ResizeObserver(resize);
-		ro.observe(canvas.parentElement ?? canvas);
+		ro.observe(canvas);
 		return () => ro.disconnect();
 	}, []);
 
@@ -98,7 +95,7 @@ export function MagField() {
 		drawSceneRef.current?.();
 	}, [charges, magnets, fieldDensity]);
 
-	const getPointerPos = (event: React.PointerEvent<HTMLCanvasElement>): Vec2 | null => {
+	const getPointerPos = (event: PointerEvent<HTMLCanvasElement>): Vec2 | null => {
 		const canvas = canvasRef.current;
 		if (!canvas) return null;
 		const rect = canvas.getBoundingClientRect();
@@ -108,7 +105,7 @@ export function MagField() {
 		};
 	};
 
-	const handlePointerDown = (event: React.PointerEvent<HTMLCanvasElement>) => {
+	const handlePointerDown = (event: PointerEvent<HTMLCanvasElement>) => {
 		const canvas = canvasRef.current;
 		if (!canvas) return;
 		const point = getPointerPos(event);
@@ -155,7 +152,7 @@ export function MagField() {
 		canvas.setPointerCapture(event.pointerId);
 	};
 
-	const handlePointerMove = (event: React.PointerEvent<HTMLCanvasElement>) => {
+	const handlePointerMove = (event: PointerEvent<HTMLCanvasElement>) => {
 		if (!draggingTarget) return;
 		const canvas = canvasRef.current;
 		if (!canvas) return;
@@ -246,7 +243,7 @@ export function MagField() {
 					</div>
 
 					<h2 className="text-sm font-semibold tracking-wide text-indigo-300">Field View</h2>
-					<p className="mt-1 text-xs text-slate-300">Arrows indicate electric field direction and local strength from all charges.</p>
+					<p className="mt-1 text-xs text-slate-300">Blue arrows: net field. Yellow arrows on magnets: attraction/repulsion direction.</p>
 
 					<div className="mt-4 h-[22rem] rounded-xl border border-slate-800 bg-slate-950/70 p-2 sm:h-[26rem] sm:p-3">
 						<canvas
@@ -451,6 +448,92 @@ function drawMagnets(ctx: CanvasRenderingContext2D, magnets: Magnet[]) {
 		ctx.textBaseline = 'middle';
 		ctx.fillText('N', -13, 0);
 		ctx.fillText('S', 13, 0);
+		ctx.restore();
+	}
+}
+
+function getMagnetPoles(m: Magnet, halfLength: number): Array<{ pos: Vec2; strength: 1 | -1 }> {
+	const ux = Math.cos(m.angleRad);
+	const uy = Math.sin(m.angleRad);
+	return [
+		{ pos: { x: m.pos.x - ux * halfLength, y: m.pos.y - uy * halfLength }, strength: 1 },
+		{ pos: { x: m.pos.x + ux * halfLength, y: m.pos.y + uy * halfLength }, strength: -1 },
+	];
+}
+
+function getMagnetForceVectors(magnets: Magnet[]): Vec2[] {
+	const halfLength = 26;
+	const k = 22000;
+	const softening = 180;
+	const maxForce = 900;
+	const forces = magnets.map(() => ({ x: 0, y: 0 }));
+
+	for (let i = 0; i < magnets.length; i++) {
+		const polesA = getMagnetPoles(magnets[i], halfLength);
+		for (let j = 0; j < magnets.length; j++) {
+			if (i === j) continue;
+			const polesB = getMagnetPoles(magnets[j], halfLength);
+
+			for (const a of polesA) {
+				for (const b of polesB) {
+					const dx = a.pos.x - b.pos.x;
+					const dy = a.pos.y - b.pos.y;
+					const r2 = dx * dx + dy * dy + softening;
+					const r = Math.sqrt(r2);
+					const strength = (k * a.strength * b.strength) / r2;
+					forces[i].x += (dx / r) * strength;
+					forces[i].y += (dy / r) * strength;
+				}
+			}
+		}
+	}
+
+	for (const f of forces) {
+		const mag = Math.sqrt(f.x * f.x + f.y * f.y);
+		if (mag <= maxForce) continue;
+		const scale = maxForce / mag;
+		f.x *= scale;
+		f.y *= scale;
+	}
+
+	return forces;
+}
+
+function drawMagnetInteractionVectors(ctx: CanvasRenderingContext2D, magnets: Magnet[]) {
+	if (magnets.length < 2) return;
+	const forces = getMagnetForceVectors(magnets);
+
+	for (let i = 0; i < magnets.length; i++) {
+		const m = magnets[i];
+		const f = forces[i];
+		const mag = Math.sqrt(f.x * f.x + f.y * f.y);
+		if (mag < 8) continue;
+
+		const dirX = f.x / mag;
+		const dirY = f.y / mag;
+		const len = clamp(mag * 0.05, 10, 30);
+		const x1 = m.pos.x;
+		const y1 = m.pos.y;
+		const x2 = x1 + dirX * len;
+		const y2 = y1 + dirY * len;
+
+		ctx.save();
+		ctx.strokeStyle = 'rgba(250,204,21,0.95)';
+		ctx.lineWidth = 2;
+		ctx.beginPath();
+		ctx.moveTo(x1, y1);
+		ctx.lineTo(x2, y2);
+		ctx.stroke();
+
+		const angle = Math.atan2(dirY, dirX);
+		const arrow = 6;
+		ctx.beginPath();
+		ctx.moveTo(x2, y2);
+		ctx.lineTo(x2 - arrow * Math.cos(angle - 0.55), y2 - arrow * Math.sin(angle - 0.55));
+		ctx.lineTo(x2 - arrow * Math.cos(angle + 0.55), y2 - arrow * Math.sin(angle + 0.55));
+		ctx.closePath();
+		ctx.fillStyle = 'rgba(253,224,71,0.95)';
+		ctx.fill();
 		ctx.restore();
 	}
 }
