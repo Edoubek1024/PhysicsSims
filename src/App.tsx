@@ -1,4 +1,4 @@
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, Link, NavLink } from 'react-router-dom';
 import { Home } from './pages/Home';
 import { Simulations } from './pages/Simulations';
 import { KinematicsDemo } from './pages/KinematicsDemo';
@@ -8,6 +8,9 @@ import { SimpleGravityAndFriction } from './pages/SimpleGravityAndFriction';
 import { BoxOnIncline } from './pages/BoxOnIncline';
 import { SpringForce } from './pages/SpringForce';
 import { PulleySystem } from './pages/PulleySystem';
+
+const navLinkClass = ({ isActive }: { isActive: boolean }) =>
+  `text-[0.7rem] transition ${isActive ? 'font-semibold text-sky-300' : 'text-slate-300 hover:text-sky-300'}`;
 
 export function App() {
   return (
@@ -22,18 +25,12 @@ export function App() {
             PHYSICS SIMS
           </Link>
           <nav className="flex items-center gap-4">
-            <Link
-              to="/"
-              className="text-[0.7rem] text-slate-300 transition hover:text-sky-300"
-            >
+            <NavLink to="/" end className={navLinkClass}>
               Home
-            </Link>
-            <Link
-              to="/simulations"
-              className="text-[0.7rem] text-slate-300 transition hover:text-sky-300"
-            >
+            </NavLink>
+            <NavLink to="/simulations" className={navLinkClass}>
               Simulations
-            </Link>
+            </NavLink>
           </nav>
         </div>
       </div>
