@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { SliderWithInput } from '../components/SliderWithInput';
+import { SliderWithInput } from '../../components/SliderWithInput';
 
 type Vec2 = { x: number; y: number };
 
@@ -523,11 +523,11 @@ export function EnergyHills() {
 
         <div className="flex flex-wrap items-center gap-3">
           <Link
-            to="/simulations"
+            to="/"
             className="inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900 px-3 py-1 text-xs font-medium text-slate-200 transition hover:border-sky-500 hover:text-sky-100"
           >
             <span className="text-sm">←</span>
-            Back to simulations
+            Back to home
           </Link>
           <span className="inline-flex items-center gap-2 rounded-full border border-sky-700/60 bg-sky-900/60 px-3 py-1 text-[0.7rem] font-medium text-sky-100">
             Gravity only · No friction

@@ -7,27 +7,41 @@ const principles = [
 			'Every simulation should make an idea obvious before you even read the equation. Motion, color, and structure come before text walls.',
 	},
 	{
-		title: 'Physics Honest',
+		title: 'Free To Use, Easy To Share',
 		detail:
-			'We simplify interfaces, not the core model. If we approximate, we say so. If an assumption matters, we surface it in plain language.',
+			'All simulations are free to use and share, with no ads or paywalls. We want to make it as easy as possible for students to access and distribute our tools.',
 	},
 	{
 		title: 'Built For Students',
-		detail:
-			'The controls and feedback are designed around how students actually explore: tweak, test, break it, and ask why.',
+		detail: (
+			<>
+				We go by our motto{' '}
+				<span className="bg-[linear-gradient(90deg,#fdba74_0%,#fef08a_24%,#86efac_48%)] bg-clip-text font-semibold text-transparent">
+					"For students, by students"
+				</span>
+				. We are committed to building the best physics sim library for students who lack the resources or
+				time to build their own tools from scratch.
+			</>
+		),
 	},
 ];
 
 const timeline = [
-	{ phase: 'Spark', text: 'Frustration with dated classroom applets and rigid tools.' },
-	{ phase: 'Prototype', text: 'Early mechanics demos proved that cleaner UX drives better intuition.' },
-	{ phase: 'Expansion', text: 'E&M and statics modules added with reusable visual + controls patterns.' },
-	{ phase: 'Now', text: 'Turning PhysicsSims into a dependable learning lab for classrooms and self-study.' },
+	{ phase: 'Prototype', text: 'Done' },
+	{ phase: 'Development', text: 'In Progress' },
+	{ phase: 'Initial Release', text: 'TBD' },
+	{ phase: 'Now', text: 'TBD' },
+];
+
+const upcomingPatches = [
+	{ title: 'More E&M and 211 simulation modules', eta: 'Patch v0.6' },
+	{ title: 'Thumbnail previews for simulations', eta: 'Patch v0.6' },
+	{ title: 'First Release with student feedback', eta: 'Release v1.0' },
 ];
 
 const team = [
-	{ name: 'Evan Doubek', role: 'Computer Science', accent: 'from-amber-300 via-orange-300 to-rose-300' },
-	{ name: 'Bryan Chen', role: 'Systems Engineering and Design', accent: 'from-cyan-300 via-sky-300 to-indigo-300' },
+	{ name: 'Evan Doubek', role: 'Computer Science', accent: 'from-cyan-300 via-sky-300 to-indigo-300 ', github: 'Edoubek1024' },
+	{ name: 'Bryan Chen', role: 'Systems Engineering and Design', accent: 'from-pink-300 via-amber-300 to-red-400', github: 'bbryanchenn' },
 ];
 
 export function About() {
@@ -50,6 +64,7 @@ export function About() {
 					enough rigor to trust in real coursework. 
 					This website will always be free to use, and we are committed to building the best physics sim library for students everywhere.
 				</p>
+				<p className='mt-5'>We would like to thank professor unknown for allowing us to do something.</p>
 
 				<div className="mt-5 flex flex-wrap gap-3 text-xs">
 					<span className="rounded-full border border-amber-300/40 bg-amber-300/10 px-3 py-1 text-amber-100">Easy2Use</span>
@@ -68,7 +83,44 @@ export function About() {
 				</div>
 			</header>
 
-			<main className="grid gap-4 sm:gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
+			<main className="grid gap-4 sm:gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">				
+				<section className="rounded-2xl border border-slate-800 bg-slate-900/70 p-5 shadow-lg shadow-slate-950/40 lg:col-span-2">
+					<h2 className="text-lg font-semibold text-slate-100">Developers</h2>
+					<p className="mt-1 text-sm text-slate-400">A small team building the kind of learning tool we wished we had.</p>
+
+					<div className="mt-4 grid gap-4 md:grid-cols-2">
+						{team.map((person) => (
+							<article key={person.name} className="group rounded-2xl border border-slate-800 bg-slate-950/70 p-5 transition hover:-translate-y-1 hover:border-slate-600">
+								<div className="flex items-start justify-between gap-4">
+									<div className="min-w-0">
+										<div className={`inline-flex rounded-full bg-gradient-to-r ${person.accent} px-3 py-1 text-[0.68rem] font-semibold text-slate-950`}>
+											Team PhysicsSims
+										</div>
+										<h3 className="mt-3 text-xl font-semibold text-slate-100">{person.name}</h3>
+										<p className="mt-1 text-sm text-slate-400">{person.role}</p>
+										<a
+											href={`https://github.com/${person.github}`}
+											target="_blank"
+											rel="noreferrer"
+											className="mt-4 inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900/80 px-3 py-2 text-xs font-semibold text-slate-200 transition hover:border-sky-400 hover:text-sky-100"
+										>
+											<svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4 fill-current">
+												<path d="M12 .5C5.73.5.75 5.58.75 11.92c0 5.07 3.29 9.37 7.86 10.89.58.11.79-.25.79-.56v-2.1c-3.2.71-3.88-1.57-3.88-1.57-.53-1.38-1.3-1.75-1.3-1.75-1.06-.74.08-.73.08-.73 1.17.09 1.8 1.22 1.8 1.22 1.04 1.83 2.72 1.3 3.38.99.11-.77.41-1.3.75-1.6-2.56-.3-5.25-1.3-5.25-5.79 0-1.28.44-2.33 1.16-3.15-.12-.3-.5-1.5.11-3.12 0 0 .94-.31 3.08 1.2.89-.25 1.84-.38 2.79-.39.95.01 1.9.14 2.79.39 2.14-1.51 3.08-1.2 3.08-1.2.61 1.62.23 2.82.11 3.12.72.82 1.16 1.87 1.16 3.15 0 4.5-2.69 5.48-5.26 5.78.42.36.79 1.07.79 2.16v3.2c0 .31.21.68.8.56 4.56-1.53 7.85-5.82 7.85-10.89C23.25 5.58 18.27.5 12 .5Z" />
+											</svg>
+										</a>
+									</div>
+									<img
+										src={`https://github.com/${person.github}.png?size=200`}
+										alt={`${person.name} profile photo`}
+										loading="lazy"
+										className="h-25 w-25 rounded-xl"
+									/>
+									
+								</div>
+							</article>
+						))}
+					</div>
+				</section>
 				<section className="rounded-2xl border border-slate-800 bg-slate-900/70 p-5 shadow-lg shadow-slate-950/40">
 					<h2 className="text-lg font-semibold text-slate-100">Core Principles</h2>
 					<div className="mt-4 space-y-3">
@@ -80,41 +132,40 @@ export function About() {
 						))}
 					</div>
 				</section>
-
-				<section className="rounded-2xl border border-slate-800 bg-slate-900/70 p-5 shadow-lg shadow-slate-950/40">
-					<h2 className="text-lg font-semibold text-slate-100">Build Timeline</h2>
-					<div className="mt-4 space-y-3">
-						{timeline.map((step, idx) => (
-							<div key={step.phase} className="flex gap-3">
-								<div className="flex flex-col items-center">
-									<span className="mt-1 h-2.5 w-2.5 rounded-full bg-cyan-300" />
-									{idx < timeline.length - 1 ? <span className="mt-1 h-full w-px bg-slate-700" /> : null}
+				<div className="grid gap-4 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
+					<section className="rounded-2xl border border-slate-800 bg-slate-900/70 p-4 shadow-lg shadow-slate-950/40">
+						<h2 className="text-base font-semibold text-slate-100">Build Timeline</h2>
+						<div className="mt-3 space-y-2.5">
+							{timeline.map((step, idx) => (
+								<div key={step.phase} className="flex gap-2.5">
+									<div className="flex flex-col items-center">
+										<span className="mt-1 h-2 w-2 rounded-full bg-cyan-300" />
+										{idx < timeline.length - 1 ? <span className="mt-1 h-full w-px bg-slate-700" /> : null}
+									</div>
+									<div className="pb-3">
+										<p className="text-xs font-semibold uppercase tracking-wide text-cyan-200">{step.phase}</p>
+										<p className="mt-0.5 text-xs text-slate-300">{step.text}</p>
+									</div>
 								</div>
-								<div className="pb-4">
-									<p className="text-sm font-semibold text-cyan-200">{step.phase}</p>
-									<p className="mt-1 text-sm text-slate-300">{step.text}</p>
-								</div>
-							</div>
-						))}
-					</div>
-				</section>
+							))}
+						</div>
+					</section>
 
-				<section className="rounded-2xl border border-slate-800 bg-slate-900/70 p-5 shadow-lg shadow-slate-950/40 lg:col-span-2">
-					<h2 className="text-lg font-semibold text-slate-100">Developers</h2>
-					<p className="mt-1 text-sm text-slate-400">A small team building the kind of learning tool we wished we had.</p>
+					<section className="rounded-2xl border border-slate-800 bg-slate-900/70 p-5 shadow-lg shadow-slate-950/40">
+						<h2 className="text-lg font-semibold text-slate-100">Future Plans</h2>
+						<p className="mt-1 text-sm text-slate-400">What we are actively preparing next.</p>
+						<div className="mt-4 space-y-3">
+							{upcomingPatches.map((patch) => (
+								<article key={patch.title} className="rounded-xl border border-slate-800 bg-slate-950/70 p-3.5">
+									<p className="bg-[linear-gradient(90deg,#a7f3d0_25%,#34d399_70%)] bg-clip-text text-sm font-semibold text-transparent">{patch.title}</p>
+									<p className="mt-1 text-xs uppercase tracking-wide text-slate-400">{patch.eta}</p>
+								</article>
+							))}
+						</div>
+					</section>
+				</div>
 
-					<div className="mt-4 grid gap-4 md:grid-cols-2">
-						{team.map((person) => (
-							<article key={person.name} className="group rounded-2xl border border-slate-800 bg-slate-950/70 p-5 transition hover:-translate-y-1 hover:border-slate-600">
-								<div className={`inline-flex rounded-full bg-gradient-to-r ${person.accent} px-3 py-1 text-[0.68rem] font-semibold text-slate-950`}>
-									Team PhysicsSims
-								</div>
-								<h3 className="mt-3 text-xl font-semibold text-slate-100">{person.name}</h3>
-								<p className="mt-1 text-sm text-slate-400">{person.role}</p>
-							</article>
-						))}
-					</div>
-				</section>
+				
 			</main>
 		</div>
 	);

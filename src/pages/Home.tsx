@@ -97,20 +97,22 @@ const enmSims = [
   {
     title: 'Maxwell\'s Equations Explorer',
     description: 'Interactively visualize the interplay of electric and magnetic fields as described by Maxwell\'s equations.',
-    status: 'Coming soon',
+    path: '/maxwell',
+    status: 'Available now',
     preview: '/thumbnails/preview.png',
   }, 
   {
     title: 'Ampere\'s Law Simulator',
     description: 'Build and analyze resistor-inductor-capacitor circuits with real-time voltage and current graphs.',
-    status: 'Coming soon',
+    path: '/amperes-law',
+    status: 'Available now',
     preview: '/thumbnails/preview.png',
   },
   {
     title: 'Faraday\'s Law Simulator',
     description: 'Visualize changing magnetic flux and induced EMF.',
     path: '/faradays-law',
-    status: 'Available now',
+    status: 'IOLab module',
     preview: '/thumbnails/preview.png',
   },
   {
@@ -124,7 +126,7 @@ const enmSims = [
     title: 'Magnetic Field Simulator',
     description: 'Visualize magnetic fields around point charges and magnets.',
     path: '/mag-field',
-    status: 'Coming now',
+    status: 'Available now',
     preview: '/thumbnails/preview.png',
   }
 ];

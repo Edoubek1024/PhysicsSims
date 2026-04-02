@@ -2,6 +2,13 @@ import { Suspense, lazy, useEffect } from 'react';
 import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import packageJson from '../package.json';
 
+const GA_MEASUREMENT_ID = 'G-RBV8F88DKB';
+
+declare global {
+  interface Window {
+    gtag?: (...args: unknown[]) => void;
+  }
+}
 
 const Home = lazy(() => import('./pages/Home').then((m) => ({ default: m.Home })));
 const About = lazy(() => import('./pages/About').then((m) => ({ default: m.About })));
@@ -14,20 +21,21 @@ const BoxOnIncline = lazy(() => import('./pages/mechanics/BoxOnIncline').then((m
 const SpringForce = lazy(() => import('./pages/mechanics/SpringForce').then((m) => ({ default: m.SpringForce })));
 const PulleySystem = lazy(() => import('./pages/mechanics/PulleySystem').then((m) => ({ default: m.PulleySystem })));
 const ColumbsLaw = lazy(() => import('./pages/enm/ColumbsLaw').then((m) => ({ default: m.ColumbsLaw })));
+const AmperesLaw = lazy(() => import('./pages/enm/AmperesLaw').then((m) => ({ default: m.AmperesLaw })));
+const Maxwell = lazy(() => import('./pages/enm/Maxwell').then((m) => ({ default: m.Maxwell })));
 const FaradaysLaw = lazy(() => import('./pages/enm/FaradaysLaw').then((m) => ({ default: m.FaradaysLaw })));
 const RCCircuit = lazy(() => import('./pages/enm/RCCircuit').then((m) => ({ default: m.RCCircuit })));
 const GaussLaw = lazy(() => import('./pages/enm/GaussLaw').then((m) => ({ default: m.GaussLaw })));
 const MagField = lazy(() => import('./pages/enm/MagField').then((m) => ({ default: m.MagField })));
 const BeamBalance = lazy(() => import('./pages/statics/BeamBalance').then((m) => ({ default: m.BeamBalance })));
 const DistributedLoad = lazy(() => import('./pages/statics/DistributedLoad').then((m) => ({ default: m.DistributedLoad })));
-const EnergyHills = lazy(() => import('./pages/EnergyHills').then((m) => ({ default: m.EnergyHills })));
+const EnergyHills = lazy(() => import('./pages/mechanics/EnergyHills').then((m) => ({ default: m.EnergyHills })));
 
 const NAV_LINKS = [
   { to: '/', label: 'Home' },
   { to: '/#mehcanics', label: 'Mechanics' },
   { to: '/#enm', label: 'E&M' },
   { to: '/#statics', label: 'Statics' },
-  { to: '/about', label: 'About' },
   { to: '/simulations', label: 'PHYS211' },
 ];
 
@@ -44,6 +52,8 @@ const APP_ROUTES = [
   { path: '/pulley-system', element: <PulleySystem /> },
   { path: '/energy-hills', element: <EnergyHills /> },
   { path: '/columbs-law', element: <ColumbsLaw /> },
+  { path: '/amperes-law', element: <AmperesLaw /> },
+  { path: '/maxwell', element: <Maxwell /> },
   { path: '/faradays-law', element: <FaradaysLaw /> },
   { path: '/rc-circuit', element: <RCCircuit /> },
   { path: '/gauss-law', element: <GaussLaw /> },
@@ -54,6 +64,19 @@ const APP_ROUTES = [
 
 export function App() {
   const location = useLocation();
+
+  useEffect(() => {
+    if (typeof window.gtag !== 'function') return;
+
+    const pagePath = `${location.pathname}${location.search}${location.hash}`;
+
+    window.gtag('event', 'page_view', {
+      page_path: pagePath,
+      page_location: window.location.href,
+      page_title: document.title,
+      send_to: GA_MEASUREMENT_ID,
+    });
+  }, [location.pathname, location.search, location.hash]);
 
   useEffect(() => {
     if (!location.hash) return;
@@ -107,14 +130,21 @@ export function App() {
       </Suspense>
       
 {/* FOOTER BOX */}
-      <footer className="border-t border-slate-800 bg-slate-950/90" >
+      <footer className="border-t border-slate-950/90 bg-slate-900/2" >
+        <img src="/adl.png" alt="Physics Sims Logo" className="mx-auto h-15 w-15" />
         <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-4 py-4 text-sm text-slate-400 sm:flex-row sm:items-center sm:justify-between ">
           <p>© 2026 PhysicsSsim v{packageJson.version}</p>
           <p className="text-center sm:text-left ">PhET we gon be after yo job</p>
           <div className="flex gap-4">
+            <a
+              href="https://courses.physics.illinois.edu"
+              aria-label="Grainger Engineering Physics Website"
+              className="inline-flex items-center justify-center rounded-sm transition hover:scale-105"
+            >
+              <img src="/uiuc.png" alt="UIUC I-Block" className="h-7 w-7 object-contain" />
+            </a>
+            <a href="/about" className="hover:text-sky-300">About</a>
             <a href="https://github.com/Edoubek1024/PhysicsSims?tab=readme-ov-file#contributing" className="hover:text-sky-300">Contribution</a>
-            <a href="#" className="hover:text-sky-300">Resources</a>
-            <a href="#" className="hover:text-sky-300">Terms</a>
             <a href="#" className="hover:text-sky-300">Contact</a>
           </div>
         </div>
