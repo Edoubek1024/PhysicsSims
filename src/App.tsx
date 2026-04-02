@@ -137,7 +137,7 @@ export function App() {
         <img src="/adl.png" alt="Physics Sims Logo" className="mx-auto h-15 w-15" />
         <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-4 py-4 text-sm text-slate-400 sm:flex-row sm:items-center sm:justify-between ">
           <p>© 2026 PhysicsSsim v{packageJson.version}</p>
-          <p className="text-center sm:text-left ">PhET we gon be after yo job</p>
+          <p className="text-center sm:text-left ">Made with ❤️</p>
           <div className="flex gap-4">
             <a
               href="https://courses.physics.illinois.edu"
@@ -264,6 +264,9 @@ export function App() {
                     Send
                   </button>
                 </div>
+                <p className="text-xs text-slate-500">
+                  This form is powered by Formspree. Your email will be recorded by Formspree, but we will not store or use it for any purpose other than responding to your message. Please refer to Formspree's privacy policy for more details.
+                </p>
               </form>
             ) : (
               <div className="mt-3 space-y-4">
