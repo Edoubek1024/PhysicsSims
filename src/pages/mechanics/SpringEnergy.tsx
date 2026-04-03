@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
-import { SliderWithInput } from '../components/SliderWithInput';
+import { SliderWithInput } from '../../components/SliderWithInput';
+import { ConceptBox } from '../../components/ConceptBox';
 
 type Vec2 = { x: number; y: number };
 
@@ -489,11 +490,48 @@ export function SpringEnergy() {
                     strokeLinejoin="round"
                   />
                 ) : (
-                  <text x="100" y="30" textAnchor="middle" fill="rgba(148,163,184,0.6)" fontSize="10">
-                    Run the simulation to see v(t)
+                  <text
+                    x="100"
+                    y="24"
+                    textAnchor="middle"
+                    fill="rgba(148,163,184,0.6)"
+                    fontSize="9"
+                  >
+                    <tspan x="100" dy="0">Run the simulation</tspan>
+                    <tspan x="100" dy="12">to see v(t)</tspan>
                   </text>
                 )}
               </svg>
+            </div>
+          </div>
+
+          <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-3">
+            <p className="text-xs font-semibold text-slate-100">Energy (live)</p>
+            <p className="mt-1 text-[0.7rem] text-slate-400">
+              KE = ½mv² · PE_spring = ½kx² · TE = KE + PE
+            </p>
+            <div className="mt-3 space-y-2">
+              <EnergyRow
+                label="Kinetic (KE)"
+                value={viewSnapshot.keJ}
+                pct={kePctView}
+                barClass="bg-sky-400"
+                valueClass="text-sky-200"
+              />
+              <EnergyRow
+                label="Spring PE"
+                value={viewSnapshot.peSpringJ}
+                pct={pePctView}
+                barClass="bg-emerald-400"
+                valueClass="text-emerald-200"
+              />
+              <EnergyRow
+                label="Total (TE)"
+                value={viewSnapshot.teJ}
+                pct={tePctView}
+                barClass="bg-fuchsia-400"
+                valueClass="text-fuchsia-200"
+              />
             </div>
           </div>
         </section>
@@ -536,54 +574,6 @@ export function SpringEnergy() {
             onChange={(value) => setControls((p) => ({ ...p, initialDisplacementM: value }))}
           />
 
-          <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-3">
-            <p className="text-xs font-semibold text-slate-100">Energy (live)</p>
-            <p className="mt-1 text-[0.7rem] text-slate-400">
-              KE = ½mv² · PE_spring = ½kx² · TE = KE + PE
-            </p>
-            <div className="mt-3 space-y-2">
-              <EnergyRow
-                label="Kinetic (KE)"
-                value={viewSnapshot.keJ}
-                pct={kePctView}
-                barClass="bg-sky-400"
-                valueClass="text-sky-200"
-              />
-              <EnergyRow
-                label="Spring PE"
-                value={viewSnapshot.peSpringJ}
-                pct={pePctView}
-                barClass="bg-emerald-400"
-                valueClass="text-emerald-200"
-              />
-              <EnergyRow
-                label="Total (TE)"
-                value={viewSnapshot.teJ}
-                pct={tePctView}
-                barClass="bg-fuchsia-400"
-                valueClass="text-fuchsia-200"
-              />
-            </div>
-          </div>
-
-          <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-3 text-xs text-slate-300">
-            <p className="font-medium text-slate-100">Snapshot</p>
-            <div className="mt-2 grid grid-cols-2 gap-2">
-              <StatChip label="x (displacement)" value={`${roundTo2(viewSnapshot.xM)} m`} />
-              <StatChip label="v" value={`${roundTo2(viewSnapshot.vMps)} m/s`} />
-              <StatChip
-                label={
-                  <>
-                    F<sub className="text-[0.78em] font-normal">spring</sub>
-                  </>
-                }
-                uppercaseLabel={false}
-                value={`${roundTo2(viewSnapshot.forceN)} N`}
-              />
-              <StatChip label="|F| max (est.)" value={`${roundTo2(maxArrowForce)} N`} />
-            </div>
-          </div>
-
           <div className="mt-auto flex flex-wrap gap-2">
             <button
               type="button"
@@ -608,30 +598,44 @@ export function SpringEnergy() {
               Reset all
             </button>
           </div>
+
+          <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-3 text-xs text-slate-300">
+            <p className="font-medium text-slate-100">Snapshot</p>
+            <div className="mt-2 grid grid-cols-2 gap-2">
+              <StatChip label="x (displacement)" value={`${roundTo2(viewSnapshot.xM)} m`} />
+              <StatChip label="v" value={`${roundTo2(viewSnapshot.vMps)} m/s`} />
+              <StatChip
+                label={
+                  <>
+                    F<sub className="text-[0.78em] font-normal">spring</sub>
+                  </>
+                }
+                uppercaseLabel={false}
+                value={`${roundTo2(viewSnapshot.forceN)} N`}
+              />
+              <StatChip label="|F| max (est.)" value={`${roundTo2(maxArrowForce)} N`} />
+            </div>
+          </div>
         </section>
       </main>
 
-      <section className="mt-6 rounded-2xl border border-slate-800 bg-slate-900/80 p-5 shadow-lg shadow-slate-950/40">
-        <h2 className="text-sm font-semibold tracking-wide text-sky-300">Explanation</h2>
-        <div className="mt-3 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <ExplainCard
-            title="Hooke’s law"
-            body="The spring exerts a restoring force F = −kx on the block, where x is displacement from the relaxed length (equilibrium). The force always points toward x = 0, so it pulls the block back when stretched and pushes when compressed."
-          />
-          <ExplainCard
-            title="Oscillatory motion"
-            body="On a frictionless surface, that restoring force produces acceleration a = F/m. The block speeds up toward equilibrium, overshoots, then slows as the spring stretches the other way—repeating in simple harmonic motion (for small angles this model stays linear)."
-          />
-          <ExplainCard
-            title="Energy exchange"
-            body="Kinetic energy KE = ½mv² is largest near equilibrium where speed is highest. Spring potential energy PE = ½kx² is largest at the turning points where the block momentarily stops. Energy sloshes between these two forms every half cycle."
-          />
-          <ExplainCard
-            title="Mechanical energy"
-            body="With no friction or damping, TE = KE + PE stays fixed for this ideal linear spring. The simulation advances (x, v) with the exact closed-form solution for one timestep of simple harmonic motion, so total energy does not drift the way it would with naive Euler steps."
-          />
-        </div>
-      </section>
+      <ConceptBox
+        heading="Explanation" items={[
+          {
+            title: "Hooke’s law",
+            description: "The spring exerts a restoring force F = −kx on the block, where x is displacement from the relaxed length (equilibrium). The force always points toward x = 0, so it pulls the block back when stretched and pushes when compressed."
+          },
+          {
+            title: "Oscillatory motion",
+            description: "On a frictionless surface, that restoring force produces acceleration a = F/m. The block speeds up toward equilibrium, overshoots, then slows as the spring stretches the other way—repeating in simple harmonic motion (for small angles this model stays linear)."
+          },
+          {
+            title: "Energy exchange",
+            description: "Kinetic energy KE = ½mv² is largest near equilibrium where speed is highest. Spring potential energy PE = ½kx² is largest at the turning points where the block momentarily stops. Energy sloshes between these two forms every half cycle."
+          },
+        ]}
+        
+      ></ConceptBox>
     </div>
   );
 }
@@ -754,11 +758,3 @@ function StatTile({ label, value, accent }: { label: string; value: string; acce
   );
 }
 
-function ExplainCard({ title, body }: { title: string; body: string }) {
-  return (
-    <div className="rounded-xl border border-slate-800 bg-slate-950/70 p-4">
-      <p className="text-xs font-semibold text-slate-100">{title}</p>
-      <p className="mt-2 text-xs leading-relaxed text-slate-300">{body}</p>
-    </div>
-  );
-}

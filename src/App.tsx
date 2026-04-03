@@ -3,17 +3,72 @@ import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import packageJson from '../package.json';
 
 const GA_MEASUREMENT_ID = 'G-RBV8F88DKB';
+const GA_SCRIPT_ID = 'google-analytics-gtag';
+const COOKIE_CONSENT_KEY = 'physicssims-cookie-consent';
 const FORMSPREE_ENDPOINT = import.meta.env.VITE_FORMSPREE_ENDPOINT as string | undefined;
 
 declare global {
   interface Window {
     gtag?: (...args: unknown[]) => void;
+    dataLayer?: unknown[];
   }
 }
 
+type CookieConsent = 'unknown' | 'allow' | 'deny';
+
+const readStoredCookieConsent = (): CookieConsent => {
+  if (typeof window === 'undefined') {
+    return 'unknown';
+  }
+
+  const storedConsent = window.localStorage.getItem(COOKIE_CONSENT_KEY);
+
+  if (storedConsent === 'allow' || storedConsent === 'deny') {
+    return storedConsent;
+  }
+
+  return 'unknown';
+};
+
+declare global {
+  interface Window {
+    [key: `ga-disable-${string}`]: boolean | undefined;
+  }
+}
+
+const setAnalyticsDisabled = (disabled: boolean) => {
+  window[`ga-disable-${GA_MEASUREMENT_ID}`] = disabled;
+};
+
+const initializeGtagStub = () => {
+  if (typeof window.gtag === 'function') {
+    return;
+  }
+
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = (...args: unknown[]) => {
+    window.dataLayer?.push(args);
+  };
+  window.gtag('js', new Date());
+  window.gtag('config', GA_MEASUREMENT_ID, { send_page_view: false });
+};
+
+const loadAnalyticsScript = () => {
+  if (document.getElementById(GA_SCRIPT_ID)) {
+    return;
+  }
+
+  const script = document.createElement('script');
+  script.id = GA_SCRIPT_ID;
+  script.async = true;
+  script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
+  document.head.appendChild(script);
+};
+
 const Home = lazy(() => import('./pages/Home').then((m) => ({ default: m.Home })));
 const About = lazy(() => import('./pages/About').then((m) => ({ default: m.About })));
-const Simulations = lazy(() => import('./pages/Simulations').then((m) => ({ default: m.Simulations })));
+const Phys211 = lazy(() => import('./pages/211').then((m) => ({ default: m.Simulations })));
+const Phys212 = lazy(() => import('./pages/212').then((m) => ({ default: m.Simulations })));
 const KinematicsDemo = lazy(() => import('./pages/mechanics/KinematicsDemo').then((m) => ({ default: m.KinematicsDemo })));
 const Kinematics2DDemo = lazy(() => import('./pages/mechanics/Kinematics2DDemo').then((m) => ({ default: m.Kinematics2DDemo })));
 const ForceSimulator = lazy(() => import('./pages/mechanics/ForceSimulator').then((m) => ({ default: m.ForceSimulator })));
@@ -31,21 +86,26 @@ const MagField = lazy(() => import('./pages/enm/MagField').then((m) => ({ defaul
 const BeamBalance = lazy(() => import('./pages/statics/BeamBalance').then((m) => ({ default: m.BeamBalance })));
 const DistributedLoad = lazy(() => import('./pages/statics/DistributedLoad').then((m) => ({ default: m.DistributedLoad })));
 const EnergyHills = lazy(() => import('./pages/mechanics/EnergyHills').then((m) => ({ default: m.EnergyHills })));
-const SpringEnergy = lazy(() => import('./pages/SpringEnergy').then((m) => ({ default: m.SpringEnergy })));
+const SpringEnergy = lazy(() => import('./pages/mechanics/SpringEnergy').then((m) => ({ default: m.SpringEnergy })));
 const WorkInDynamics = lazy(() => import('./pages/WorkInDynamics').then((m) => ({ default: m.WorkInDynamics })));
 
 const NAV_LINKS = [
   { to: '/', label: 'Home' },
-  { to: '/#mehcanics', label: 'Mechanics' },
+  { to: '/#mechanics', label: 'Mechanics' },
   { to: '/#enm', label: 'E&M' },
   { to: '/#statics', label: 'Statics' },
-  { to: '/simulations', label: 'PHYS211' },
+];
+
+const PHYS_LINKS = [
+  { to: '/211', label: 'PHYS211' },
+  { to: '/212', label: 'PHYS212' },
 ];
 
 const APP_ROUTES = [
   { path: '/', element: <Home /> },
   { path: '/about', element: <About /> },
-  { path: '/simulations', element: <Simulations /> },
+  { path: '/211', element: <Phys211 /> },
+  { path: '/212', element: <Phys212 /> },
   { path: '/kinematics', element: <KinematicsDemo /> },
   { path: '/kinematics-2d', element: <Kinematics2DDemo /> },
   { path: '/forces', element: <ForceSimulator /> },
@@ -69,11 +129,28 @@ const APP_ROUTES = [
 
 export function App() {
   const location = useLocation();
+  const [cookieConsent, setCookieConsent] = useState<CookieConsent>(readStoredCookieConsent);
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
   const [isContactOpen, setIsContactOpen] = useState(false);
 
   useEffect(() => {
-    if (typeof window.gtag !== 'function') return;
+    if (cookieConsent === 'unknown') {
+      return;
+    }
+
+    window.localStorage.setItem(COOKIE_CONSENT_KEY, cookieConsent);
+    setAnalyticsDisabled(cookieConsent === 'deny');
+
+    if (cookieConsent !== 'allow') {
+      return;
+    }
+
+    initializeGtagStub();
+    loadAnalyticsScript();
+  }, [cookieConsent]);
+
+  useEffect(() => {
+    if (cookieConsent !== 'allow' || typeof window.gtag !== 'function') return;
 
     const pagePath = `${location.pathname}${location.search}${location.hash}`;
 
@@ -83,13 +160,13 @@ export function App() {
       page_title: document.title,
       send_to: GA_MEASUREMENT_ID,
     });
-  }, [location.pathname, location.search, location.hash]);
+  }, [cookieConsent, location.pathname, location.search, location.hash]);
 
   useEffect(() => {
     if (!location.hash) return;
 
     const hash = location.hash.slice(1).toLowerCase();
-    const normalizedHash = hash === 'mehcanics' ? 'mechanics' : hash;
+    const normalizedHash = hash;
     const target =
       document.getElementById(normalizedHash) ??
       document.querySelector<HTMLElement>(`[data-hash="${hash}"]`);
@@ -123,6 +200,31 @@ export function App() {
                 {item.label}
               </Link>
             ))}
+            <div className="group relative">
+              <button
+                type="button"
+                className="inline-flex items-center gap-1 text-[0.9rem] text-slate-300 transition hover:text-sky-300 group-focus-within:text-sky-300"
+                aria-haspopup="menu"
+              >
+                PHYS
+                <span aria-hidden="true">▾</span>
+              </button>
+              <div
+                className="invisible absolute right-0 top-full z-20 mt-2 min-w-28 rounded-md border border-slate-700 bg-slate-900/95 py-1 opacity-0 shadow-lg shadow-slate-950/60 transition group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100"
+                role="menu"
+              >
+                {PHYS_LINKS.map((item) => (
+                  <Link
+                    key={item.to}
+                    to={item.to}
+                    role="menuitem"
+                    className="block px-3 py-2 text-[0.85rem] text-slate-300 transition hover:bg-slate-800 hover:text-sky-300"
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
           </nav>
         </div>
       </div>
@@ -140,8 +242,8 @@ export function App() {
       <footer className="border-t border-slate-950/90 bg-slate-900/2" >
         <img src="/adl.png" alt="Physics Sims Logo" className="mx-auto h-15 w-15" />
         <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-4 py-4 text-sm text-slate-400 sm:flex-row sm:items-center sm:justify-between ">
-          <p>© 2026 PhysicsSsim v{packageJson.version}</p>
-          <p className="text-center sm:text-left ">Made with ❤️</p>
+          <p>© 2026 PhysicsSim v{packageJson.version}</p>
+          <p className="text-center center">Made with ❤️</p>
           <div className="flex gap-4">
             <a
               href="https://courses.physics.illinois.edu"
@@ -157,6 +259,13 @@ export function App() {
               className="hover:text-sky-300"
             >
               Privacy
+            </a>
+            <a
+              type="button"
+              onClick={() => setCookieConsent('unknown')}
+              className="hover:text-sky-300"
+            >
+              Cookies
             </a>
             <a href="https://github.com/Edoubek1024/PhysicsSims?tab=readme-ov-file#contributing" className="hover:text-sky-300">Contribution</a>
             <a
@@ -186,9 +295,9 @@ export function App() {
               Privacy Notice
             </h2>
             <p className="mt-3 text-sm text-slate-300">
-              PhysicsSims does not collect any personal data from users. However, we use Google Analytics to collect anonymous usage data to help us improve the site. 
-              This data includes information about your device, browser, and interactions with the site, but it does not include any personally identifiable information. 
-              By using PhysicsSims, you consent to the collection of this anonymous usage data.
+              PhysicsSims does not collect personal data from users. Anonymous usage tracking with Google Analytics only starts after you allow cookies.
+              The tracking data includes device, browser, and interaction information, but it does not include personally identifiable information.
+              You can change your choice with the Cookies button in the footer.
             </p>
             <div className="mt-5 flex justify-end">
               <button
@@ -198,6 +307,37 @@ export function App() {
               >
                 Close
               </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
+
+      {cookieConsent === 'unknown' ? (
+        <div className="fixed inset-x-0 bottom-0 z-50 px-4 pb-4">
+          <div className="mx-auto max-w-6xl rounded-2xl border border-slate-700/80 bg-slate-950/95 p-4 shadow-2xl shadow-slate-950/70 backdrop-blur">
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+              <div className="space-y-1">
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-300">Cookies</p>
+                <p className="text-sm text-slate-200">
+                  This site uses cookies to enahance your experiences and analyze traffic. By clicking "Allow", you consent to the use of analytics cookies. You can change your choice at any time by clicking the "Cookies" button in the footer.
+                </p>
+              </div>
+              <div className="flex flex-col gap-2 sm:flex-row">
+                <button
+                  type="button"
+                  onClick={() => setCookieConsent('deny')}
+                  className="rounded-md border border-slate-600 px-4 py-2 text-sm font-medium text-slate-200 transition hover:border-slate-400 hover:bg-slate-900"
+                >
+                  Deny
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setCookieConsent('allow')}
+                  className="rounded-md bg-sky-300 px-4 py-2 text-sm font-medium text-slate-950 transition hover:bg-sky-400"
+                >
+                  Allow
+                </button>
+              </div>
             </div>
           </div>
         </div>

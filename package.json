@@ -1,11 +1,14 @@
 {
   "name": "physics-labs",
   "private": true,
+  "homepage": "https://Edoubek1024.github.io/PhysicsSims",
   "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc && vite build && node --input-type=module -e \"import { copyFileSync } from 'node:fs'; copyFileSync('dist/index.html', 'dist/404.html');\"",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist",
     "preview": "vite preview",
     "lint": "eslint src --ext ts,tsx"
   },
@@ -22,6 +25,7 @@
     "eslint": "^9.0.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-react": "^7.37.1",
+    "gh-pages": "^6.3.0",
     "postcss": "^8.4.49",
     "prettier": "^3.4.0",
     "tailwindcss": "^3.4.17",

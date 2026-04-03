@@ -62,7 +62,33 @@ npm run dev      # start development server
 npm run build    # type-check + production build
 npm run preview  # preview production build locally
 npm run lint     # run eslint
+npm run deploy   # build and publish dist/ to GitHub Pages
 ```
+
+## Deploy To GitHub Pages
+
+This project is configured for the repository URL:
+
+- `https://Edoubek1024.github.io/PhysicsSims`
+
+One-time setup:
+
+1. Ensure the GitHub repository exists at `Edoubek1024/PhysicsSims`
+2. In GitHub, open **Settings -> Pages**
+3. Set **Source** to **Deploy from a branch**
+4. Choose branch **gh-pages** and folder **/(root)**
+
+Deploy:
+
+```bash
+npm install
+npm run deploy
+```
+
+Notes:
+
+- `vite.config.ts` uses `base: '/PhysicsSims/'` for project-page hosting.
+- Build output includes `dist/404.html` copied from `dist/index.html` so React Router routes load correctly on refresh.
 
 ## Project Structure
 

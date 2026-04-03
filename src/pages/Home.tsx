@@ -216,7 +216,7 @@ export function Home() {
           </div>
         </header>
 
-        <section id="mechanics" data-hash="mehcanics">
+        <section id="mechanics" data-hash="mechanics">
           <div className="mb-4">
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-sky-400">Mechanics</p>
             <h2 className="mt-1 text-xl font-semibold text-slate-50">Kinematics and Dynamics</h2>
@@ -274,7 +274,7 @@ export function Home() {
                     <li key={sim.title}>
                       <Link to={sim.path} className="block px-4 py-3 transition hover:bg-slate-900/80">
                         <p className="text-sm font-semibold text-slate-100">{sim.title}</p>
-                        <p className="mt-0.5 text-xs text-emerald-300/90">{sim.status}</p>
+                        {/* <p className="mt-0.5 text-xs text-emerald-300/90">{sim.status}</p> */}
                         <p className="mt-0.5 text-xs text-slate-400">{sim.description}</p>
                       </Link>
                     </li>
@@ -283,7 +283,7 @@ export function Home() {
                 return (
                   <li key={sim.title} className="px-4 py-3">
                     <p className="text-sm font-semibold text-slate-100">{sim.title}</p>
-                    <p className="mt-0.5 text-xs text-emerald-300/90">{sim.status}</p>
+                    {/* <p className="mt-0.5 text-xs text-emerald-300/90">{sim.status}</p> */}
                     <p className="mt-0.5 text-xs text-slate-400">{sim.description}</p>
                   </li>
                 );
@@ -353,7 +353,7 @@ export function Home() {
                     <li key={sim.title}>
                       <Link to={sim.path} className="block px-4 py-3 transition hover:bg-slate-900/80">
                         <p className="text-sm font-semibold text-slate-100">{sim.title}</p>
-                        <p className="mt-0.5 text-xs text-red-300/90">{sim.status}</p>
+                        {/* <p className="mt-0.5 text-xs text-red-300/90">{sim.status}</p> */}
                         <p className="mt-0.5 text-xs text-slate-400">{sim.description}</p>
                       </Link>
                     </li>
@@ -362,7 +362,7 @@ export function Home() {
                 return (
                   <li key={sim.title} className="px-4 py-3">
                     <p className="text-sm font-semibold text-slate-100">{sim.title}</p>
-                    <p className="mt-0.5 text-xs text-red-300/90">{sim.status}</p>
+                    {/* <p className="mt-0.5 text-xs text-red-300/90">{sim.status}</p> */}
                     <p className="mt-0.5 text-xs text-slate-400">{sim.description}</p>
                   </li>
                 );

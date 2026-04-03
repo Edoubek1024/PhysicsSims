@@ -633,6 +633,41 @@ export function EnergyHills() {
               <p className="font-mono text-[0.6rem] text-fuchsia-200">TE = {ui.teJ.toFixed(1)} J</p>
             </div>
           </div>
+
+          <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-3">
+            <p className="text-xs font-semibold text-slate-100">Energy (live)</p>
+            <p className="mt-1 text-[0.7rem] text-slate-400">
+              Using KE = ½mv² and PE = mgh with g = 9.8 m/s².
+            </p>
+
+            <div className="mt-3 space-y-2">
+              <EnergyRow label="Kinetic (KE)" value={ui.keJ} pct={kePct} barClass="bg-sky-400" valueClass="text-sky-200" />
+              <EnergyRow
+                label="Potential (PE)"
+                value={ui.peJ}
+                pct={pePct}
+                barClass="bg-emerald-400"
+                valueClass="text-emerald-200"
+              />
+              <EnergyRow
+                label="Total (TE)"
+                value={ui.teJ}
+                pct={tePct}
+                barClass="bg-fuchsia-400"
+                valueClass="text-fuchsia-200"
+              />
+            </div>
+          </div>
+
+          <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-3 text-xs text-slate-300">
+            <p className="font-medium text-slate-100">Snapshot</p>
+            <div className="mt-2 grid grid-cols-2 gap-2">
+              <StatChip label="Height (h)" value={`${roundTo2(ui.hM)} m`} />
+              <StatChip label="Speed (v)" value={`${roundTo2(ui.vMps)} m/s`} />
+              <StatChip label="Mass (m)" value={`${roundTo2(controls.massKg)} kg`} />
+              <StatChip label="g" value="9.8 m/s²" />
+            </div>
+          </div>
         </section>
 
         <section className="flex min-h-[28rem] flex-col space-y-5 rounded-2xl border border-slate-800 bg-slate-950/80 p-5 shadow-lg shadow-slate-950/40">
@@ -687,41 +722,6 @@ export function EnergyHills() {
             </p>
           </div>
 
-          <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-3">
-            <p className="text-xs font-semibold text-slate-100">Energy (live)</p>
-            <p className="mt-1 text-[0.7rem] text-slate-400">
-              Using KE = ½mv² and PE = mgh with g = 9.8 m/s².
-            </p>
-
-            <div className="mt-3 space-y-2">
-              <EnergyRow label="Kinetic (KE)" value={ui.keJ} pct={kePct} barClass="bg-sky-400" valueClass="text-sky-200" />
-              <EnergyRow
-                label="Potential (PE)"
-                value={ui.peJ}
-                pct={pePct}
-                barClass="bg-emerald-400"
-                valueClass="text-emerald-200"
-              />
-              <EnergyRow
-                label="Total (TE)"
-                value={ui.teJ}
-                pct={tePct}
-                barClass="bg-fuchsia-400"
-                valueClass="text-fuchsia-200"
-              />
-            </div>
-          </div>
-
-          <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-3 text-xs text-slate-300">
-            <p className="font-medium text-slate-100">Snapshot</p>
-            <div className="mt-2 grid grid-cols-2 gap-2">
-              <StatChip label="Height (h)" value={`${roundTo2(ui.hM)} m`} />
-              <StatChip label="Speed (v)" value={`${roundTo2(ui.vMps)} m/s`} />
-              <StatChip label="Mass (m)" value={`${roundTo2(controls.massKg)} kg`} />
-              <StatChip label="g" value="9.8 m/s²" />
-            </div>
-          </div>
-
           <div className="mt-auto flex flex-wrap gap-2">
             <button
               type="button"
@@ -746,6 +746,8 @@ export function EnergyHills() {
               Reset all
             </button>
           </div>
+        
+          
         </section>
       </main>
 
