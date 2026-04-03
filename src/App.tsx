@@ -31,6 +31,8 @@ const MagField = lazy(() => import('./pages/enm/MagField').then((m) => ({ defaul
 const BeamBalance = lazy(() => import('./pages/statics/BeamBalance').then((m) => ({ default: m.BeamBalance })));
 const DistributedLoad = lazy(() => import('./pages/statics/DistributedLoad').then((m) => ({ default: m.DistributedLoad })));
 const EnergyHills = lazy(() => import('./pages/mechanics/EnergyHills').then((m) => ({ default: m.EnergyHills })));
+const SpringEnergy = lazy(() => import('./pages/SpringEnergy').then((m) => ({ default: m.SpringEnergy })));
+const WorkInDynamics = lazy(() => import('./pages/WorkInDynamics').then((m) => ({ default: m.WorkInDynamics })));
 
 const NAV_LINKS = [
   { to: '/', label: 'Home' },
@@ -52,6 +54,8 @@ const APP_ROUTES = [
   { path: '/spring-force', element: <SpringForce /> },
   { path: '/pulley-system', element: <PulleySystem /> },
   { path: '/energy-hills', element: <EnergyHills /> },
+  { path: '/spring-energy', element: <SpringEnergy /> },
+  { path: '/work-in-dynamics', element: <WorkInDynamics /> },
   { path: '/columbs-law', element: <ColumbsLaw /> },
   { path: '/amperes-law', element: <AmperesLaw /> },
   { path: '/maxwell', element: <Maxwell /> },

@@ -77,6 +77,18 @@ const mechanicsSims = [
     description: 'Potential ↔ kinetic energy conversion on smooth, bumpy, and looped terrain.',
     preview: '/thumbnails/energy-hills.png',
   },
+  {
+    title: 'Spring Energy',
+    path: '/spring-energy',
+    description: 'Oscillating spring–mass system: Hooke’s law, energy exchange, and conserved total energy.',
+    preview: '/thumbnails/spring.png',
+  },
+  {
+    title: 'Work in Dynamics',
+    path: '/work-in-dynamics',
+    description: 'Incline, rope pull, and spring tabs with live work tracking (W = F·Δr) per force.',
+    preview: '/thumbnails/energy-hills.png',
+  },
 ];
 
 const enmSims = [

@@ -49,6 +49,11 @@ const energySims: SimLink[] = [
     title: 'Energy Hills',
     description: 'Potential ↔ kinetic energy conversion on smooth, bumpy, and looped terrain.',
   },
+  {
+    to: '/spring-energy',
+    title: 'Spring Energy Simulation',
+    description: 'Horizontal spring–mass oscillator: velocity, KE, spring PE, and total energy with a live force arrow.',
+  },
 ];
 
 export function Simulations() {
