@@ -187,7 +187,7 @@ export function Home() {
             Welcome to
           </p>
           <h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-50 sm:text-4xl md:text-5xl bg-[linear-gradient(90deg,#fca5a5_0%,#fdba74_22%,#fde68a_40%,#86efac_58%,#93c5fd_78%,#c4b5fd_100%)] bg-clip-text text-transparent">
-            PhysicsSimsssssssssssssssssssssssssssssssssssssssssssss
+            PhysicsSims
           </h1>
           <p className="mt-4 max-w-2xl text-sm text-slate-300 sm:text-base">
             Interactive simulations for mechanics and core physics topics, all in the browser.

@@ -17,16 +17,14 @@ declare global {
 type CookieConsent = 'unknown' | 'allow' | 'deny';
 
 const readStoredCookieConsent = (): CookieConsent => {
-  if (typeof window === 'undefined') {
-    return 'unknown';
+  try {
+    const storedConsent = window.localStorage.getItem(COOKIE_CONSENT_KEY);
+    if (storedConsent === 'allow' || storedConsent === 'deny') {
+      return storedConsent;
+    }
+  } catch {
+    // localStorage may be unavailable (e.g. private browsing with strict settings)
   }
-
-  const storedConsent = window.localStorage.getItem(COOKIE_CONSENT_KEY);
-
-  if (storedConsent === 'allow' || storedConsent === 'deny') {
-    return storedConsent;
-  }
-
   return 'unknown';
 };
 
@@ -138,7 +136,11 @@ export function App() {
       return;
     }
 
-    window.localStorage.setItem(COOKIE_CONSENT_KEY, cookieConsent);
+    try {
+      window.localStorage.setItem(COOKIE_CONSENT_KEY, cookieConsent);
+    } catch {
+      // localStorage may be unavailable in restricted environments
+    }
     setAnalyticsDisabled(cookieConsent === 'deny');
 
     if (cookieConsent !== 'allow') {
@@ -252,7 +254,7 @@ export function App() {
             >
               <img src="/uiuc.png" alt="UIUC I-Block" className="h-7 w-7 object-contain" />
             </a>
-            <a href="/about" className="hover:text-sky-300">About</a>
+            <Link to="/about" className="hover:text-sky-300">About</Link>
             <a
               type="button"
               onClick={() => setIsPrivacyOpen(true)}
