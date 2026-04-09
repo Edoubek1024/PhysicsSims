@@ -1,5 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { SliderWithInput } from '../../components/SliderWithInput';
+import { useUrlStateSync } from '../../hooks/useUrlStateSync';
+import type { UrlStateSyncOptions } from '../../hooks/useUrlStateSync';
 
 type Vec2 = { x: number; y: number };
 
@@ -84,6 +87,121 @@ function gravityForceVector(mass: number, gravityEnabled: boolean): Vec2 {
   return { x: 0, y: -9.8 * mass };
 }
 
+function clamp(value: number, min: number, max: number): number {
+  return Math.min(max, Math.max(min, value));
+}
+
+function parseNumberParam(params: URLSearchParams, key: string): number | null {
+  const raw = params.get(key);
+  if (raw == null) return null;
+  const parsed = Number(raw);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function formatNumberParam(value: number): string {
+  return Number(value.toFixed(2)).toString();
+}
+
+function defaultForceAtIndex(index: number): ForceControl {
+  if (index === 0) {
+    return { ...DEFAULT_CONTROLS.forces[0] };
+  }
+  return { ...NEW_FORCE_DEFAULTS };
+}
+
+function readControlsFromUrl(params: URLSearchParams): Partial<ControlsState> {
+  const patch: Partial<ControlsState> = {};
+
+  const mass = parseNumberParam(params, 'mass');
+  if (mass != null) {
+    patch.mass = clamp(mass, 0.1, 20);
+  }
+
+  const gravity = params.get('gravity');
+  if (gravity != null) {
+    patch.gravityEnabled = gravity === '1' || gravity.toLowerCase() === 'true';
+  }
+
+  let sawAnyForceField = false;
+  let highestForceIndex = 0;
+  const forceCount = parseNumberParam(params, 'fc');
+  const parsedCount =
+    forceCount != null ? Math.floor(clamp(forceCount, 1, MAX_FORCES)) : null;
+
+  const nextForces: ForceControl[] = [];
+  for (let index = 0; index < MAX_FORCES; index += 1) {
+    const displayIndex = index + 1;
+    const magnitude =
+      index === 0
+        ? parseNumberParam(params, `f${displayIndex}m`) ?? parseNumberParam(params, 'force')
+        : parseNumberParam(params, `f${displayIndex}m`);
+    const angle = parseNumberParam(params, `f${displayIndex}a`);
+    const enabled = params.get(`f${displayIndex}e`);
+
+    const hasAny = magnitude != null || angle != null || enabled != null;
+    if (!hasAny) {
+      continue;
+    }
+
+    sawAnyForceField = true;
+    highestForceIndex = displayIndex;
+
+    const defaults = defaultForceAtIndex(index);
+    nextForces[index] = {
+      enabled:
+        enabled != null
+          ? enabled === '1' || enabled.toLowerCase() === 'true'
+          : defaults.enabled,
+      magnitude:
+        magnitude != null ? clamp(magnitude, 0, 20) : defaults.magnitude,
+      angleDeg: angle != null ? clamp(angle, 0, 360) : defaults.angleDeg,
+    };
+  }
+
+  if (sawAnyForceField || parsedCount != null) {
+    const count = parsedCount ?? Math.max(1, highestForceIndex);
+    const normalizedForces: ForceControl[] = [];
+    for (let index = 0; index < count; index += 1) {
+      normalizedForces.push(nextForces[index] ?? defaultForceAtIndex(index));
+    }
+    patch.forces = normalizedForces;
+  }
+
+  return patch;
+}
+
+function writeControlsToUrl(state: ControlsState, params: URLSearchParams) {
+  params.set('mass', formatNumberParam(clamp(state.mass, 0.1, 20)));
+  params.set('gravity', state.gravityEnabled ? '1' : '0');
+  params.set('fc', state.forces.length.toString());
+
+  const firstForce = state.forces[0];
+  if (firstForce != null) {
+    params.set('force', formatNumberParam(clamp(firstForce.magnitude, 0, 20)));
+  } else {
+    params.delete('force');
+  }
+
+  for (let index = 0; index < MAX_FORCES; index += 1) {
+    const displayIndex = index + 1;
+    const magnitudeKey = `f${displayIndex}m`;
+    const angleKey = `f${displayIndex}a`;
+    const enabledKey = `f${displayIndex}e`;
+
+    const force = state.forces[index];
+    if (force == null) {
+      params.delete(magnitudeKey);
+      params.delete(angleKey);
+      params.delete(enabledKey);
+      continue;
+    }
+
+    params.set(magnitudeKey, formatNumberParam(clamp(force.magnitude, 0, 20)));
+    params.set(angleKey, formatNumberParam(clamp(force.angleDeg, 0, 360)));
+    params.set(enabledKey, force.enabled ? '1' : '0');
+  }
+}
+
 export function ForceSimulator() {
   const [controls, setControls] = useState<ControlsState>(DEFAULT_CONTROLS);
   const [isRunning, setIsRunning] = useState(false);
@@ -99,6 +217,16 @@ export function ForceSimulator() {
   const controlsRef = useRef<ControlsState>(controls);
   const posRef = useRef<Vec2>(boxPos);
   const velRef = useRef<Vec2>(boxVel);
+
+  const controlsUrlOptions = useMemo<UrlStateSyncOptions<ControlsState>>(
+    () => ({
+      read: readControlsFromUrl,
+      write: writeControlsToUrl,
+    }),
+    []
+  );
+
+  useUrlStateSync(controls, setControls, controlsUrlOptions);
 
   useEffect(() => {
     isRunningRef.current = isRunning;
@@ -606,6 +734,7 @@ export function ForceSimulator() {
                 step={0.1}
                 value={controls.mass}
                 onChange={handleMassChange}
+                syncToUrl={false}
               />
             </div>
 
@@ -772,6 +901,7 @@ function ForceControlCard({ index, force, onChange, onRemove }: ForceControlCard
           step={0.2}
           value={force.magnitude}
           onChange={(value) => onChange({ magnitude: value })}
+          syncToUrl={false}
         />
         <SliderWithInput
           label="Angle"
@@ -782,86 +912,9 @@ function ForceControlCard({ index, force, onChange, onRemove }: ForceControlCard
           value={force.angleDeg}
           onChange={(value) => onChange({ angleDeg: value })}
           description="0° = right, 90° = up"
+          syncToUrl={false}
         />
       </div>
-    </div>
-  );
-}
-
-type SliderWithInputProps = {
-  label: string;
-  units: string;
-  min: number;
-  max: number;
-  step: number;
-  value: number;
-  onChange: (value: number) => void;
-  description?: string;
-};
-
-function SliderWithInput({
-  label,
-  units,
-  min,
-  max,
-  step,
-  value,
-  onChange,
-  description,
-}: SliderWithInputProps) {
-  const handleSliderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onChange(Number(event.target.value));
-  };
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const parsed = Number(event.target.value);
-    if (Number.isNaN(parsed)) return;
-    const clamped = Math.min(max, Math.max(min, parsed));
-    onChange(clamped);
-  };
-
-  return (
-    <div className="space-y-1.5">
-      <div className="flex items-baseline justify-between gap-2">
-        <p className="text-slate-200">{label}</p>
-        <span className="text-[0.65rem] text-slate-400">
-          {value.toFixed(2)} {units}
-        </span>
-      </div>
-      <div className="flex items-center gap-3">
-        <input
-          type="range"
-          min={min}
-          max={max}
-          step={step}
-          value={value}
-          onChange={handleSliderChange}
-          className="h-1 flex-1 cursor-pointer appearance-none rounded-full bg-slate-800 accent-sky-400"
-        />
-        <div className="flex items-center gap-1 rounded-md border border-slate-700 bg-slate-900 px-2 py-1">
-          <input
-            type="number"
-            min={min}
-            max={max}
-            step={step}
-            value={value.toFixed(2)}
-            onChange={handleInputChange}
-            className="w-20 bg-transparent text-right text-[0.7rem] text-slate-100 outline-none"
-          />
-          <span className="text-[0.65rem] text-slate-400">{units}</span>
-        </div>
-      </div>
-      <div className="flex justify-between text-[0.6rem] text-slate-500">
-        <span>
-          Min: {min} {units}
-        </span>
-        <span>
-          Max: {max} {units}
-        </span>
-      </div>
-      {description && (
-        <p className="text-[0.6rem] text-slate-500">{description}</p>
-      )}
     </div>
   );
 }

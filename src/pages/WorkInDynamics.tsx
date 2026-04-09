@@ -2,6 +2,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { ConceptBox } from '../components/ConceptBox';
+import { SliderWithInput } from '../components/SliderWithInput';
 
 type Vec2 = { x: number; y: number };
 
@@ -68,6 +69,7 @@ function Arrow({ from, to, color, strokeWidth = 2.5, headSize = 8, opacity = 1 }
 
 function ControlRow(props: {
   label: React.ReactNode;
+  queryKey?: string;
   units?: string;
   min: number;
   max: number;
@@ -76,45 +78,20 @@ function ControlRow(props: {
   onChange: (value: number) => void;
   disabled?: boolean;
 }) {
-  const { label, units, min, max, step, value, onChange, disabled = false } = props;
+  const { label, queryKey, units, min, max, step, value, onChange, disabled = false } = props;
   return (
     <div className={`space-y-1.5 ${disabled ? 'pointer-events-none opacity-60' : ''}`}>
-      <div className="flex items-baseline justify-between gap-2">
-        <p className="text-slate-200">{label}</p>
-        <span className="text-[0.65rem] text-slate-400">
-          {roundTo2(value).toFixed(2)} {units ?? ''}
-        </span>
-      </div>
-      <div className="flex items-center gap-3">
-        <input
-          type="range"
-          min={min}
-          max={max}
-          step={step}
-          value={value}
-          onChange={(e) => !disabled && onChange(Number(e.target.value))}
-          disabled={disabled}
-          className="h-1 flex-1 cursor-pointer appearance-none rounded-full bg-slate-800 accent-sky-400 disabled:cursor-not-allowed"
-        />
-        <div className="flex items-center gap-1 rounded-md border border-slate-700 bg-slate-900 px-2 py-1">
-          <input
-            type="number"
-            min={min}
-            max={max}
-            step={step}
-            value={roundTo2(value)}
-            onChange={(e) => {
-              if (disabled) return;
-              const p = Number(e.target.value);
-              if (Number.isNaN(p)) return;
-              onChange(clamp(p, min, max));
-            }}
-            disabled={disabled}
-            className="w-20 bg-transparent text-right text-[0.7rem] text-slate-100 outline-none disabled:cursor-not-allowed"
-          />
-          {units ? <span className="text-[0.65rem] text-slate-400">{units}</span> : null}
-        </div>
-      </div>
+      <SliderWithInput
+        label={label}
+        queryKey={queryKey}
+        units={units}
+        min={min}
+        max={max}
+        step={step}
+        value={value}
+        onChange={onChange}
+        disabled={disabled}
+      />
     </div>
   );
 }
@@ -510,10 +487,10 @@ export function InclineWorkSim({
         </div>
         <div className="space-y-3 rounded-lg border border-slate-800 bg-slate-900/70 p-3">
           <p className="text-[0.65rem] font-semibold uppercase tracking-wide text-sky-300">Controls</p>
-          <ControlRow label="Mass (m)" units="kg" min={0.5} max={20} step={0.1} value={controls.massKg} onChange={(v) => onControlChange('massKg', v)} disabled={disabled} />
-          <ControlRow label="Angle (θ)" units="°" min={0} max={MAX_INCLINE_ANGLE_DEG} step={1} value={controls.angleDeg} onChange={(v) => onControlChange('angleDeg', v)} disabled={disabled} />
-          <ControlRow label={<>μₛ</>} units="" min={0} max={1} step={0.01} value={controls.muS} onChange={(v) => onControlChange('muS', v)} disabled={disabled} />
-          <ControlRow label={<>μₖ</>} units="" min={0} max={1} step={0.01} value={controls.muK} onChange={(v) => onControlChange('muK', v)} disabled={disabled} />
+          <ControlRow label="Mass (m)" queryKey="incline-mass" units="kg" min={0.5} max={20} step={0.1} value={controls.massKg} onChange={(v) => onControlChange('massKg', v)} disabled={disabled} />
+          <ControlRow label="Angle (θ)" queryKey="incline-angle" units="°" min={0} max={MAX_INCLINE_ANGLE_DEG} step={1} value={controls.angleDeg} onChange={(v) => onControlChange('angleDeg', v)} disabled={disabled} />
+          <ControlRow label={<>μₛ</>} queryKey="incline-mus" units="" min={0} max={1} step={0.01} value={controls.muS} onChange={(v) => onControlChange('muS', v)} disabled={disabled} />
+          <ControlRow label={<>μₖ</>} queryKey="incline-muk" units="" min={0} max={1} step={0.01} value={controls.muK} onChange={(v) => onControlChange('muK', v)} disabled={disabled} />
         </div>
       </aside>
     </div>
@@ -809,10 +786,10 @@ export function FrictionWorkSim({
         </div>
         <div className="space-y-3 rounded-lg border border-slate-800 bg-slate-900/70 p-3">
           <p className="text-[0.65rem] font-semibold uppercase tracking-wide text-sky-300">Controls</p>
-          <ControlRow label="Rope pull" units="N" min={0} max={60} step={0.5} value={controls.ropeForceN} onChange={(v) => onControlChange('ropeForceN', v)} disabled={false} />
-          <ControlRow label="Mass" units="kg" min={0.5} max={20} step={0.1} value={controls.massKg} onChange={(v) => onControlChange('massKg', v)} disabled={disabled} />
-          <ControlRow label={<>μₖ</>} units="" min={0} max={1} step={0.01} value={controls.muK} onChange={(v) => onControlChange('muK', v)} disabled={disabled} />
-          <ControlRow label={<>μₛ</>} units="" min={0} max={1} step={0.01} value={controls.muS} onChange={(v) => onControlChange('muS', v)} disabled={disabled} />
+          <ControlRow label="Rope pull" queryKey="friction-rope-force" units="N" min={0} max={60} step={0.5} value={controls.ropeForceN} onChange={(v) => onControlChange('ropeForceN', v)} disabled={false} />
+          <ControlRow label="Mass" queryKey="friction-mass" units="kg" min={0.5} max={20} step={0.1} value={controls.massKg} onChange={(v) => onControlChange('massKg', v)} disabled={disabled} />
+          <ControlRow label={<>μₖ</>} queryKey="friction-muk" units="" min={0} max={1} step={0.01} value={controls.muK} onChange={(v) => onControlChange('muK', v)} disabled={disabled} />
+          <ControlRow label={<>μₛ</>} queryKey="friction-mus" units="" min={0} max={1} step={0.01} value={controls.muS} onChange={(v) => onControlChange('muS', v)} disabled={disabled} />
         </div>
       </aside>
     </div>
@@ -1053,11 +1030,11 @@ export function SpringWorkSim({
         </div>
         <div className="space-y-3 rounded-lg border border-slate-800 bg-slate-900/70 p-3">
           <p className="text-[0.65rem] font-semibold uppercase tracking-wide text-sky-300">Controls</p>
-          <ControlRow label="Mass" units="kg" min={0.5} max={20} step={0.5} value={controls.massKg} onChange={(v) => onControlChange('massKg', v)} disabled={disabled} />
-          <ControlRow label="k" units="N/m" min={1} max={50} step={1} value={controls.springKNm} onChange={(v) => onControlChange('springKNm', v)} disabled={disabled} />
-          <ControlRow label="x₀" units="m" min={-5} max={5} step={0.1} value={controls.initialDisplacementM} onChange={(v) => onControlChange('initialDisplacementM', v)} disabled={disabled} />
-          <ControlRow label={<>μₛ</>} units="" min={0} max={1} step={0.01} value={controls.muS} onChange={(v) => onControlChange('muS', v)} disabled={disabled} />
-          <ControlRow label={<>μₖ</>} units="" min={0} max={1} step={0.01} value={controls.muK} onChange={(v) => onControlChange('muK', v)} disabled={disabled} />
+          <ControlRow label="Mass" queryKey="spring-mass" units="kg" min={0.5} max={20} step={0.5} value={controls.massKg} onChange={(v) => onControlChange('massKg', v)} disabled={disabled} />
+          <ControlRow label="k" queryKey="spring-k" units="N/m" min={1} max={50} step={1} value={controls.springKNm} onChange={(v) => onControlChange('springKNm', v)} disabled={disabled} />
+          <ControlRow label="x₀" queryKey="spring-x0" units="m" min={-5} max={5} step={0.1} value={controls.initialDisplacementM} onChange={(v) => onControlChange('initialDisplacementM', v)} disabled={disabled} />
+          <ControlRow label={<>μₛ</>} queryKey="spring-mus" units="" min={0} max={1} step={0.01} value={controls.muS} onChange={(v) => onControlChange('muS', v)} disabled={disabled} />
+          <ControlRow label={<>μₖ</>} queryKey="spring-muk" units="" min={0} max={1} step={0.01} value={controls.muK} onChange={(v) => onControlChange('muK', v)} disabled={disabled} />
         </div>
       </aside>
     </div>

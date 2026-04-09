@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { type PointerEvent, useEffect, useMemo, useRef, useState } from 'react';
+import { SliderWithInput } from '../../components/SliderWithInput';
 
 type Vec2 = { x: number; y: number };
 
@@ -293,15 +294,15 @@ export function MagField() {
 					</div>
 
 					<div className="space-y-2 rounded-lg border border-slate-800 bg-slate-900/80 p-3 text-xs text-slate-300">
-						<p className="font-semibold text-slate-100">Field density</p>
-						<input
-							type="range"
+						<SliderWithInput
+							label="Field density"
 							min={16}
 							max={36}
 							step={1}
 							value={fieldDensity}
-							onChange={(e) => setFieldDensity(clamp(Number(e.target.value), 16, 36))}
-							className="h-1 w-full cursor-pointer appearance-none rounded-full bg-slate-800 accent-indigo-400"
+							onChange={(v) => setFieldDensity(clamp(v, 16, 36))}
+							accentClass="accent-indigo-400"
+							queryKey="field-density"
 						/>
 						<p className="text-[0.7rem] text-slate-400">grid step: {fieldDensity}px</p>
 						<p className="text-[0.7rem] text-slate-500">Tip: drag point charges and magnets directly on the field view.</p>

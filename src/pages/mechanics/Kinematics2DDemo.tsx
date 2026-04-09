@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { SliderWithInput } from '../../components/SliderWithInput';
 
 type VelocityMode = 'magnitude_angle' | 'vx_vy';
 
@@ -354,6 +355,7 @@ export function Kinematics2DDemo() {
           <div className="mt-3 space-y-4 text-xs">
             <ControlRow
               label="Acceleration (gravity)"
+              queryKey="gravity"
               units="m/s²"
               min={0}
               max={25}
@@ -364,6 +366,7 @@ export function Kinematics2DDemo() {
             />
             <ControlRow
               label="Initial height"
+              queryKey="initial-height"
               units="m"
               min={0}
               max={50}
@@ -402,6 +405,7 @@ export function Kinematics2DDemo() {
                 <div className="space-y-3">
                   <ControlRow
                     label="Speed"
+                    queryKey="speed"
                     units="m/s"
                     min={0}
                     max={28}
@@ -412,6 +416,7 @@ export function Kinematics2DDemo() {
                   />
                   <ControlRow
                     label="Angle (above horizontal)"
+                    queryKey="launch-angle"
                     units="°"
                     min={-90}
                     max={90}
@@ -425,6 +430,7 @@ export function Kinematics2DDemo() {
                 <div className="space-y-3">
                   <ControlRow
                     label={<><span>v</span><sub>x</sub></>}
+                    queryKey="vx"
                     units="m/s"
                     min={-20}
                     max={20}
@@ -435,6 +441,7 @@ export function Kinematics2DDemo() {
                   />
                   <ControlRow
                     label={<><span>v</span><sub>y</sub></>}
+                    queryKey="vy"
                     units="m/s"
                     min={-20}
                     max={20}
@@ -701,6 +708,7 @@ function MetricChart2D({
 
 type ControlRowProps = {
   label: React.ReactNode;
+  queryKey?: string;
   units: string;
   min: number;
   max: number;
@@ -712,6 +720,7 @@ type ControlRowProps = {
 
 function ControlRow({
   label,
+  queryKey,
   units,
   min,
   max,
@@ -720,49 +729,19 @@ function ControlRow({
   onChange,
   disabled = false,
 }: ControlRowProps) {
-  const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (disabled) return;
-    onChange(Number(e.target.value));
-  };
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (disabled) return;
-    const parsed = Number(e.target.value);
-    if (Number.isNaN(parsed)) return;
-    onChange(Math.min(max, Math.max(min, parsed)));
-  };
   return (
     <div className={`space-y-1.5 ${disabled ? 'pointer-events-none opacity-60' : ''}`}>
-      <div className="flex items-baseline justify-between gap-2">
-        <p className="text-slate-200">{label}</p>
-        <span className="text-[0.65rem] text-slate-400">
-          {roundTo2(value).toFixed(2)} {units}
-        </span>
-      </div>
-      <div className="flex items-center gap-3">
-        <input
-          type="range"
-          min={min}
-          max={max}
-          step={step}
-          value={value}
-          onChange={handleSliderChange}
-          disabled={disabled}
-          className="h-1 flex-1 cursor-pointer appearance-none rounded-full bg-slate-800 accent-sky-400 disabled:cursor-not-allowed"
-        />
-        <div className="flex items-center gap-1 rounded-md border border-slate-700 bg-slate-900 px-2 py-1">
-          <input
-            type="number"
-            min={min}
-            max={max}
-            step={step}
-            value={roundTo2(value)}
-            onChange={handleInputChange}
-            disabled={disabled}
-            className="w-20 bg-transparent text-right text-[0.7rem] text-slate-100 outline-none disabled:cursor-not-allowed"
-          />
-          <span className="text-[0.65rem] text-slate-400">{units}</span>
-        </div>
-      </div>
+      <SliderWithInput
+        label={label}
+        queryKey={queryKey}
+        units={units}
+        min={min}
+        max={max}
+        step={step}
+        value={value}
+        onChange={onChange}
+        disabled={disabled}
+      />
       <div className="flex justify-between text-[0.6rem] text-slate-500">
         <span>Min: {min} {units}</span>
         <span>Max: {max} {units}</span>

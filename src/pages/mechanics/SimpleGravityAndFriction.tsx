@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { SliderWithInput } from '../../components/SliderWithInput';
 
 type ControlsState = {
   massKg: number;
@@ -557,6 +558,7 @@ export function SimpleGravityAndFriction() {
           <div className="mt-3 space-y-4 text-xs">
             <ControlRow
               label="Rope pull force"
+              queryKey="rope-force"
               units="N"
               min={0}
               max={60}
@@ -567,6 +569,7 @@ export function SimpleGravityAndFriction() {
             />
             <ControlRow
               label="Mass"
+              queryKey="mass"
               units="kg"
               min={0.5}
               max={20}
@@ -577,6 +580,7 @@ export function SimpleGravityAndFriction() {
             />
             <ControlRow
               label={<><span>Kinetic friction </span>(μ<sub>k</sub>)</>}
+              queryKey="mu-k"
               units=""
               min={0}
               max={1}
@@ -587,6 +591,7 @@ export function SimpleGravityAndFriction() {
             />
             <ControlRow
               label={<><span>Static friction </span>(μ<sub>s</sub>)</>}
+              queryKey="mu-s"
               units=""
               min={0}
               max={1}
@@ -675,6 +680,7 @@ function MetricRow({ label, value, valueText, units }: MetricRowProps) {
 
 type ControlRowProps = {
   label: React.ReactNode;
+  queryKey?: string;
   units: string;
   min: number;
   max: number;
@@ -686,6 +692,7 @@ type ControlRowProps = {
 
 function ControlRow({
   label,
+  queryKey,
   units,
   min,
   max,
@@ -694,51 +701,19 @@ function ControlRow({
   onChange,
   disabled = false,
 }: ControlRowProps) {
-  const handleSliderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (disabled) return;
-    onChange(Number(event.target.value));
-  };
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (disabled) return;
-    const parsed = Number(event.target.value);
-    if (Number.isNaN(parsed)) return;
-    onChange(clamp(parsed, min, max));
-  };
-
   return (
     <div className={`space-y-1.5 ${disabled ? 'pointer-events-none opacity-60' : ''}`}>
-      <div className="flex items-baseline justify-between gap-2">
-        <p className="text-slate-200">{label}</p>
-        <span className="text-[0.65rem] text-slate-400">
-          {roundTo2(value).toFixed(2)} {units}
-        </span>
-      </div>
-      <div className="flex items-center gap-3">
-        <input
-          type="range"
-          min={min}
-          max={max}
-          step={step}
-          value={value}
-          onChange={handleSliderChange}
-          disabled={disabled}
-          className="h-1 flex-1 cursor-pointer appearance-none rounded-full bg-slate-800 accent-sky-400 disabled:cursor-not-allowed"
-        />
-        <div className="flex items-center gap-1 rounded-md border border-slate-700 bg-slate-900 px-2 py-1">
-          <input
-            type="number"
-            min={min}
-            max={max}
-            step={step}
-            value={roundTo2(value)}
-            onChange={handleInputChange}
-            disabled={disabled}
-            className="w-20 bg-transparent text-right text-[0.7rem] text-slate-100 outline-none disabled:cursor-not-allowed"
-          />
-          <span className="text-[0.65rem] text-slate-400">{units}</span>
-        </div>
-      </div>
+      <SliderWithInput
+        label={label}
+        queryKey={queryKey}
+        units={units}
+        min={min}
+        max={max}
+        step={step}
+        value={value}
+        onChange={onChange}
+        disabled={disabled}
+      />
       <div className="flex justify-between text-[0.6rem] text-slate-500">
         <span>
           Min: {min} {units}

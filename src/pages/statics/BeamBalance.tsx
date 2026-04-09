@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { type ChangeEvent, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
+import { SliderWithInput } from '../../components/SliderWithInput';
 
 type Controls = {
 	leftMassKg: number;
@@ -313,45 +314,16 @@ function ControlRow({
 	value: number;
 	onChange: (value: number) => void;
 }) {
-	const handleSliderChange = (event: ChangeEvent<HTMLInputElement>) => {
-		onChange(Number(event.target.value));
-	};
-
-	const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-		const parsed = Number(event.target.value);
-		if (Number.isNaN(parsed)) return;
-		onChange(clamp(parsed, min, max));
-	};
-
 	return (
-		<div className="space-y-1.5">
-			<div className="flex items-baseline justify-between gap-2">
-				<p className="text-xs text-slate-200">{label}</p>
-				<span className="text-[0.65rem] text-slate-400">{roundTo2(value)} {units}</span>
-			</div>
-			<div className="flex items-center gap-3">
-				<input
-					type="range"
-					min={min}
-					max={max}
-					step={step}
-					value={value}
-					onChange={handleSliderChange}
-					className="h-1 flex-1 cursor-pointer appearance-none rounded-full bg-slate-800 accent-rose-400"
-				/>
-				<div className="flex items-center gap-1 rounded-md border border-slate-700 bg-slate-900 px-2 py-1">
-					<input
-						type="number"
-						min={min}
-						max={max}
-						step={step}
-						value={roundTo2(value)}
-						onChange={handleInputChange}
-						className="w-20 bg-transparent text-right text-[0.7rem] text-slate-100 outline-none"
-					/>
-					<span className="text-[0.65rem] text-slate-400">{units}</span>
-				</div>
-			</div>
-		</div>
+		<SliderWithInput
+			label={label}
+			units={units}
+			min={min}
+			max={max}
+			step={step}
+			value={value}
+			onChange={onChange}
+			accentClass="accent-rose-400"
+		/>
 	);
 }

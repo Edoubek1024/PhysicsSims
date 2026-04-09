@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect, useLayoutEffect, useMemo, useRef } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 type SliderWithInputProps = {
   label: React.ReactNode;
@@ -11,10 +12,25 @@ type SliderWithInputProps = {
   description?: string;
   accentClass?: string;
   inputClassName?: string;
+  queryKey?: string;
+  syncToUrl?: boolean;
+  disabled?: boolean;
 };
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
+}
+
+function toQueryKey(label: React.ReactNode): string | null {
+  if (typeof label !== 'string') return null;
+
+  const normalized = label
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
+  return normalized.length > 0 ? normalized : null;
 }
 
 export function SliderWithInput({
@@ -28,8 +44,80 @@ export function SliderWithInput({
   description,
   accentClass = 'accent-sky-400',
   inputClassName = 'w-20 rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-right text-xs text-slate-100 outline-none',
+  queryKey,
+  syncToUrl = true,
+  disabled = false,
 }: SliderWithInputProps) {
+  const [params, setParams] = useSearchParams();
+  const didHydrateRef = useRef(false);
+  const skipNextWriteRef = useRef(false);
+  const userEditedRef = useRef(false);
+  const lastSeenRawRef = useRef<string | null>(null);
+
   const percent = ((value - min) / (max - min)) * 100;
+  const resolvedQueryKey = useMemo(() => queryKey ?? toQueryKey(label), [label, queryKey]);
+
+  useLayoutEffect(() => {
+    if (!syncToUrl || resolvedQueryKey == null) return;
+
+    const raw = params.get(resolvedQueryKey);
+
+    if (!didHydrateRef.current) {
+      didHydrateRef.current = true;
+      lastSeenRawRef.current = raw;
+
+      if (raw == null) return;
+
+      const parsed = Number(raw);
+      if (!Number.isFinite(parsed)) return;
+
+      const next = clamp(parsed, min, max);
+      if (!Object.is(next, value)) {
+        skipNextWriteRef.current = true;
+        onChange(next);
+      }
+      return;
+    }
+
+    if (raw === lastSeenRawRef.current) {
+      return;
+    }
+
+    lastSeenRawRef.current = raw;
+    if (raw == null) return;
+
+    const parsed = Number(raw);
+    if (!Number.isFinite(parsed)) return;
+
+    const next = clamp(parsed, min, max);
+    if (!Object.is(next, value)) {
+      skipNextWriteRef.current = true;
+      onChange(next);
+    }
+  }, [max, min, onChange, params, resolvedQueryKey, syncToUrl, value]);
+
+  useEffect(() => {
+    if (!syncToUrl || resolvedQueryKey == null) return;
+    if (!didHydrateRef.current) return;
+    if (!userEditedRef.current) return;
+
+    if (skipNextWriteRef.current) {
+      skipNextWriteRef.current = false;
+      return;
+    }
+
+    const serialized = String(value);
+    if (params.get(resolvedQueryKey) === serialized) return;
+
+    setParams(
+      (prev) => {
+        const next = new URLSearchParams(prev);
+        next.set(resolvedQueryKey, serialized);
+        return next;
+      },
+      { replace: true }
+    );
+  }, [params, resolvedQueryKey, setParams, syncToUrl, value]);
 
   return (
     <div className="space-y-1.5">
@@ -49,7 +137,12 @@ export function SliderWithInput({
           max={max}
           step={step}
           value={value}
-          onChange={(e) => onChange(Number(e.target.value))}
+          onChange={(e) => {
+            if (disabled) return;
+            userEditedRef.current = true;
+            onChange(Number(e.target.value));
+          }}
+          disabled={disabled}
           style={{
             background: `linear-gradient(to right, #38bdf8 ${percent}%, #1e293b ${percent}%)`,
           }}
@@ -73,10 +166,14 @@ export function SliderWithInput({
             step={step}
             value={value}
             onChange={(e) => {
+              if (disabled) return;
               const next = Number(e.target.value);
-              if (!Number.isNaN(next)) onChange(clamp(next, min, max));
+              if (Number.isNaN(next)) return;
+              userEditedRef.current = true;
+              onChange(clamp(next, min, max));
             }}
-            className={inputClassName}
+            disabled={disabled}
+            className={`${inputClassName} disabled:cursor-not-allowed`}
           />
           {units && <span className="text-[0.65rem] text-slate-400">{units}</span>}
         </div>

@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
-import { type ChangeEvent } from 'react';
 import { Link } from 'react-router-dom';
+import { SliderWithInput } from '../../components/SliderWithInput';
 
 type SurfaceShape = 'sphere' | 'cylinder' | 'cube';
 
@@ -378,51 +378,19 @@ function ControlRow({
 	onChange: (value: number) => void;
 	disabled?: boolean;
 }) {
-	const handleSliderChange = (event: ChangeEvent<HTMLInputElement>) => {
-		if (disabled) return;
-		onChange(Number(event.target.value));
-	};
-
-	const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-		if (disabled) return;
-		const parsed = Number(event.target.value);
-		if (Number.isNaN(parsed)) return;
-		onChange(clamp(parsed, min, max));
-	};
-
 	return (
 		<div className={`space-y-1.5 ${disabled ? 'pointer-events-none opacity-50' : ''}`}>
-			<div className="flex items-baseline justify-between gap-2">
-				<p className="text-xs text-slate-200">{label}</p>
-				<span className="text-[0.65rem] text-slate-400">
-					{roundTo(value, 2).toFixed(2)} {units}
-				</span>
-			</div>
-			<div className="flex items-center gap-3">
-				<input
-					type="range"
-					min={min}
-					max={max}
-					step={step}
-					value={value}
-					onChange={handleSliderChange}
-					disabled={disabled}
-					className="h-1 flex-1 cursor-pointer appearance-none rounded-full bg-slate-800 accent-emerald-400 disabled:cursor-not-allowed"
-				/>
-				<div className="flex items-center gap-1 rounded-md border border-slate-700 bg-slate-900 px-2 py-1">
-					<input
-						type="number"
-						min={min}
-						max={max}
-						step={step}
-						value={roundTo(value, 2)}
-						onChange={handleInputChange}
-						disabled={disabled}
-						className="w-20 bg-transparent text-right text-[0.7rem] text-slate-100 outline-none disabled:cursor-not-allowed"
-					/>
-					<span className="text-[0.65rem] text-slate-400">{units}</span>
-				</div>
-			</div>
+			<SliderWithInput
+				label={label}
+				units={units}
+				min={min}
+				max={max}
+				step={step}
+				value={value}
+				onChange={onChange}
+				disabled={disabled}
+				accentClass="accent-emerald-400"
+			/>
 		</div>
 	);
 }
