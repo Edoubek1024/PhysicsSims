@@ -11,7 +11,6 @@ const HOME_ANNOUNCEMENT = {
   buttons: [
     { text: 'Start Exploring', url: '#mechanics' },
     { text: 'Project Repository', url: 'https://github.com/IlliniOpenEdu/PhysicsSims', newTab: true },
-    { text: 'Feedback & Suggestions', url: '#contact' },
   ],
 };
 
