@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 /** Shown when a referenced PNG is missing from `public/thumbnails/`. */
 const PREVIEW_FALLBACK = '/thumbnails/placeholder.svg';
+const base = import.meta.env.BASE_URL;
 
 function SimPreviewImg({
   src,
@@ -32,62 +33,62 @@ const mechanicsSims = [
     title: '1-D Kinematics',
     path: '/kinematics',
     description: 'Explore motion in one dimension.',
-    preview: '/thumbnails/kinematics.png',
+    preview: `${base}thumbnails/kinematics.png`,
   },
   {
     title: '2-D Kinematics',
     path: '/kinematics-2d',
     status: 'Available now',
     description: 'Projectile and planar motion.',
-    preview: '/thumbnails/kinematics2d.png',
+    preview: `${base}thumbnails/kinematics2d.png`,
   },
   {
     title: 'Force Simulator',
     path: '/forces',
     description: 'Force balance and net force.',
-    preview: '/thumbnails/forces.png',
+    preview: `${base}thumbnails/forces.png`,
   },
   {
     title: 'Simple Friction',
     path: '/gravity-friction',
     description: 'Friction vs pulling force.',
-    preview: '/thumbnails/friction.png',
+    preview: `${base}thumbnails/friction.png`,
   },
   {
     title: 'Box on Incline',
     path: '/box-incline',
     description: 'Forces on a slope.',
-    preview: '/thumbnails/incline.png',
+    preview: `${base}thumbnails/incline.png`,
   },
   {
     title: 'Spring Force',
     path: '/spring-force',
     description: 'Hooke\'s Law and spring dynamics.',
-    preview: '/thumbnails/spring.png',
+    preview: `${base}thumbnails/spring.png`,
   },
   {
     title: 'Pulley system',
     path: '/pulley-system',
     description: 'Two-mass Atwood machine: tension, gravity, and motion when masses differ.',
-    preview: '/thumbnails/pulley.png',
+    preview: `${base}thumbnails/pulley.png`,
   },
   {
     title: 'Energy Hills',
     path: '/energy-hills',
     description: 'Potential ↔ kinetic energy conversion on smooth, bumpy, and looped terrain.',
-    preview: '/thumbnails/energy-hills.png',
+    preview: `${base}thumbnails/energy-hills.png`,
   },
   {
     title: 'Spring Energy',
     path: '/spring-energy',
     description: 'Oscillating spring–mass system: Hooke’s law, energy exchange, and conserved total energy.',
-    preview: '/thumbnails/spring.png',
+    preview: `${base}thumbnails/spring.png`,
   },
   {
     title: 'Work in Dynamics',
     path: '/work-in-dynamics',
     description: 'Incline, rope pull, and spring tabs with live work tracking (W = F·Δr) per force.',
-    preview: '/thumbnails/energy-hills.png',
+    preview: `${base}thumbnails/energy-hills.png`,
   },
 ];
 
@@ -97,49 +98,49 @@ const enmSims = [
     description: 'Map field lines and force vectors around charges.',
     path: '/columbs-law',
     status: 'Available now',
-    preview: '/thumbnails/columbs.png',
+    preview: `${base}thumbnails/columbs.png`,
   },
   {
     title: 'Gauss\'s Law Visualizer',
     description: 'Explore electric flux and field distributions for different charge configurations.',
     path: '/gauss-law',
     status: 'Available now',
-    preview: '/thumbnails/gauss.png',
+    preview: `${base}thumbnails/gauss.png`,
   },
   {
     title: 'Maxwell\'s Equations Explorer',
     description: 'Interactively visualize the interplay of electric and magnetic fields as described by Maxwell\'s equations.',
     path: '/maxwell',
     status: 'Available now',
-    preview: '/thumbnails/preview.png',
+    preview: `${base}thumbnails/maxwell.png`,
   }, 
   {
     title: 'Ampere\'s Law Simulator',
     description: 'Build and analyze resistor-inductor-capacitor circuits with real-time voltage and current graphs.',
     path: '/amperes-law',
     status: 'Available now',
-    preview: '/thumbnails/preview.png',
+    preview: `${base}thumbnails/amperes.png`,
   },
   {
     title: 'Faraday\'s Law Simulator',
     description: 'Visualize changing magnetic flux and induced EMF.',
     path: '/faradays-law',
     status: 'IOLab module',
-    preview: '/thumbnails/preview.png',
+    preview: `${base}thumbnails/faradays.png`,
   },
   {
     title: 'RC Circuit Lab',
     description: 'Explore capacitor charging and discharging with live voltage and current scopes.',
     path: '/rc-circuit',
     status: 'Available now',
-    preview: '/thumbnails/preview.png',
+    preview: `${base}thumbnails/preview.png`,
   },
   {
     title: 'Magnetic Field Simulator',
     description: 'Visualize magnetic fields around point charges and magnets.',
     path: '/mag-field',
     status: 'Available now',
-    preview: '/thumbnails/preview.png',
+    preview: `${base}thumbnails/preview.png`,
   }
 ];
 
@@ -149,14 +150,14 @@ const staticsSims = [
     description: 'Explore torque and equilibrium with a virtual beam balance.',
     path: '/beam-balance',
     status: 'Available now',
-    preview: '/thumbnails/beambalance.png',
+    preview: `${base}thumbnails/beambalance.png`,
   },
   {
     title: 'Beam Load and Support Analyzer',
     description: 'Set end supports, apply forces/moments/UDLs, and inspect reactions, shear, and moment.',
     path: '/distributed-load',
     status: 'Available now',
-    preview: '/thumbnails/preview.png',
+    preview: `${base}thumbnails/preview.png`,
   },
 
 ];

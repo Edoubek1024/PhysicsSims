@@ -24,17 +24,28 @@ PhysicsSims aims for:
 - 1-D Kinematics
 - 2-D Kinematics
 - Force Simulator
-- Simple Friction (Rope Pull)
+- Simple Friction and Spring Force
 - Box on Incline
+- Pulley System
+- Energy Hills
+- Spring Energy
+- Works in Dynamics
 
 ### Electricity and Magnetism
 
 - Coulomb's Law Explorer
 - Gauss's Law Visualizer
+- Maxwell's Law Visualizer
+- Ampere's Law Visualizer
+- Faraday's Law Simulator
+- RC Circut Lab
+- Magnetic Field Simulator
+
 
 ### Statics
 
 - Beam Balance Simulator
+- Beam Load and Support Analyzer
 
 ## Tech Stack
 
@@ -47,7 +58,7 @@ PhysicsSims aims for:
 ## Quick Start
 
 ```bash
-git clone https://github.com/Edoubek1024/PhysicsSims.git
+git clone https://github.com/IlliniOpenEdu/PhysicsSims.git
 cd PhysicsSims
 npm install
 npm run dev
@@ -69,11 +80,11 @@ npm run deploy   # build and publish dist/ to GitHub Pages
 
 This project is configured for the repository URL:
 
-- `https://Edoubek1024.github.io/PhysicsSims`
+- `https://IlliniOpenEdu.github.io/PhysicsSims`
 
 One-time setup:
 
-1. Ensure the GitHub repository exists at `Edoubek1024/PhysicsSims`
+1. Ensure the GitHub repository exists at `IlliniOpenEdu/PhysicsSims`
 2. In GitHub, open **Settings -> Pages**
 3. Set **Source** to **Deploy from a branch**
 4. Choose branch **gh-pages** and folder **/(root)**

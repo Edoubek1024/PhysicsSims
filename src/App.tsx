@@ -269,7 +269,7 @@ export function App() {
             >
               Cookies
             </a>
-            <a href="https://github.com/Edoubek1024/PhysicsSims?tab=readme-ov-file#contributing" className="hover:text-sky-300">Contribution</a>
+            <a href="https://github.com/IlliniOpenEdu/PhysicsSims?tab=readme-ov-file#contributing" className="hover:text-sky-300">Contribution</a>
             <a
               type="button"
               onClick={() => setIsContactOpen(true)}
