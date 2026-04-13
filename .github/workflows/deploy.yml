@@ -17,6 +17,18 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      VITE_FORMSPREE_ENDPOINT: ${{ secrets.VITE_FORMSPREE_ENDPOINT }}
+      VITE_ARTEMIS_ASC_URL: ${{ secrets.VITE_ARTEMIS_ASC_URL }}
+      VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
+      VITE_FIREBASE_AUTH_DOMAIN: ${{ secrets.VITE_FIREBASE_AUTH_DOMAIN }}
+      VITE_FIREBASE_PROJECT_ID: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
+      VITE_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
+      VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}
+      VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
+      VITE_INTERNAL_ADMIN_ENABLED: ${{ secrets.VITE_INTERNAL_ADMIN_ENABLED }}
+      VITE_ADMIN_UN: ${{ secrets.VITE_ADMIN_UN }}
+      VITE_ADMIN_PW: ${{ secrets.VITE_ADMIN_PW }}
     steps:
       - uses: actions/checkout@v4
 

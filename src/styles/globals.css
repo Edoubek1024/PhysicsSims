@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -9,5 +11,151 @@ body,
 }
 
 body {
-  @apply bg-slate-950 text-slate-100;
+  @apply bg-slate-950 text-slate-100 font-sans;
+  font-family: 'Fira Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.reveal-up {
+  animation: reveal-up 560ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.framer-rise {
+  animation: framer-rise 640ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.framer-press {
+  transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1), border-color 260ms ease, background-color 260ms ease;
+}
+
+.framer-press:hover {
+  transform: translateY(-2px) scale(1.01);
+}
+
+.framer-press:active {
+  transform: translateY(0) scale(0.995);
+}
+
+.float-orb {
+  animation: float-orb 6.8s ease-in-out infinite;
+}
+
+.animate-particle-1 {
+  animation: particle-drift-1 5.6s ease-in-out infinite;
+}
+
+.animate-particle-2 {
+  animation: particle-drift-2 6.2s ease-in-out infinite;
+}
+
+.animate-particle-3 {
+  animation: particle-drift-3 7.1s ease-in-out infinite;
+}
+
+.home-bg-shift {
+  animation: home-bg-shift 14s ease-in-out infinite alternate;
+}
+
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes framer-rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes float-orb {
+  0%,
+  100% {
+    transform: translateY(0px) translateX(0px);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translateY(-10px) translateX(4px);
+    opacity: 1;
+  }
+}
+
+@keyframes particle-drift-1 {
+  0%,
+  100% {
+    transform: translate(0px, 0px);
+    opacity: 0.55;
+  }
+  50% {
+    transform: translate(7px, -8px);
+    opacity: 1;
+  }
+}
+
+@keyframes particle-drift-2 {
+  0%,
+  100% {
+    transform: translate(0px, 0px);
+    opacity: 0.45;
+  }
+  50% {
+    transform: translate(-6px, -10px);
+    opacity: 0.85;
+  }
+}
+
+@keyframes particle-drift-3 {
+  0%,
+  100% {
+    transform: translate(0px, 0px);
+    opacity: 0.35;
+  }
+  50% {
+    transform: translate(8px, -6px);
+    opacity: 0.8;
+  }
+}
+
+@keyframes home-bg-shift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  100% {
+    transform: translate3d(0, -8px, 0) scale(1.015);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-up,
+  .framer-rise {
+    animation: none;
+  }
+
+  .float-orb,
+  .animate-particle-1,
+  .animate-particle-2,
+  .animate-particle-3,
+  .home-bg-shift {
+    animation: none;
+  }
+
+  .framer-press,
+  .framer-press:hover,
+  .framer-press:active {
+    transform: none;
+    transition: none;
+  }
 }

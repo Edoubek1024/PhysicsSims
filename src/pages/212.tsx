@@ -67,7 +67,7 @@ export function Simulations() {
       <header className="mb-10">
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-400">Browse labs</p>
         <h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-50 sm:text-4xl">
-          Physics 212
+          Physics 212: Electricity & Magnetism
         </h1>
         <p className="mt-3 max-w-2xl text-sm text-slate-300 sm:text-base">
           This page focuses on PHYS212 topics and organizes labs by course unit.

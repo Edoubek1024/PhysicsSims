@@ -27,10 +27,10 @@ const principles = [
 ];
 
 const timeline = [
-	{ phase: 'Prototype', text: 'Done' },
-	{ phase: 'Development', text: 'In Progress' },
-	{ phase: 'Initial Release', text: 'TBD' },
-	{ phase: 'Now', text: 'TBD' },
+	{ phase: 'Development', text: 'Done' },
+	{ phase: 'Initial Release', text: 'Done' },
+	{ phase: 'More Modules', text: 'In Progress' },
+	{ phase: 'Full Release', text: 'TBD' },
 ];
 
 const upcomingPatches = [
@@ -70,6 +70,7 @@ export function About() {
 					<span className="rounded-full border border-amber-300/40 bg-amber-300/10 px-3 py-1 text-amber-100">Easy2Use</span>
 					<span className="rounded-full border border-emerald-300/40 bg-emerald-300/10 px-3 py-1 text-emerald-100">Browser native</span>
 					<span className="rounded-full border border-cyan-300/40 bg-cyan-300/10 px-3 py-1 text-cyan-100">Classroom ready</span>
+					<span className="rounded-full border border-pink-300/40 bg-pink-300/10 px-3 py-1 text-pink-100">Shareable Modules</span>
 				</div>
 
 				<div className="mt-6">

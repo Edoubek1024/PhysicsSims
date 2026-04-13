@@ -67,7 +67,7 @@ export function Simulations() {
       <header className="mb-10">
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-400">Browse labs</p>
         <h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-50 sm:text-4xl">
-          Physics 211
+          Physics 211: Mechanics
         </h1>
         <p className="mt-3 max-w-2xl text-sm text-slate-300 sm:text-base">
           This page focus on materials for PHYS211, the algebra-based introductory physics course. The simulations are organized by unit, but feel free to jump around!

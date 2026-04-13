@@ -1,6 +1,7 @@
 import { Suspense, lazy, useEffect, useState } from 'react';
 import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import packageJson from '../package.json';
+import { loadAdminState, pushAnalyticsEvent } from './config/internalAdmin';
 
 const GA_MEASUREMENT_ID = 'G-5XJFVLZQ0Z';
 const GA_SCRIPT_ID = 'google-analytics-gtag';
@@ -68,6 +69,7 @@ const Home = lazy(() => import('./pages/Home').then((m) => ({ default: m.Home })
 const About = lazy(() => import('./pages/About').then((m) => ({ default: m.About })));
 const Phys211 = lazy(() => import('./pages/211').then((m) => ({ default: m.Simulations })));
 const Phys212 = lazy(() => import('./pages/212').then((m) => ({ default: m.Simulations })));
+const TAM211 = lazy(() => import('./pages/T211').then((m) => ({ default: m.Simulations })));
 const KinematicsDemo = lazy(() => import('./pages/mechanics/KinematicsDemo').then((m) => ({ default: m.KinematicsDemo })));
 const Kinematics2DDemo = lazy(() => import('./pages/mechanics/Kinematics2DDemo').then((m) => ({ default: m.Kinematics2DDemo })));
 const ForceSimulator = lazy(() => import('./pages/mechanics/ForceSimulator').then((m) => ({ default: m.ForceSimulator })));
@@ -87,12 +89,13 @@ const DistributedLoad = lazy(() => import('./pages/statics/DistributedLoad').the
 const EnergyHills = lazy(() => import('./pages/mechanics/EnergyHills').then((m) => ({ default: m.EnergyHills })));
 const SpringEnergy = lazy(() => import('./pages/mechanics/SpringEnergy').then((m) => ({ default: m.SpringEnergy })));
 const WorkInDynamics = lazy(() => import('./pages/WorkInDynamics').then((m) => ({ default: m.WorkInDynamics })));
+const Admin = lazy(() => import('./pages/Admin').then((m) => ({ default: m.Admin })));
 
 const NAV_LINKS = [
   { to: '/', label: 'Home' },
-  { to: '/#mechanics', label: 'Mechanics' },
-  { to: '/#enm', label: 'E&M' },
-  { to: '/#statics', label: 'Statics' },
+  // { to: '/#mechanics', label: 'Mechanics' },
+  // { to: '/#enm', label: 'E&M' },
+  // { to: '/#statics', label: 'Statics' },
 ];
 
 const PHYS_LINKS = [
@@ -100,11 +103,16 @@ const PHYS_LINKS = [
   { to: '/212', label: 'PHYS212' },
 ];
 
+const TAM_LINKS = [
+  { to: '/T211', label: 'TAM211' },
+]
+
 const APP_ROUTES = [
   { path: '/', element: <Home /> },
   { path: '/about', element: <About /> },
   { path: '/211', element: <Phys211 /> },
   { path: '/212', element: <Phys212 /> },
+  { path: '/T211', element: <TAM211 /> },
   { path: '/kinematics', element: <KinematicsDemo /> },
   { path: '/kinematics-2d', element: <Kinematics2DDemo /> },
   { path: '/forces', element: <ForceSimulator /> },
@@ -124,6 +132,7 @@ const APP_ROUTES = [
   { path: '/mag-field', element: <MagField /> },
   { path: '/beam-balance', element: <BeamBalance /> },
   { path: '/distributed-load', element: <DistributedLoad /> },
+  { path: '/admin', element: <Admin /> },
 ];
 
 export function App() {
@@ -131,6 +140,9 @@ export function App() {
   const [cookieConsent, setCookieConsent] = useState<CookieConsent>(readStoredCookieConsent);
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
   const [isContactOpen, setIsContactOpen] = useState(false);
+  const isActivePath = (path: string) => location.pathname === path;
+  const isGroupActive = (links: Array<{ to: string; label: string }>) =>
+    links.some((link) => isActivePath(link.to));
 
   useEffect(() => {
     if (cookieConsent === 'unknown') {
@@ -166,6 +178,19 @@ export function App() {
   }, [cookieConsent, location.pathname, location.search, location.hash]);
 
   useEffect(() => {
+    const adminState = loadAdminState();
+    if (!adminState.featureFlags.analyticsCollection) {
+      return;
+    }
+
+    pushAnalyticsEvent('page_view', 'Route changed', {
+      path: location.pathname,
+      search: location.search,
+      hash: location.hash,
+    });
+  }, [location.pathname, location.search, location.hash]);
+
+  useEffect(() => {
     if (!location.hash) return;
 
     const hash = location.hash.slice(1).toLowerCase();
@@ -183,22 +208,23 @@ export function App() {
 
   // NAVBAR + ROUTES
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100">
-      <div className="border-b border-slate-800/80 bg-slate-950/80">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 text-xs">
+    <div className="flex min-h-screen flex-col bg-slate-950 text-slate-100">
+      <div className="sticky top-0 z-40 border-b border-white/10 bg-slate-950/70 backdrop-blur-md">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3 text-xs sm:flex-nowrap">
           <Link
             to="/"
-            className="flex items-center gap-2 font-semibold tracking-[0.18em] text-sky-300"
+            className="group inline-flex min-w-[10.5rem] items-center gap-2 font-semibold tracking-[0.16em] text-cyan-200 transition hover:text-cyan-100"
           >
-            <span className="h-1.5 w-1.5 rounded-full bg-sky-400" />
+            <span className="h-1.5 w-1.5 rounded-full bg-cyan-300 transition group-hover:scale-125" />
             PHYSICS SIMS
           </Link>
-          <nav className="flex items-center gap-4">
+
+          <nav className="flex min-h-[2.25rem] flex-1 items-center justify-end gap-4 whitespace-nowrap text-[0.86rem] leading-5">
             {NAV_LINKS.map((item) => (
               <Link
                 key={item.to}
                 to={item.to}
-                className="text-[0.9rem] text-slate-300 transition hover:text-sky-300"
+                className={`border-b pb-1 text-[0.86rem] font-medium transition ${isActivePath(item.to) ? 'border-cyan-300 text-cyan-100' : 'border-transparent text-slate-300 hover:border-cyan-300/70 hover:text-cyan-200'}`}
               >
                 {item.label}
               </Link>
@@ -206,14 +232,14 @@ export function App() {
             <div className="group relative">
               <button
                 type="button"
-                className="inline-flex items-center gap-1 text-[0.9rem] text-slate-300 transition hover:text-sky-300 group-focus-within:text-sky-300"
+                className={`inline-flex items-center gap-1 border-b pb-1 text-[0.86rem] font-medium transition ${isGroupActive(PHYS_LINKS) ? 'border-cyan-300 text-cyan-100' : 'border-transparent text-slate-300 hover:border-cyan-300/70 hover:text-cyan-200'} group-focus-within:text-cyan-100`}
                 aria-haspopup="menu"
               >
                 PHYS
                 <span aria-hidden="true">▾</span>
               </button>
               <div
-                className="invisible absolute right-0 top-full z-20 mt-2 min-w-28 rounded-md border border-slate-700 bg-slate-900/95 py-1 opacity-0 shadow-lg shadow-slate-950/60 transition group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100"
+                className="invisible absolute right-0 top-full z-20 mt-2 min-w-32 rounded-xl border border-white/10 bg-slate-900/95 p-1 opacity-0 shadow-xl shadow-slate-950/70 transition group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100"
                 role="menu"
               >
                 {PHYS_LINKS.map((item) => (
@@ -221,7 +247,32 @@ export function App() {
                     key={item.to}
                     to={item.to}
                     role="menuitem"
-                    className="block px-3 py-2 text-[0.85rem] text-slate-300 transition hover:bg-slate-800 hover:text-sky-300"
+                    className={`block rounded-lg px-3 py-2 text-[0.82rem] transition ${isActivePath(item.to) ? 'bg-cyan-300/20 text-cyan-100' : 'text-slate-300 hover:bg-white/[0.06] hover:text-cyan-200'}`}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+            <div className="group relative">
+              <button
+                type="button"
+                className={`inline-flex items-center gap-1 border-b pb-1 text-[0.86rem] font-medium transition ${isGroupActive(TAM_LINKS) ? 'border-cyan-300 text-cyan-100' : 'border-transparent text-slate-300 hover:border-cyan-300/70 hover:text-cyan-200'} group-focus-within:text-cyan-100`}
+                aria-haspopup="menu"
+              >
+                TAM
+                <span aria-hidden="true">▾</span>
+              </button>
+              <div
+                className="invisible absolute right-0 top-full z-20 mt-2 min-w-32 rounded-xl border border-white/10 bg-slate-900/95 p-1 opacity-0 shadow-xl shadow-slate-950/70 transition group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100"
+                role="menu"
+              >
+                {TAM_LINKS.map((item) => (
+                  <Link
+                    key={item.to}
+                    to={item.to}
+                    role="menuitem"
+                    className={`block rounded-lg px-3 py-2 text-[0.82rem] transition ${isActivePath(item.to) ? 'bg-cyan-300/20 text-cyan-100' : 'text-slate-300 hover:bg-white/[0.06] hover:text-cyan-200'}`}
                   >
                     {item.label}
                   </Link>
@@ -233,27 +284,41 @@ export function App() {
       </div>
 
       {/* ROUTES */}
-      <Suspense fallback={<div className="mx-auto max-w-6xl px-4 py-8 text-sm text-slate-400">Loading simulation...</div>}>
-        <Routes>
-          {APP_ROUTES.map((route) => (
-            <Route key={route.path} path={route.path} element={route.element} />
-          ))}
-        </Routes>
-      </Suspense>
+      <main className="flex-1">
+        <Suspense fallback={<div className="mx-auto min-h-[55vh] max-w-6xl px-4 py-8 text-sm text-slate-400">Loading page...</div>}>
+          <Routes>
+            {APP_ROUTES.map((route) => (
+              <Route key={route.path} path={route.path} element={route.element} />
+            ))}
+          </Routes>
+        </Suspense>
+      </main>
       
 {/* FOOTER BOX */}
       <footer className="border-t border-slate-950/90 bg-slate-900/2" >
-        <img src={`${import.meta.env.BASE_URL}adl.png`} alt="Physics Sims Logo" className="mx-auto h-15 w-15" />
-        <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-4 py-4 text-sm text-slate-400 sm:flex-row sm:items-center sm:justify-between ">
+        <img
+          src={`${import.meta.env.BASE_URL}adl.png`}
+          alt="Physics Sims Logo"
+          width={56}
+          height={56}
+          className="mx-auto h-14 w-14"
+        />
+        <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-4 py-4 text-sm text-slate-400 sm:flex-row sm:items-center sm:justify-between">
           <p>© 2026 PhysicsSim v{packageJson.version}</p>
-          <p className="text-center center">Made with ❤️</p>
-          <div className="flex gap-4">
+          <p className="text-center center">Made with <Link className="text-red-500" to="/admin">❤</Link></p>
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
             <a
               href="https://courses.physics.illinois.edu"
               aria-label="Grainger Engineering Physics Website"
               className="inline-flex items-center justify-center rounded-sm transition hover:scale-105"
             >
-              <img src={`${import.meta.env.BASE_URL}uiuc.png`} alt="UIUC I-Block" className="h-7 w-7 object-contain" />
+              <img
+                src={`${import.meta.env.BASE_URL}uiuc.png`}
+                alt="UIUC I-Block"
+                width={28}
+                height={28}
+                className="h-7 w-7 object-contain"
+              />
             </a>
             <Link to="/about" className="hover:text-sky-300">About</Link>
             <a
