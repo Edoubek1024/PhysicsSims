@@ -1,4 +1,4 @@
-import { Suspense, lazy, useEffect, useState } from 'react';
+import { Suspense, lazy, useEffect, useMemo, useState } from 'react';
 import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import packageJson from '../package.json';
 import { loadAdminState, pushAnalyticsEvent } from './config/internalAdmin';
@@ -67,9 +67,11 @@ const loadAnalyticsScript = () => {
 
 const Home = lazy(() => import('./pages/Home').then((m) => ({ default: m.Home })));
 const About = lazy(() => import('./pages/About').then((m) => ({ default: m.About })));
+const Instructor = lazy(() => import('./pages/Instructor').then((m) => ({ default: m.Instructor })));
 const Phys211 = lazy(() => import('./pages/211').then((m) => ({ default: m.Simulations })));
 const Phys212 = lazy(() => import('./pages/212').then((m) => ({ default: m.Simulations })));
 const TAM211 = lazy(() => import('./pages/T211').then((m) => ({ default: m.Simulations })));
+
 const KinematicsDemo = lazy(() => import('./pages/mechanics/KinematicsDemo').then((m) => ({ default: m.KinematicsDemo })));
 const Kinematics2DDemo = lazy(() => import('./pages/mechanics/Kinematics2DDemo').then((m) => ({ default: m.Kinematics2DDemo })));
 const ForceSimulator = lazy(() => import('./pages/mechanics/ForceSimulator').then((m) => ({ default: m.ForceSimulator })));
@@ -77,22 +79,28 @@ const SimpleGravityAndFriction = lazy(() => import('./pages/mechanics/SimpleGrav
 const BoxOnIncline = lazy(() => import('./pages/mechanics/BoxOnIncline').then((m) => ({ default: m.BoxOnIncline })));
 const SpringForce = lazy(() => import('./pages/mechanics/SpringForce').then((m) => ({ default: m.SpringForce })));
 const PulleySystem = lazy(() => import('./pages/mechanics/PulleySystem').then((m) => ({ default: m.PulleySystem })));
+const EnergyHills = lazy(() => import('./pages/mechanics/EnergyHills').then((m) => ({ default: m.EnergyHills })));
+const SpringEnergy = lazy(() => import('./pages/mechanics/SpringEnergy').then((m) => ({ default: m.SpringEnergy })));
+const WorkInDynamics = lazy(() => import('./pages/WorkInDynamics').then((m) => ({ default: m.WorkInDynamics })));
+
 const ColumbsLaw = lazy(() => import('./pages/enm/ColumbsLaw').then((m) => ({ default: m.ColumbsLaw })));
 const AmperesLaw = lazy(() => import('./pages/enm/AmperesLaw').then((m) => ({ default: m.AmperesLaw })));
 const Maxwell = lazy(() => import('./pages/enm/Maxwell').then((m) => ({ default: m.Maxwell })));
 const FaradaysLaw = lazy(() => import('./pages/enm/FaradaysLaw').then((m) => ({ default: m.FaradaysLaw })));
+const CapacitorLab = lazy(() => import('./pages/enm/Capacitor').then((m) => ({ default: m.Capacitor })));
 const RCCircuit = lazy(() => import('./pages/enm/RCCircuit').then((m) => ({ default: m.RCCircuit })));
 const GaussLaw = lazy(() => import('./pages/enm/GaussLaw').then((m) => ({ default: m.GaussLaw })));
 const MagField = lazy(() => import('./pages/enm/MagField').then((m) => ({ default: m.MagField })));
+
 const BeamBalance = lazy(() => import('./pages/statics/BeamBalance').then((m) => ({ default: m.BeamBalance })));
 const DistributedLoad = lazy(() => import('./pages/statics/DistributedLoad').then((m) => ({ default: m.DistributedLoad })));
-const EnergyHills = lazy(() => import('./pages/mechanics/EnergyHills').then((m) => ({ default: m.EnergyHills })));
-const SpringEnergy = lazy(() => import('./pages/mechanics/SpringEnergy').then((m) => ({ default: m.SpringEnergy })));
-const WorkInDynamics = lazy(() => import('./pages/WorkInDynamics').then((m) => ({ default: m.WorkInDynamics })));
+
 const Admin = lazy(() => import('./pages/Admin').then((m) => ({ default: m.Admin })));
+
 
 const NAV_LINKS = [
   { to: '/', label: 'Home' },
+  // { to: '/instructor', label: 'Instructor' },
   // { to: '/#mechanics', label: 'Mechanics' },
   // { to: '/#enm', label: 'E&M' },
   // { to: '/#statics', label: 'Statics' },
@@ -109,6 +117,7 @@ const TAM_LINKS = [
 
 const APP_ROUTES = [
   { path: '/', element: <Home /> },
+  { path: '/instructor', element: <Instructor /> },
   { path: '/about', element: <About /> },
   { path: '/211', element: <Phys211 /> },
   { path: '/212', element: <Phys212 /> },
@@ -127,6 +136,7 @@ const APP_ROUTES = [
   { path: '/amperes-law', element: <AmperesLaw /> },
   { path: '/maxwell', element: <Maxwell /> },
   { path: '/faradays-law', element: <FaradaysLaw /> },
+  { path: '/capacitor', element: <CapacitorLab /> },
   { path: '/rc-circuit', element: <RCCircuit /> },
   { path: '/gauss-law', element: <GaussLaw /> },
   { path: '/mag-field', element: <MagField /> },
@@ -137,6 +147,10 @@ const APP_ROUTES = [
 
 export function App() {
   const location = useLocation();
+  const isCleanMode = useMemo(() => {
+    const query = new URLSearchParams(location.search);
+    return query.get('clean') === '1' || query.get('clean') === 'true';
+  }, [location.search]);
   const [cookieConsent, setCookieConsent] = useState<CookieConsent>(readStoredCookieConsent);
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
   const [isContactOpen, setIsContactOpen] = useState(false);
@@ -206,9 +220,11 @@ export function App() {
     });
   }, [location.hash, location.pathname]);
 
+
   // NAVBAR + ROUTES
   return (
     <div className="flex min-h-screen flex-col bg-slate-950 text-slate-100">
+      {!isCleanMode ? (
       <div className="sticky top-0 z-40 border-b border-white/10 bg-slate-950/70 backdrop-blur-md">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3 text-xs sm:flex-nowrap">
           <Link
@@ -282,6 +298,7 @@ export function App() {
           </nav>
         </div>
       </div>
+      ) : null}
 
       {/* ROUTES */}
       <main className="flex-1">
@@ -295,7 +312,8 @@ export function App() {
       </main>
       
 {/* FOOTER BOX */}
-      <footer className="border-t border-slate-950/90 bg-slate-900/2" >
+  {!isCleanMode ? (
+  <footer className="border-t border-slate-950/90 bg-slate-900/2" >
         <img
           src={`${import.meta.env.BASE_URL}adl.png`}
           alt="Physics Sims Logo"
@@ -346,8 +364,9 @@ export function App() {
           </div>
         </div>
       </footer>
+      ) : null}
 
-      {isPrivacyOpen ? (
+      {!isCleanMode && isPrivacyOpen ? (
         <div
           className="fixed inset-0 z-50 grid place-items-center bg-slate-950/70 p-4"
           onClick={() => setIsPrivacyOpen(false)}
@@ -380,7 +399,7 @@ export function App() {
         </div>
       ) : null}
 
-      {cookieConsent === 'unknown' ? (
+      {!isCleanMode && cookieConsent === 'unknown' ? (
         <div className="fixed inset-x-0 bottom-0 z-50 px-4 pb-4">
           <div className="mx-auto max-w-6xl rounded-2xl border border-slate-700/80 bg-slate-950/95 p-4 shadow-2xl shadow-slate-950/70 backdrop-blur">
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -411,7 +430,7 @@ export function App() {
         </div>
       ) : null}
 
-      {isContactOpen ? (
+      {!isCleanMode && isContactOpen ? (
         <div
           className="fixed inset-0 z-50 grid place-items-center bg-slate-950/70 p-4"
           onClick={() => setIsContactOpen(false)}
@@ -499,6 +518,7 @@ export function App() {
           </div>
         </div>
       ) : null}
+
     </div>
     
   );

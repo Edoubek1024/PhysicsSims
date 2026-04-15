@@ -69,6 +69,7 @@ export const KNOWN_SIM_PATHS = [
   '/maxwell',
   '/amperes-law',
   '/faradays-law',
+  '/capacitor',
   '/rc-circuit',
   '/mag-field',
   '/beam-balance',

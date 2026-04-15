@@ -8,6 +8,13 @@ PhET we are coming for you. Better watch out, PhET.
 
 ![status](https://github.com/IlliniOpenEdu/PhysicsSims/actions/workflows/deploy.yml/badge.svg?style=for-the-badge)
 
+## Project Highlights
+
+- Multiple simulation tracks for mechanics, electricity and magnetism, and statics
+- A homepage that surfaces the full library, live deploy status, and featured content
+- Announcement and content controls for internal testing and site updates
+- GitHub Pages deployment with router refresh support
+
 ## Why This Exists
 
 Too many classroom sims are either visually outdated or overloaded with friction-heavy UI.
@@ -26,21 +33,23 @@ PhysicsSims aims for:
 - 1-D Kinematics
 - 2-D Kinematics
 - Force Simulator
-- Simple Friction and Spring Force
+- Simple Friction
+- Spring Force
 - Box on Incline
 - Pulley System
 - Energy Hills
 - Spring Energy
-- Works in Dynamics
+- Work in Dynamics
 
 ### Electricity and Magnetism
 
 - Coulomb's Law Explorer
+- Capacitor Lab
 - Gauss's Law Visualizer
-- Maxwell's Law Visualizer
-- Ampere's Law Visualizer
+- Maxwell's Equations Explorer
+- Ampere's Law Simulator
 - Faraday's Law Simulator
-- RC Circut Lab
+- RC Circuit Lab
 - Magnetic Field Simulator
 
 
@@ -123,10 +132,11 @@ src/
 
 ## Roadmap
 
-- Faraday's Law simulator
-- Ampere's Law simulator
-- Maxwell's equations explorer
+- More mechanics modules
+- More E&M modules
 - More statics and rigid-body modules
+- Learner-friendly guidance and polish pass on the existing sims
+- Additional E&M ideas: equipotential maps, induction variants, and current-loop magnetic fields
 
 ## Contributing
 

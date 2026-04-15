@@ -21,6 +21,14 @@ function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
 }
 
+function roundTo3(value: number) {
+  return Math.round(value * 1000) / 1000;
+}
+
+function isSameNumber(a: number, b: number) {
+  return Math.abs(a - b) < 1e-9;
+}
+
 function toQueryKey(label: React.ReactNode): string | null {
   if (typeof label !== 'string') return null;
 
@@ -140,7 +148,9 @@ export function SliderWithInput({
           onChange={(e) => {
             if (disabled) return;
             userEditedRef.current = true;
-            onChange(Number(e.target.value));
+            const next = Number(e.target.value);
+            if (!Number.isFinite(next) || isSameNumber(next, value)) return;
+            onChange(next);
           }}
           disabled={disabled}
           style={{
@@ -169,8 +179,10 @@ export function SliderWithInput({
               if (disabled) return;
               const next = Number(e.target.value);
               if (Number.isNaN(next)) return;
+              const normalized = clamp(roundTo3(next), min, max);
+              if (isSameNumber(normalized, value)) return;
               userEditedRef.current = true;
-              onChange(clamp(next, min, max));
+              onChange(normalized);
             }}
             disabled={disabled}
             className={`${inputClassName} disabled:cursor-not-allowed`}

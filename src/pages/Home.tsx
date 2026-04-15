@@ -209,6 +209,13 @@ const enmSims: SimItem[] = [
     path: '/mag-field',
     status: 'Available now',
     preview: `${base}thumbnails/mag.png`,
+  },
+  {
+    title: 'Capacitor',
+    description: 'Understand how capacitors store charge and energy.',
+    path: '/capacitor',
+    status: 'Available now',
+    preview: `${base}thumbnails/capacitor.png`,
   }
 ];
 
