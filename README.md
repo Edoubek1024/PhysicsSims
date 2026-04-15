@@ -7,6 +7,7 @@ PhysicsSims is designed for students who want to *see* the math happen: tweak pa
 PhET we are coming for you. Better watch out, PhET.
 
 ![status](https://github.com/IlliniOpenEdu/PhysicsSims/actions/workflows/deploy.yml/badge.svg?style=for-the-badge)
+![visitors](https://visitor-badge.laobi.icu/badge?page_id=IlliniOpenEdu.PhysicsSims&left_color=black&right_color=red)
 
 ## Project Highlights
 
