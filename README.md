@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="100" height="100"" src="https://raw.githubusercontent.com/IlliniOpenEdu/PhysicsSims/main/public/logo.png" alt="logo">
+  <img width="100" height="100"" src="public/logo.png" alt="logo">
   <h3 align="center" style="color: #333;">Physics Sims</h3>
 </p>
 
