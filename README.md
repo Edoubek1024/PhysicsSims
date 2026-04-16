@@ -4,10 +4,11 @@ Interactive, browser-native physics simulations built with React + TypeScript.
 
 PhysicsSims is designed for students who want to *see* the math happen: tweak parameters, watch behavior change instantly, and build intuition for mechanics, E&M, and statics.
 
-PhET we are coming for you. Better watch out, PhET.
+PhET set the standard. We’re building what comes next.
 
 ![status](https://github.com/IlliniOpenEdu/PhysicsSims/actions/workflows/deploy.yml/badge.svg?style=for-the-badge)
 ![visitors](https://visitor-badge.laobi.icu/badge?page_id=IlliniOpenEdu.PhysicsSims&left_color=black&right_color=red)
+![qr code](https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://IlliniOpenEdu.github.io/PhysicsSims)
 
 ## Project Highlights
 
