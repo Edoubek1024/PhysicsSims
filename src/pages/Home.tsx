@@ -182,6 +182,12 @@ const mechanicsSims: SimItem[] = [
     description: 'Elastic balls in a square arena: ball–ball and wall collisions with per-ball and total momentum readouts.',
     preview: `${base}thumbnails/pulley.png`,
   },
+  {
+    title: 'Rotational Kinematics · Taut Ball on String',
+    path: '/rotational-taut-string',
+    description: 'Uniform circular motion with live tension, tangential velocity, and centripetal acceleration vectors.',
+    preview: `${base}thumbnails/forces.png`,
+  },
 ];
 
 const enmSims: SimItem[] = [

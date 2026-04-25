@@ -81,6 +81,15 @@ const momentumSims: SimLink[] = [
   },
 ];
 
+const rotationalSims: SimLink[] = [
+  {
+    to: '/rotational-taut-string',
+    title: 'Taut Ball on a String (Uniform Circular Motion)',
+    description:
+      'Ball constrained to a circle by a taut string with live tension, tangential velocity, and centripetal acceleration vectors.',
+  },
+];
+
 export function Simulations() {
   return (
     <div className="relative mx-auto flex min-h-screen max-w-6xl flex-col overflow-hidden px-4 py-10">
@@ -191,6 +200,30 @@ export function Simulations() {
                   </span>
                   <p className="mt-2 flex-1 text-sm text-slate-400">{sim.description}</p>
                   <span className="mt-4 text-xs font-medium text-amber-300/90 transition group-hover:text-amber-200">
+                    Open lab →
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section>
+          <h2 className="border-b border-slate-800 pb-2 text-sm font-semibold uppercase tracking-[0.15em] text-violet-300/90">
+            Unit 5 — Rotational Kinematics
+          </h2>
+          <ul className="mt-5 grid gap-4 sm:grid-cols-2">
+            {rotationalSims.map((sim) => (
+              <li key={sim.to}>
+                <Link
+                  to={sim.to}
+                  className="group flex h-full flex-col rounded-2xl border border-slate-800 bg-slate-900/70 p-5 shadow-md shadow-slate-950/30 transition hover:border-violet-500/50 hover:bg-slate-900"
+                >
+                  <span className="text-base font-semibold text-slate-50 group-hover:text-violet-200/95">
+                    {sim.title}
+                  </span>
+                  <p className="mt-2 flex-1 text-sm text-slate-400">{sim.description}</p>
+                  <span className="mt-4 text-xs font-medium text-violet-300/90 transition group-hover:text-violet-200">
                     Open lab →
                   </span>
                 </Link>

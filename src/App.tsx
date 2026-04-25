@@ -100,6 +100,7 @@ const CenterOfMass = lazy(() => import('./pages/mechanics/CenterOfMass').then((m
 const ImpulseBuilder = lazy(() => import('./pages/mechanics/ImpulseBuilder').then((m) => ({ default: m.ImpulseBuilder })));
 const MomentumCollision1D = lazy(() => import('./pages/mechanics/MomentumCollision1D').then((m) => ({ default: m.MomentumCollision1D })));
 const Collision2D = lazy(() => import('./pages/mechanics/Collision2D').then((m) => ({ default: m.Collision2D })));
+const TautStringCircularMotionPage = lazy(() => import('./pages/mechanics/TautStringCircularMotionPage').then((m) => ({ default: m.TautStringCircularMotionPage })));
 const Admin = lazy(() => import('./pages/Admin').then((m) => ({ default: m.Admin })));
 
 
@@ -141,6 +142,7 @@ const APP_ROUTES = [
   { path: '/impulse-builder', element: <ImpulseBuilder /> },
   { path: '/momentum-collision-1d', element: <MomentumCollision1D /> },
   { path: '/momentum-collision-2d', element: <Collision2D /> },
+  { path: '/rotational-taut-string', element: <TautStringCircularMotionPage /> },
   { path: '/columbs-law', element: <ColumbsLaw /> },
   { path: '/amperes-law', element: <AmperesLaw /> },
   { path: '/maxwell', element: <Maxwell /> },
