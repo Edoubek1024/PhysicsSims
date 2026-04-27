@@ -102,6 +102,21 @@ const rotationalSims: SimLink[] = [
   },
 ];
 
+const rotationalDynamicsSims: SimLink[] = [
+  {
+    to: '/rotational-dynamics-rotating-object-builder',
+    title: 'Rotating Object Builder (Moment of Inertia Explorer)',
+    description:
+      'Construct composite objects from point masses, spheres, and rods to compare per-component and total moment of inertia.',
+  },
+  {
+    to: '/rotational-dynamics-bullet-disk-collision',
+    title: 'Bullet & Rotating Disk (Angular Momentum Transfer)',
+    description:
+      'Fire a bullet into an off-center point on a rotating disk and observe inelastic angular-momentum transfer with L conservation.',
+  },
+];
+
 export function Simulations() {
   return (
     <div className="relative mx-auto flex min-h-screen max-w-6xl flex-col overflow-hidden px-4 py-10">
@@ -236,6 +251,30 @@ export function Simulations() {
                   </span>
                   <p className="mt-2 flex-1 text-sm text-slate-400">{sim.description}</p>
                   <span className="mt-4 text-xs font-medium text-violet-300/90 transition group-hover:text-violet-200">
+                    Open lab →
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section>
+          <h2 className="border-b border-slate-800 pb-2 text-sm font-semibold uppercase tracking-[0.15em] text-cyan-300/90">
+            Unit 6 — Rotational Dynamics
+          </h2>
+          <ul className="mt-5 grid gap-4 sm:grid-cols-2">
+            {rotationalDynamicsSims.map((sim) => (
+              <li key={sim.to}>
+                <Link
+                  to={sim.to}
+                  className="group flex h-full flex-col rounded-2xl border border-slate-800 bg-slate-900/70 p-5 shadow-md shadow-slate-950/30 transition hover:border-cyan-500/50 hover:bg-slate-900"
+                >
+                  <span className="text-base font-semibold text-slate-50 group-hover:text-cyan-200/95">
+                    {sim.title}
+                  </span>
+                  <p className="mt-2 flex-1 text-sm text-slate-400">{sim.description}</p>
+                  <span className="mt-4 text-xs font-medium text-cyan-300/90 transition group-hover:text-cyan-200">
                     Open lab →
                   </span>
                 </Link>

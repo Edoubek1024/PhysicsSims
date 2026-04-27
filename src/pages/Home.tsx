@@ -200,6 +200,18 @@ const mechanicsSims: SimItem[] = [
     description: 'Central gravity and 2D orbital trajectories with Sun-Earth and Earth-Moon presets.',
     preview: `${base}thumbnails/forces.png`,
   },
+  {
+    title: 'Rotational Dynamics · Rotating Object Builder',
+    path: '/rotational-dynamics-rotating-object-builder',
+    description: 'Build composite objects and inspect how mass distribution changes moment of inertia via I = Σmr².',
+    preview: `${base}thumbnails/forces.png`,
+  },
+  {
+    title: 'Rotational Dynamics · Bullet & Rotating Disk',
+    path: '/rotational-dynamics-bullet-disk-collision',
+    description: 'Off-center inelastic bullet-disk interaction with angular momentum conservation and updated post-impact spin.',
+    preview: `${base}thumbnails/forces.png`,
+  },
 ];
 
 const enmSims: SimItem[] = [

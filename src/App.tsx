@@ -103,6 +103,8 @@ const Collision2D = lazy(() => import('./pages/mechanics/Collision2D').then((m) 
 const TautStringCircularMotionPage = lazy(() => import('./pages/mechanics/TautStringCircularMotionPage').then((m) => ({ default: m.TautStringCircularMotionPage })));
 const AngularMotionBuilderPage = lazy(() => import('./pages/mechanics/AngularMotionBuilderPage').then((m) => ({ default: m.AngularMotionBuilderPage })));
 const OrbitalMotionPage = lazy(() => import('./pages/mechanics/OrbitalMotionPage').then((m) => ({ default: m.OrbitalMotionPage })));
+const RotatingObjectBuilder = lazy(() => import('./pages/mechanics/RotatingObjectBuilder').then((m) => ({ default: m.RotatingObjectBuilder })));
+const BulletDiskCollision = lazy(() => import('./pages/mechanics/BulletDiskCollision').then((m) => ({ default: m.BulletDiskCollision })));
 const Admin = lazy(() => import('./pages/Admin').then((m) => ({ default: m.Admin })));
 
 
@@ -147,6 +149,8 @@ const APP_ROUTES = [
   { path: '/orbital-motion', element: <OrbitalMotionPage /> },
   { path: '/rotational-taut-string', element: <TautStringCircularMotionPage /> },
   { path: '/rotational-angular-motion-builder', element: <AngularMotionBuilderPage /> },
+  { path: '/rotational-dynamics-rotating-object-builder', element: <RotatingObjectBuilder /> },
+  { path: '/rotational-dynamics-bullet-disk-collision', element: <BulletDiskCollision /> },
   { path: '/columbs-law', element: <ColumbsLaw /> },
   { path: '/amperes-law', element: <AmperesLaw /> },
   { path: '/maxwell', element: <Maxwell /> },
