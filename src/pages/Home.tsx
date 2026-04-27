@@ -212,6 +212,12 @@ const mechanicsSims: SimItem[] = [
     description: 'Off-center inelastic bullet-disk interaction with angular momentum conservation and updated post-impact spin.',
     preview: `${base}thumbnails/forces.png`,
   },
+  {
+    title: 'Rotational Dynamics · Torque Visualizer (Seesaw)',
+    path: '/rotational-dynamics-torque-seesaw',
+    description: 'Adjust masses and lever arms on a seesaw to compare torques, check equilibrium, and see rotation from net torque.',
+    preview: `${base}thumbnails/forces.png`,
+  },
 ];
 
 const enmSims: SimItem[] = [

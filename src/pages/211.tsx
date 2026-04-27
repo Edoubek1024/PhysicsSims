@@ -115,6 +115,12 @@ const rotationalDynamicsSims: SimLink[] = [
     description:
       'Fire a bullet into an off-center point on a rotating disk and observe inelastic angular-momentum transfer with L conservation.',
   },
+  {
+    to: '/rotational-dynamics-torque-seesaw',
+    title: 'Torque Visualizer (Seesaw Balance)',
+    description:
+      'Place masses along a lever to compare left/right torque, identify equilibrium, and observe tilt under net torque.',
+  },
 ];
 
 export function Simulations() {
