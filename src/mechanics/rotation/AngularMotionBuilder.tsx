@@ -42,10 +42,6 @@ const HISTORY_SAMPLE_MS = 120;
 const UI_PUSH_MS = 120;
 const MAX_HISTORY_POINTS = Math.ceil((HISTORY_WINDOW_S * 1000) / HISTORY_SAMPLE_MS) + 2;
 
-function clamp(value: number, min: number, max: number): number {
-  return Math.min(max, Math.max(min, value));
-}
-
 function wrapAngleRad(theta: number): number {
   let next = theta % TWO_PI;
   if (next < 0) next += TWO_PI;

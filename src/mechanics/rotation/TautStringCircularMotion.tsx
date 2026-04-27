@@ -280,7 +280,6 @@ export function TautStringCircularMotion() {
   }, [controls.radiusM, initialLinearSpeed, initialSpeedMode]);
 
   const theta = simStateRef.current.theta + displayTick * 0;
-  const vDisplay = currentDerived.v;
   const rDisplay = controls.radiusM;
   const aDisplay = currentDerived.aC;
   const tensionDisplay = currentDerived.tensionN;

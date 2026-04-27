@@ -231,7 +231,6 @@ export function OrbitalMotion() {
         orbitBodyRef.current.setAttribute('cx', posSvg.x.toFixed(2));
         orbitBodyRef.current.setAttribute('cy', posSvg.y.toFixed(2));
       }
-      const centralSvg = { x: 50, y: 50 };
       if (orbitCircleRef.current) {
         orbitCircleRef.current.setAttribute('r', centralRadiusPx.toFixed(2));
       }
