@@ -13,10 +13,6 @@ function clamp(v: number, min: number, max: number): number {
   return Math.min(max, Math.max(min, v));
 }
 
-function worldToSvg(v: number): number {
-  return ((v + WORLD_HALF_SPAN_M) / (2 * WORLD_HALF_SPAN_M)) * CANVAS_W;
-}
-
 function diskInertia(massKg: number, radiusM: number): number {
   return 0.5 * massKg * radiusM * radiusM;
 }
