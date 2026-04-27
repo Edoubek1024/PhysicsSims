@@ -121,6 +121,12 @@ const rotationalDynamicsSims: SimLink[] = [
     description:
       'Place masses along a lever to compare left/right torque, identify equilibrium, and observe tilt under net torque.',
   },
+  {
+    to: '/rotational-dynamics-active-torque-disk',
+    title: 'Active Torque Disk Simulator (Hold-to-Apply Torque)',
+    description:
+      'Hold a button to apply continuous tangential force and watch torque-driven changes in ω, L, and ΔL = τΔt.',
+  },
 ];
 
 export function Simulations() {

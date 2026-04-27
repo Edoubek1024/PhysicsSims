@@ -218,6 +218,12 @@ const mechanicsSims: SimItem[] = [
     description: 'Adjust masses and lever arms on a seesaw to compare torques, check equilibrium, and see rotation from net torque.',
     preview: `${base}thumbnails/forces.png`,
   },
+  {
+    title: 'Rotational Dynamics · Active Torque Disk',
+    path: '/rotational-dynamics-active-torque-disk',
+    description: 'Hold to apply torque to a disk and observe real-time angular acceleration, angular momentum, and rotational impulse.',
+    preview: `${base}thumbnails/forces.png`,
+  },
 ];
 
 const enmSims: SimItem[] = [

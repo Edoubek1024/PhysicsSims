@@ -106,6 +106,7 @@ const OrbitalMotionPage = lazy(() => import('./pages/mechanics/OrbitalMotionPage
 const RotatingObjectBuilder = lazy(() => import('./pages/mechanics/RotatingObjectBuilder').then((m) => ({ default: m.RotatingObjectBuilder })));
 const BulletDiskCollision = lazy(() => import('./pages/mechanics/BulletDiskCollision').then((m) => ({ default: m.BulletDiskCollision })));
 const TorqueSeesaw = lazy(() => import('./pages/mechanics/TorqueSeesaw').then((m) => ({ default: m.TorqueSeesaw })));
+const ActiveTorqueDisk = lazy(() => import('./pages/mechanics/ActiveTorqueDisk').then((m) => ({ default: m.ActiveTorqueDisk })));
 const Admin = lazy(() => import('./pages/Admin').then((m) => ({ default: m.Admin })));
 
 
@@ -153,6 +154,7 @@ const APP_ROUTES = [
   { path: '/rotational-dynamics-rotating-object-builder', element: <RotatingObjectBuilder /> },
   { path: '/rotational-dynamics-bullet-disk-collision', element: <BulletDiskCollision /> },
   { path: '/rotational-dynamics-torque-seesaw', element: <TorqueSeesaw /> },
+  { path: '/rotational-dynamics-active-torque-disk', element: <ActiveTorqueDisk /> },
   { path: '/columbs-law', element: <ColumbsLaw /> },
   { path: '/amperes-law', element: <AmperesLaw /> },
   { path: '/maxwell', element: <Maxwell /> },
