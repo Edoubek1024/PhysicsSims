@@ -153,6 +153,13 @@ const mechanicsSims: SimItem[] = [
     preview: `${base}thumbnails/spring.png`,
   },
   {
+    title: 'Rotational Energy · Rolling Without Slipping',
+    path: '/rolling-energy-split',
+    description:
+      'No-slip ramp roll: watch PE become translational and rotational KE with v = ωr, stacked energy bars, and shape-dependent β = I/(mr²).',
+    preview: `${base}thumbnails/incline.png`,
+  },
+  {
     title: 'Work in Dynamics',
     path: '/work-in-dynamics',
     description: 'Incline, rope pull, and spring tabs with live work tracking (W = F·Δr) per force.',
