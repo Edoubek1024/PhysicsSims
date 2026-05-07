@@ -8,7 +8,7 @@ import {
   Quaternion,
   Vector3,
 } from 'three';
-import type { EMVolumeSample, WaveParams } from '../../lib/waveEq/types.ts';
+import type { EMVolumeSample, WaveParams } from '../../lib/enm/waveEq/types.ts';
 
 type FieldKind = 'electric' | 'magnetic';
 

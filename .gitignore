@@ -29,3 +29,12 @@ dist-ssr
 
 # wiki stays in the repo, but we don't want to track changes to it
 /wiki
+
+# claude + ruflo files
+.claude
+.ruflo
+.claude-flow
+.ruflow
+*.flow
+.mcp.json
+roots.sst

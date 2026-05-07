@@ -1,4 +1,4 @@
-import type { ColliderLog } from '../../lib/collider/types';
+import type { ColliderLog } from '../../lib/enm/collider/types';
 
 type EventLogProps = {
   logs: ColliderLog[];

@@ -6,7 +6,7 @@ import { LiveReadout } from '../../components/collider/LiveReadout';
 import { ModeToggle } from '../../components/collider/ModeToggle';
 import { RingViewCanvas } from '../../components/collider/RingViewCanvas';
 import { TunnelViewCanvas } from '../../components/collider/TunnelViewCanvas';
-import { COLLIDER_LABEL } from '../../lib/collider/constants';
+import { COLLIDER_LABEL } from '../../lib/enm/collider/constants';
 import { useColliderSimulation } from '../../hooks/useColliderSimulation';
 
 type EducationTab = 'how' | 'magnets' | 'acceleration' | 'collisions' | 'detectors';

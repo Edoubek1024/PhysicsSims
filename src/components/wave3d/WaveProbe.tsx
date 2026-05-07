@@ -1,6 +1,6 @@
 import { Html } from '@react-three/drei';
-import { sampleProbeValue } from '../../lib/waveEq/sampling';
-import type { WaveMode, WaveParams } from '../../lib/waveEq/types';
+import { sampleProbeValue } from '../../lib/enm/waveEq/sampling';
+import type { WaveMode, WaveParams } from '../../lib/enm/waveEq/types';
 
 type WaveProbeProps = {
   x: number;

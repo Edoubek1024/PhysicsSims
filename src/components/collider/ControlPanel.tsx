@@ -1,5 +1,5 @@
 import { SliderWithInput } from '../SliderWithInput';
-import type { ColliderControls, ParticleType } from '../../lib/collider/types';
+import type { ColliderControls, ParticleType } from '../../lib/enm/collider/types';
 
 type ControlPanelProps = {
   controls: ColliderControls;

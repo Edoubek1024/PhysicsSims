@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
-import { sampleElectromagneticWave } from '../../lib/waveEq/emWave';
-import type { WaveParams } from '../../lib/waveEq/types';
+import { sampleElectromagneticWave } from '../../lib/enm/waveEq/emWave';
+import type { WaveParams } from '../../lib/enm/waveEq/types';
 import { EMFieldArrows } from './EMFieldArrows';
 import { EMWaveLine } from './EMWaveLine';
 import { WaveLine } from './WaveLine';

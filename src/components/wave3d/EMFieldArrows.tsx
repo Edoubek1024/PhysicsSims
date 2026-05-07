@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
-import { sampleEMFieldArrows } from '../../lib/waveEq/emWave';
-import type { EMArrowSample, WaveParams } from '../../lib/waveEq/types';
+import { sampleEMFieldArrows } from '../../lib/enm/waveEq/emWave';
+import type { EMArrowSample, WaveParams } from '../../lib/enm/waveEq/types';
 
 type EMFieldArrowsProps = {
   time: number;

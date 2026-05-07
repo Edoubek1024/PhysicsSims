@@ -1,4 +1,4 @@
-import type { ViewMode } from '../../lib/collider/types';
+import type { ViewMode } from '../../lib/enm/collider/types';
 
 type ModeToggleProps = {
   mode: ViewMode;

@@ -1,5 +1,5 @@
 import { Line, Text } from '@react-three/drei';
-import type { WaveMode } from '../../lib/waveEq/types';
+import type { WaveMode } from '../../lib/enm/waveEq/types';
 
 type WaveAxesProps = {
   mode: WaveMode;

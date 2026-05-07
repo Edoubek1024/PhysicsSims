@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import type { MutableRefObject } from 'react';
-import { renderTunnel } from '../../lib/collider/renderTunnel';
-import type { ColliderControls, ColliderRuntime } from '../../lib/collider/types';
+import { renderTunnel } from '../../lib/enm/collider/renderTunnel';
+import type { ColliderControls, ColliderRuntime } from '../../lib/enm/collider/types';
 
 type TunnelViewCanvasProps = {
   runtimeRef: MutableRefObject<ColliderRuntime>;

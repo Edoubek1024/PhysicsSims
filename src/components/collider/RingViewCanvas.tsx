@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import type { MutableRefObject } from 'react';
-import { renderRing } from '../../lib/collider/renderRing';
-import type { ColliderControls, ColliderRuntime } from '../../lib/collider/types';
+import { renderRing } from '../../lib/enm/collider/renderRing';
+import type { ColliderControls, ColliderRuntime } from '../../lib/enm/collider/types';
 
 type RingViewCanvasProps = {
   runtimeRef: MutableRefObject<ColliderRuntime>;

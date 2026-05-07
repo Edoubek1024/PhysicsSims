@@ -1,5 +1,5 @@
 import { Grid } from '@react-three/drei';
-import type { EMDisplayMode, WaveMode } from '../../lib/waveEq/types';
+import type { EMDisplayMode, WaveMode } from '../../lib/enm/waveEq/types';
 
 type WaveGridProps = {
   mode: WaveMode;

@@ -65,7 +65,8 @@ const loadAnalyticsScript = () => {
   document.head.appendChild(script);
 };
 
-const Home = lazy(() => import('./pages/Home').then((m) => ({ default: m.Home })));
+const Home = lazy(() => import('./Home').then((m) => ({ default: m.Home })));
+const Dashboard = lazy(() => import('./pages/Dashboard').then((m) => ({ default: m.Dashboard })));
 const About = lazy(() => import('./pages/About').then((m) => ({ default: m.About })));
 const Instructor = lazy(() => import('./pages/Instructor').then((m) => ({ default: m.Instructor })));
 const Phys211 = lazy(() => import('./pages/211').then((m) => ({ default: m.Simulations })));
@@ -93,6 +94,7 @@ const GaussLaw = lazy(() => import('./pages/enm/GaussLaw').then((m) => ({ defaul
 const MagField = lazy(() => import('./pages/enm/MagField').then((m) => ({ default: m.MagField })));
 const LHC = lazy(() => import('./pages/enm/LHC').then((m) => ({ default: m.LHC })));
 const WaveEq3D = lazy(() => import('./pages/enm/wave-3d').then((m) => ({ default: m.WaveEquation3D })));
+const Optics = lazy(() => import('./pages/enm/Optics').then((m) => ({ default: m.Optics })));
 
 const BeamBalance = lazy(() => import('./pages/statics/BeamBalance').then((m) => ({ default: m.BeamBalance })));
 const DistributedLoad = lazy(() => import('./pages/statics/DistributedLoad').then((m) => ({ default: m.DistributedLoad })));
@@ -122,6 +124,7 @@ const TAM_LINKS = [
 
 const APP_ROUTES = [
   { path: '/', element: <Home /> },
+  { path: '/dashboard', element: <Dashboard /> },
   { path: '/instructor', element: <Instructor /> },
   { path: '/about', element: <About /> },
   { path: '/211', element: <Phys211 /> },
@@ -152,6 +155,7 @@ const APP_ROUTES = [
   { path: '/lhc', element: <LHC /> },
   { path: '/wave-3d', element: <WaveEq3D /> },
   { path: '/wave-equation-3d', element: <WaveEq3D /> },
+  { path: '/optics', element: <Optics /> },
   { path: '/beam-balance', element: <BeamBalance /> },
   { path: '/distributed-load', element: <DistributedLoad /> },
   { path: '/admin', element: <Admin /> },
@@ -323,9 +327,9 @@ export function App() {
         </Suspense>
       </main>
       
-{/* FOOTER BOX */}
-  {!isCleanMode ? (
-  <footer className="border-t border-slate-950/90 bg-slate-900/2" >
+      {/* FOOTER BOX — Only show on non-home pages */}
+      {!isCleanMode && location.pathname !== '/' ? (
+      <footer className="border-t border-slate-950/90 bg-slate-900/2" >
         <img
           src={`${import.meta.env.BASE_URL}adl.png`}
           alt="Physics Sims Logo"

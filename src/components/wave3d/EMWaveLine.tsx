@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef } from 'react';
 import { BufferAttribute, BufferGeometry, DynamicDrawUsage } from 'three';
-import type { EMWaveSample } from '../../lib/waveEq/types';
+import type { EMWaveSample } from '../../lib/enm/waveEq/types';
 
 type EMWaveLineProps = {
   samples: EMWaveSample[];

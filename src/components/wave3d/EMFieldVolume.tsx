@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { Edges } from '@react-three/drei';
 import { EMVolumeArrows } from './EMVolumeArrows';
 import { useEMFieldVolume } from '../../hooks/useEMFieldVolume';
-import type { WaveParams } from '../../lib/waveEq/types.ts';
+import type { WaveParams } from '../../lib/enm/waveEq/types.ts';
 
 type EMFieldVolumeProps = {
   time: number;
