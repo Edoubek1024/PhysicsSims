@@ -114,7 +114,7 @@ const Admin = lazy(() => import('./pages/Admin').then((m) => ({ default: m.Admin
 
 
 const NAV_LINKS = [
-  { to: '/', label: 'Home' },
+  { to: '/dashboard', label: 'Dashboard' },
   // { to: '/instructor', label: 'Instructor' },
   // { to: '/#mechanics', label: 'Mechanics' },
   // { to: '/#enm', label: 'E&M' },
