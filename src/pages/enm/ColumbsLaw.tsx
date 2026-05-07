@@ -19,7 +19,7 @@ const DEFAULT_CONTROLS: ControlsState = {
 
 const MIN_Q = -10;
 const MAX_Q = 10;
-const MIN_R = 0.2;
+const MIN_R = 0;
 const MAX_R = 5;
 
 function roundTo2(n: number): number {

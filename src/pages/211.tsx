@@ -54,6 +54,12 @@ const energySims: SimLink[] = [
     title: 'Spring Energy Simulation',
     description: 'Horizontal spring–mass oscillator: velocity, KE, spring PE, and total energy with a live force arrow.',
   },
+  {
+    to: '/rolling-energy-split',
+    title: 'Rolling Without Slipping (Energy Split Explorer)',
+    description:
+      'Roll down a no-slip ramp: gravitational PE splits into translational and rotational kinetic energy (v = ωr), with live stacked energy bars.',
+  },
 ];
 
 const momentumSims: SimLink[] = [
@@ -78,6 +84,63 @@ const momentumSims: SimLink[] = [
     title: '2D Collisions Simulator',
     description:
       'Elastic disks in a square arena: pairwise collisions, wall bounces, and live Σpₓ, Σpᵧ tracking per ball.',
+  },
+];
+
+const rotationalSims: SimLink[] = [
+  {
+    to: '/rotational-angular-motion-builder',
+    title: 'Simple Anguler Motion Visualizer',
+    description:
+      'Set θ₀, ω₀, and α to visualize rotational kinematics, with live θ-ω-α readouts and time graphs.',
+  },
+  {
+    to: '/rotational-taut-string',
+    title: 'Taut Ball on a String (Uniform Circular Motion)',
+    description:
+      'Ball constrained to a circle by a taut string with live tension, tangential velocity, and centripetal acceleration vectors.',
+  },
+  {
+    to: '/orbital-motion',
+    title: 'Gravity & Orbital Motion',
+    description:
+      'Two-body gravity with presets (Sun-Earth, Earth-Moon): tune mass, distance, and speed for orbit, escape, or crash.',
+  },
+];
+
+const rotationalEnergySims: SimLink[] = [
+  {
+    to: '/rolling-energy-split',
+    title: 'Rolling Without Slipping (Energy Split Explorer)',
+    description:
+      'Roll on a no-slip ramp: see PE convert into translational and rotational KE with β = I/(mr²), conserved total energy, and live stacked energy bars.',
+  },
+];
+
+const rotationalDynamicsSims: SimLink[] = [
+  {
+    to: '/rotational-dynamics-rotating-object-builder',
+    title: 'Rotating Object Builder (Moment of Inertia Explorer)',
+    description:
+      'Construct composite objects from point masses, spheres, and rods to compare per-component and total moment of inertia.',
+  },
+  {
+    to: '/rotational-dynamics-bullet-disk-collision',
+    title: 'Bullet & Rotating Disk (Angular Momentum Transfer)',
+    description:
+      'Fire a bullet into an off-center point on a rotating disk and observe inelastic angular-momentum transfer with L conservation.',
+  },
+  {
+    to: '/rotational-dynamics-torque-seesaw',
+    title: 'Torque Visualizer (Seesaw Balance)',
+    description:
+      'Place masses along a lever to compare left/right torque, identify equilibrium, and observe tilt under net torque.',
+  },
+  {
+    to: '/rotational-dynamics-active-torque-disk',
+    title: 'Active Torque Disk Simulator (Hold-to-Apply Torque)',
+    description:
+      'Hold a button to apply continuous tangential force and watch torque-driven changes in ω, L, and ΔL = τΔt.',
   },
 ];
 
@@ -191,6 +254,78 @@ export function Simulations() {
                   </span>
                   <p className="mt-2 flex-1 text-sm text-slate-400">{sim.description}</p>
                   <span className="mt-4 text-xs font-medium text-amber-300/90 transition group-hover:text-amber-200">
+                    Open lab →
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section>
+          <h2 className="border-b border-slate-800 pb-2 text-sm font-semibold uppercase tracking-[0.15em] text-violet-300/90">
+            Unit 5 — Angular Motion
+          </h2>
+          <ul className="mt-5 grid gap-4 sm:grid-cols-2">
+            {rotationalSims.map((sim) => (
+              <li key={sim.to}>
+                <Link
+                  to={sim.to}
+                  className="group flex h-full flex-col rounded-2xl border border-slate-800 bg-slate-900/70 p-5 shadow-md shadow-slate-950/30 transition hover:border-violet-500/50 hover:bg-slate-900"
+                >
+                  <span className="text-base font-semibold text-slate-50 group-hover:text-violet-200/95">
+                    {sim.title}
+                  </span>
+                  <p className="mt-2 flex-1 text-sm text-slate-400">{sim.description}</p>
+                  <span className="mt-4 text-xs font-medium text-violet-300/90 transition group-hover:text-violet-200">
+                    Open lab →
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section>
+          <h2 className="border-b border-slate-800 pb-2 text-sm font-semibold uppercase tracking-[0.15em] text-cyan-300/90">
+            Unit 6 — Rotational Dynamics
+          </h2>
+          <ul className="mt-5 grid gap-4 sm:grid-cols-2">
+            {rotationalDynamicsSims.map((sim) => (
+              <li key={sim.to}>
+                <Link
+                  to={sim.to}
+                  className="group flex h-full flex-col rounded-2xl border border-slate-800 bg-slate-900/70 p-5 shadow-md shadow-slate-950/30 transition hover:border-cyan-500/50 hover:bg-slate-900"
+                >
+                  <span className="text-base font-semibold text-slate-50 group-hover:text-cyan-200/95">
+                    {sim.title}
+                  </span>
+                  <p className="mt-2 flex-1 text-sm text-slate-400">{sim.description}</p>
+                  <span className="mt-4 text-xs font-medium text-cyan-300/90 transition group-hover:text-cyan-200">
+                    Open lab →
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section>
+          <h2 className="border-b border-slate-800 pb-2 text-sm font-semibold uppercase tracking-[0.15em] text-indigo-300/90">
+            Unit 7 — Rotational Energy
+          </h2>
+          <ul className="mt-5 grid gap-4 sm:grid-cols-2">
+            {rotationalEnergySims.map((sim) => (
+              <li key={sim.to}>
+                <Link
+                  to={sim.to}
+                  className="group flex h-full flex-col rounded-2xl border border-slate-800 bg-slate-900/70 p-5 shadow-md shadow-slate-950/30 transition hover:border-indigo-500/50 hover:bg-slate-900"
+                >
+                  <span className="text-base font-semibold text-slate-50 group-hover:text-indigo-200/95">
+                    {sim.title}
+                  </span>
+                  <p className="mt-2 flex-1 text-sm text-slate-400">{sim.description}</p>
+                  <span className="mt-4 text-xs font-medium text-indigo-300/90 transition group-hover:text-indigo-200">
                     Open lab →
                   </span>
                 </Link>

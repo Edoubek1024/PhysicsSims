@@ -102,6 +102,14 @@ const CenterOfMass = lazy(() => import('./pages/mechanics/CenterOfMass').then((m
 const ImpulseBuilder = lazy(() => import('./pages/mechanics/ImpulseBuilder').then((m) => ({ default: m.ImpulseBuilder })));
 const MomentumCollision1D = lazy(() => import('./pages/mechanics/MomentumCollision1D').then((m) => ({ default: m.MomentumCollision1D })));
 const Collision2D = lazy(() => import('./pages/mechanics/Collision2D').then((m) => ({ default: m.Collision2D })));
+const TautStringCircularMotionPage = lazy(() => import('./pages/mechanics/TautStringCircularMotionPage').then((m) => ({ default: m.TautStringCircularMotionPage })));
+const AngularMotionBuilderPage = lazy(() => import('./pages/mechanics/AngularMotionBuilderPage').then((m) => ({ default: m.AngularMotionBuilderPage })));
+const OrbitalMotionPage = lazy(() => import('./pages/mechanics/OrbitalMotionPage').then((m) => ({ default: m.OrbitalMotionPage })));
+const RotatingObjectBuilder = lazy(() => import('./pages/mechanics/RotatingObjectBuilder').then((m) => ({ default: m.RotatingObjectBuilder })));
+const BulletDiskCollision = lazy(() => import('./pages/mechanics/BulletDiskCollision').then((m) => ({ default: m.BulletDiskCollision })));
+const TorqueSeesaw = lazy(() => import('./pages/mechanics/TorqueSeesaw').then((m) => ({ default: m.TorqueSeesaw })));
+const ActiveTorqueDisk = lazy(() => import('./pages/mechanics/ActiveTorqueDisk').then((m) => ({ default: m.ActiveTorqueDisk })));
+const RollingEnergySplit = lazy(() => import('./pages/mechanics/RollingEnergySplit').then((m) => ({ default: m.RollingEnergySplit })));
 const Admin = lazy(() => import('./pages/Admin').then((m) => ({ default: m.Admin })));
 
 
@@ -144,6 +152,14 @@ const APP_ROUTES = [
   { path: '/impulse-builder', element: <ImpulseBuilder /> },
   { path: '/momentum-collision-1d', element: <MomentumCollision1D /> },
   { path: '/momentum-collision-2d', element: <Collision2D /> },
+  { path: '/orbital-motion', element: <OrbitalMotionPage /> },
+  { path: '/rotational-taut-string', element: <TautStringCircularMotionPage /> },
+  { path: '/rotational-angular-motion-builder', element: <AngularMotionBuilderPage /> },
+  { path: '/rotational-dynamics-rotating-object-builder', element: <RotatingObjectBuilder /> },
+  { path: '/rotational-dynamics-bullet-disk-collision', element: <BulletDiskCollision /> },
+  { path: '/rotational-dynamics-torque-seesaw', element: <TorqueSeesaw /> },
+  { path: '/rotational-dynamics-active-torque-disk', element: <ActiveTorqueDisk /> },
+  { path: '/rolling-energy-split', element: <RollingEnergySplit /> },
   { path: '/columbs-law', element: <ColumbsLaw /> },
   { path: '/amperes-law', element: <AmperesLaw /> },
   { path: '/maxwell', element: <Maxwell /> },
