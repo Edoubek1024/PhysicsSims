@@ -522,16 +522,16 @@ export function Home() {
               transition={{ duration: 0.6 }}
             >
               <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-                Ready to Explore Physics?
+                Experience our most advanced simulation
               </h2>
               <p className="text-slate-400 text-lg mb-8">
-                Try our featured simulation.
+                Explore particle collisions, decay processes, and fundamental forces in the Large Hadron Collider simulation.
               </p>
               <Link
                 to="/lhc"
                 className="inline-block px-8 py-4 rounded-lg bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-semibold hover:shadow-lg hover:shadow-blue-500/40 transition-all duration-200 active:scale-95"
               >
-                Launch LHC Simulation
+                Launch
               </Link>
             </motion.div>
           </div>

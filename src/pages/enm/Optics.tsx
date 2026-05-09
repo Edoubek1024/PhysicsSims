@@ -471,9 +471,17 @@ export function Optics() {
                       <select
                         value={medium1}
                         onChange={(e) => setMedium1(e.target.value as MediaKey)}
-                        className="w-full rounded-lg border border-white/[0.07] bg-white/[0.04] px-3 py-2 text-xs text-slate-200 outline-none"
+                        className="w-full appearance-none rounded-lg border border-white/[0.07] bg-white/[0.04] px-3 py-2 text-xs text-slate-200 outline-none"
                       >
-                        {(Object.keys(MEDIA) as MediaKey[]).map((k) => <option key={k} value={k}>{MEDIA[k].label}</option>)}
+                        {(Object.keys(MEDIA) as MediaKey[]).map((k) => (
+                          <option
+                            key={k}
+                            value={k}
+                            className="bg-slate-950 text-slate-200"
+                          >
+                            {MEDIA[k].label}
+                          </option>
+                        ))}
                       </select>
                     </div>
                     <div>
@@ -481,9 +489,17 @@ export function Optics() {
                       <select
                         value={medium2}
                         onChange={(e) => setMedium2(e.target.value as MediaKey)}
-                        className="w-full rounded-lg border border-white/[0.07] bg-white/[0.04] px-3 py-2 text-xs text-slate-200 outline-none"
+                        className="w-full appearance-none rounded-lg border border-white/[0.07] bg-white/[0.04] px-3 py-2 text-xs text-slate-200 outline-none"
                       >
-                        {(Object.keys(MEDIA) as MediaKey[]).map((k) => <option key={k} value={k}>{MEDIA[k].label}</option>)}
+                        {(Object.keys(MEDIA) as MediaKey[]).map((k) => (
+                          <option
+                            key={k}
+                            value={k}
+                            className="bg-slate-950 text-slate-200"
+                          >
+                            {MEDIA[k].label}
+                          </option>
+                        ))}
                       </select>
                     </div>
                     <Slider label="Incident angle θ₁" value={theta1Deg} min={0} max={89} unit="°" onChange={setTheta1Deg} />
