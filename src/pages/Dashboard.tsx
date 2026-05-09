@@ -52,7 +52,7 @@ const SIMS: SimItem[] = [
   { track: 'enm', title: 'RC Circuit Lab', path: '/rc-circuit', description: 'Explore capacitor charging and discharging with live voltage and current scopes.', preview: `${base}thumbnails/RC.png` },
   { track: 'enm', title: 'Magnetic Field Simulator', path: '/mag-field', description: 'Visualize magnetic fields around point charges and magnets.', preview: `${base}thumbnails/mag.png` },
   { track: 'enm', title: 'Capacitor Lab', path: '/capacitor', description: 'Understand how capacitors store charge and energy.', preview: `${base}thumbnails/capacitor.png` },
-  { track: 'enm', title: 'Optics Simulator', path: '/optics', description: 'Explore light properties including wavelength, polarization, and interference.', preview: `${base}thumbnails/optics.png` },
+  { track: 'enm', title: 'Optics Simulator', path: '/optics', description: 'Explore light properties including wavelength, polarization, and interference.', preview: `${base}thumbnails/light.png` },
 
   // Statics
   { track: 'statics', title: 'Beam Balance Simulator', path: '/beam-balance', description: 'Explore torque and equilibrium with a virtual beam balance.', preview: `${base}thumbnails/beambalance.png`, featured: true },
