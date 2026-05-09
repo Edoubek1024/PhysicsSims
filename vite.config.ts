@@ -9,6 +9,6 @@ const localCacheDir = process.env.LOCALAPPDATA
 export default defineConfig({
   plugins: [react()],
   envPrefix: ['VITE_'],
-  base: '/PhysicsSims/',
+  base: '/',
   cacheDir: localCacheDir,
 });
