@@ -1,0 +1,8 @@
+# This file is used internally by FFMPEG.
+file 'file:C:/Users/heint/OneDrive/Documents/CodesNStuffz/PhysicsSims/media/videos/gauss_law/1080p60/partial_movie_files/GaussLaw/334508516_1040212302_223132457.mp4'
+file 'file:C:/Users/heint/OneDrive/Documents/CodesNStuffz/PhysicsSims/media/videos/gauss_law/1080p60/partial_movie_files/GaussLaw/1244529242_1443014449_3600949101.mp4'
+file 'file:C:/Users/heint/OneDrive/Documents/CodesNStuffz/PhysicsSims/media/videos/gauss_law/1080p60/partial_movie_files/GaussLaw/1244529242_2412373395_2354975115.mp4'
+file 'file:C:/Users/heint/OneDrive/Documents/CodesNStuffz/PhysicsSims/media/videos/gauss_law/1080p60/partial_movie_files/GaussLaw/1244529242_2872752589_1742728947.mp4'
+file 'file:C:/Users/heint/OneDrive/Documents/CodesNStuffz/PhysicsSims/media/videos/gauss_law/1080p60/partial_movie_files/GaussLaw/1244529242_2151631729_2073307087.mp4'
+file 'file:C:/Users/heint/OneDrive/Documents/CodesNStuffz/PhysicsSims/media/videos/gauss_law/1080p60/partial_movie_files/GaussLaw/1244529242_2840654701_2419235629.mp4'
+file 'file:C:/Users/heint/OneDrive/Documents/CodesNStuffz/PhysicsSims/media/videos/gauss_law/1080p60/partial_movie_files/GaussLaw/1244529242_4249682336_1870549749.mp4'

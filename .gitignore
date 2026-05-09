@@ -40,5 +40,7 @@ dist-ssr
 roots.sst
 
 # manim
-media/
 manim/scenes/__pycache__/
+media/Tex/
+media/texts/
+media/images/
