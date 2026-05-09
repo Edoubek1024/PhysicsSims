@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { SliderWithInput } from '../../components/SliderWithInput';
+import VideoExplain from '../../components/videoExplain';
 
 type SurfaceShape = 'sphere' | 'cylinder' | 'cube';
 
@@ -60,17 +61,19 @@ export function GaussLaw() {
 						charge, not on the surface geometry.
 					</p>
 				</div>
-
+				<VideoExplain
+					videoSrc={`${import.meta.env.BASE_URL}media/videos/gauss_law/1080p60/GaussLaw.mp4`}
+					title="Gauss's Law Explainer"
+					description="Watch a short animation explaining Gauss's law and how electric flux depends on enclosed charge."
+					buttonLabel="Watch Video"
+				/>
 				<Link
-					to="/"
+					to="/dashboard"
 					className="inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900 px-3 py-1 text-xs font-medium text-slate-200 transition hover:border-emerald-500 hover:text-emerald-100"
 				>
-					<span className="text-sm">←</span>
+				<span className="text-sm">←</span>
 					Home
 				</Link>
-                <span className="inline-flex items-center gap-2 rounded-full border border-emerald-700/60 bg-emerald-900/50 px-3 py-1 text-[0.7rem] font-medium text-emerald-100">
-                    Gaussian Surface · Electric Flux
-                </span>
 			</header>
 
 			<main className="grid gap-4 sm:gap-6 lg:grid-cols-[minmax(0,1.8fr)_minmax(0,1fr)]">

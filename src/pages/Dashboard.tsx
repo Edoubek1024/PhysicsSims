@@ -1,6 +1,7 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { loadAdminState, type AdminControlState } from '../config/internalAdmin';
 
 const base = import.meta.env.BASE_URL;
 const PREVIEW_FALLBACK = `${base}thumbnails/preview.png`;
@@ -29,12 +30,12 @@ const SIMS: SimItem[] = [
   { track: 'mechanics', title: 'Work in Dynamics', path: '/work-in-dynamics', description: 'Incline, rope pull, and spring tabs with live work tracking (W = F·Δr) per force.', preview: `${base}thumbnails/incline.png` },
   { track: 'mechanics', title: 'Center of Mass', path: '/center-of-mass', description: 'Drag multiple masses in 2D and track the system center of mass in real time.', preview: `${base}thumbnails/forces.png` },
   { track: 'mechanics', title: 'Impulse Builder', path: '/impulse-builder', description: 'Constant horizontal force over a chosen duration: J = FΔt, Δp, and coasting motion.', preview: `${base}thumbnails/forces.png` },
-  { track: 'mechanics', title: '1D Collision', path: '/momentum-collision-1d', description: 'Elastic and inelastic 1D collisions with live momentum tracking.', preview: `${base}thumbnails/pulley.png` },
-  { track: 'mechanics', title: '2D Collisions', path: '/momentum-collision-2d', description: 'Elastic disks in a square arena with per-ball Σpₓ, Σpᵧ readouts.', preview: `${base}thumbnails/pulley.png` },
-  { track: 'mechanics', title: 'Taut String Circular Motion', path: '/rotational-taut-string', description: 'Explore circular motion with tension, speed, radius, and centripetal force.', preview: PREVIEW_FALLBACK },
+  { track: 'mechanics', title: '1D Collision', path: '/momentum-collision-1d', description: 'Elastic and inelastic 1D collisions with live momentum tracking.', preview: `${base}thumbnails/1d.png` },
+  { track: 'mechanics', title: '2D Collisions', path: '/momentum-collision-2d', description: 'Elastic disks in a square arena with per-ball Σpₓ, Σpᵧ readouts.', preview: `${base}thumbnails/2d.png` },
+  { track: 'mechanics', title: 'Taut String Circular Motion', path: '/rotational-taut-string', description: 'Explore circular motion with tension, speed, radius, and centripetal force.', preview: `${base}thumbnails/rotational.png` },
   { track: 'mechanics', title: 'Angular Motion Builder', path: '/rotational-angular-motion-builder', description: 'Build rotating systems and inspect angular velocity, acceleration, and torque.', preview: PREVIEW_FALLBACK },
-  { track: 'mechanics', title: 'Orbital Motion', path: '/orbital-motion', description: 'Model orbiting bodies and see how gravity shapes trajectories.', preview: PREVIEW_FALLBACK },
-  { track: 'mechanics', title: 'Rotating Object Builder', path: '/rotational-dynamics-rotating-object-builder', description: 'Adjust mass placement and watch the moment of inertia and angular response change.', preview: PREVIEW_FALLBACK },
+  { track: 'mechanics', title: 'Orbital Motion', path: '/orbital-motion', description: 'Model orbiting bodies and see how gravity shapes trajectories.', preview: `${base}/thumbnails/orbital.png` },
+  { track: 'mechanics', title: 'Rotating Object Builder', path: '/rotational-dynamics-rotating-object-builder', description: 'Adjust mass placement and watch the moment of inertia and angular response change.', preview: `${base}thumbnails/rotational.png` },
   { track: 'mechanics', title: 'Bullet-Disk Collision', path: '/rotational-dynamics-bullet-disk-collision', description: 'Compare angular momentum transfer in a bullet striking a rotating disk.', preview: PREVIEW_FALLBACK },
   { track: 'mechanics', title: 'Torque Seesaw', path: '/rotational-dynamics-torque-seesaw', description: 'Balance torques on a seesaw and find equilibrium conditions.', preview: PREVIEW_FALLBACK },
   { track: 'mechanics', title: 'Active Torque Disk', path: '/rotational-dynamics-active-torque-disk', description: 'Apply torque to a disk and watch the rotational dynamics update live.', preview: PREVIEW_FALLBACK },
@@ -138,22 +139,39 @@ function SimCard({ sim, index }: { sim: SimItem; index: number }) {
 export function Dashboard() {
   const [activeTrack, setActiveTrack] = useState<FilterTrack>('all');
   const [query, setQuery] = useState('');
+  const [adminControls, setAdminControls] = useState<AdminControlState>(loadAdminState);
+
+  useEffect(() => {
+    const onStorageUpdated = () => {
+      setAdminControls(loadAdminState());
+    };
+
+    window.addEventListener('storage', onStorageUpdated);
+    return () => {
+      window.removeEventListener('storage', onStorageUpdated);
+    };
+  }, []);
+
+  const visibleSims = useMemo(
+    () => SIMS.filter((sim) => adminControls.simulationVisibility[sim.path] !== false),
+    [adminControls.simulationVisibility],
+  );
 
   const counts = useMemo(() => ({
-    all: SIMS.length,
-    mechanics: SIMS.filter((s) => s.track === 'mechanics').length,
-    enm:       SIMS.filter((s) => s.track === 'enm').length,
-    statics:   SIMS.filter((s) => s.track === 'statics').length,
-  }), []);
+    all: visibleSims.length,
+    mechanics: visibleSims.filter((s) => s.track === 'mechanics').length,
+    enm:       visibleSims.filter((s) => s.track === 'enm').length,
+    statics:   visibleSims.filter((s) => s.track === 'statics').length,
+  }), [visibleSims]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return SIMS.filter((s) => {
+    return visibleSims.filter((s) => {
       const matchTrack = activeTrack === 'all' || s.track === activeTrack;
       const matchQuery = !q || s.title.toLowerCase().includes(q) || s.description.toLowerCase().includes(q);
       return matchTrack && matchQuery;
     });
-  }, [activeTrack, query]);
+  }, [activeTrack, query, visibleSims]);
 
   return (
     <div className="min-h-screen bg-[#030507] text-white">

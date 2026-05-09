@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ConceptBox } from '../../components/ConceptBox';
 import { SliderWithInput } from '../../components/SliderWithInput';
+import { VideoExplain } from '../../components/videoExplain';
 
 type ControlsState = {
   q1: number; // microcoulombs
@@ -140,6 +141,12 @@ export function ColumbsLaw() {
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
+          <VideoExplain
+            videoSrc={`${import.meta.env.BASE_URL}media/videos/coulomb_law/1080p60/CoulombLaw.mp4`}
+            title="Coulomb's Law Explainer"
+            description="Watch a short animation explaining Coulomb's law and how electrostatic force depends on charge and distance."
+            buttonLabel="Watch Video"
+          />
           <Link
             to="/"
             className="inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900 px-3 py-1 text-xs font-medium text-slate-200 transition hover:border-emerald-500 hover:text-emerald-100"

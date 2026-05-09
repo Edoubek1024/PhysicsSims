@@ -67,6 +67,8 @@ const loadAnalyticsScript = () => {
 
 const Home = lazy(() => import('./Home').then((m) => ({ default: m.Home })));
 const Dashboard = lazy(() => import('./pages/Dashboard').then((m) => ({ default: m.Dashboard })));
+const System = lazy(() => import('./pages/system/status').then((m) => ({ default: m.System })));
+const TOS = lazy(() => import('./pages/system/TOS').then((m) => ({ default: m.TOS })));
 const About = lazy(() => import('./pages/About').then((m) => ({ default: m.About })));
 const Instructor = lazy(() => import('./pages/Instructor').then((m) => ({ default: m.Instructor })));
 const Phys211 = lazy(() => import('./pages/211').then((m) => ({ default: m.Simulations })));
@@ -110,8 +112,10 @@ const BulletDiskCollision = lazy(() => import('./pages/mechanics/BulletDiskColli
 const TorqueSeesaw = lazy(() => import('./pages/mechanics/TorqueSeesaw').then((m) => ({ default: m.TorqueSeesaw })));
 const ActiveTorqueDisk = lazy(() => import('./pages/mechanics/ActiveTorqueDisk').then((m) => ({ default: m.ActiveTorqueDisk })));
 const RollingEnergySplit = lazy(() => import('./pages/mechanics/RollingEnergySplit').then((m) => ({ default: m.RollingEnergySplit })));
-const Admin = lazy(() => import('./pages/Admin').then((m) => ({ default: m.Admin })));
 
+const Admin = lazy(() => import('./pages/Admin').then((m) => ({ default: m.Admin })));
+const Changelog = lazy(() => import('./pages/system/Changelog').then((m) => ({ default: m.Changelog })));
+const Partnership = lazy(() => import('./pages/system/Partnership').then((m) => ({ default: m.Partnership })));
 
 const NAV_LINKS = [
   { to: '/dashboard', label: 'Dashboard' },
@@ -133,8 +137,13 @@ const TAM_LINKS = [
 const APP_ROUTES = [
   { path: '/', element: <Home /> },
   { path: '/dashboard', element: <Dashboard /> },
+  { path: '/system', element: <System /> },
+  { path: '/tos', element: <TOS /> },
+  { path: '/TOS', element: <TOS /> },
   { path: '/instructor', element: <Instructor /> },
   { path: '/about', element: <About /> },
+  { path: '/partnership', element: <Partnership /> },
+  { path: '/changelog', element: <Changelog /> },
   { path: '/211', element: <Phys211 /> },
   { path: '/212', element: <Phys212 /> },
   { path: '/T211', element: <TAM211 /> },
@@ -343,56 +352,136 @@ export function App() {
         </Suspense>
       </main>
       
-      {/* FOOTER BOX — Only show on non-home pages */}
-      {!isCleanMode && location.pathname !== '/' ? (
-      <footer className="border-t border-slate-950/90 bg-slate-900/2" >
-        <img
-          src={`${import.meta.env.BASE_URL}adl.png`}
-          alt="Physics Sims Logo"
-          width={56}
-          height={56}
-          className="mx-auto h-14 w-14"
-        />
-        <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-4 py-4 text-sm text-slate-400 sm:grid sm:grid-cols-[1fr_auto_1fr] sm:items-center">
-          <p className="sm:justify-self-start">© 2026 PhysicsSim v{packageJson.version}</p>
-          <p className="text-center sm:justify-self-center">Made with <Link className="text-red-500" to="/admin">❤</Link></p>
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 sm:justify-self-end sm:justify-end">
-            <a
-              href="https://courses.physics.illinois.edu"
-              aria-label="Grainger Engineering Physics Website"
-              className="inline-flex items-center justify-center rounded-sm transition hover:scale-105"
-            >
-              <img
-                src={`${import.meta.env.BASE_URL}uiuc.png`}
-                alt="UIUC I-Block"
-                width={28}
-                height={28}
-                className="h-7 w-7 object-contain"
-              />
-            </a>
-            <Link to="/about" className="hover:text-sky-300">About</Link>
-            <a
-              type="button"
-              onClick={() => setIsPrivacyOpen(true)}
-              className="hover:text-sky-300"
-            >
-              Privacy
-            </a>
-            <a
-              type="button"
-              onClick={() => setCookieConsent('unknown')}
-              className="hover:text-sky-300"
-            >
-              Cookies
-            </a>
-            <a href="https://github.com/IlliniOpenEdu/PhysicsSims?tab=readme-ov-file#contributing" className="hover:text-sky-300">Contribution</a>
-            <a
-              type="button"
-              onClick={() => setIsContactOpen(true)}
-              className="hover:text-sky-300"
-            >
-              Contact
-            </a>
+      {/* FOOTER BOX */}
+      {!isCleanMode ? (
+      <footer className="border-t border-white/[0.05] py-12 px-4 bg-white/[0.015]">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-6 h-6 rounded bg-gradient-to-br from-blue-400 to-cyan-400 flex items-center justify-center font-bold text-[#030507] text-xs">
+                  φ
+                </div>
+                <span className="font-bold">PhysicsSims</span>
+              </div>
+              <p className="text-slate-500 text-sm">
+                For students, by students.
+              </p>
+              <p className="text-slate-600 text-xs mt-3">Version {packageJson.version}</p>
+            </div>
+
+            <div>
+              <h3 className="font-semibold mb-3 text-sm uppercase tracking-wider text-slate-400">
+                Product
+              </h3>
+              <ul className="space-y-2 text-sm text-slate-500">
+                <li>
+                  <Link to="/dashboard" className="hover:text-white transition">
+                    Simulations
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/system" className="hover:text-white transition">
+                    Server Status
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/about" className="hover:text-white transition">
+                    About
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/changelog" className="hover:text-white transition">
+                    Changelog
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="font-semibold mb-3 text-sm uppercase tracking-wider text-slate-400">
+                Resources
+              </h3>
+              <ul className="space-y-2 text-sm text-slate-500">
+                <li>
+                  <a
+                    href="https://github.com/IlliniOpenEdu/PhysicsSims"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="hover:text-white transition"
+                  >
+                    GitHub
+                  </a>
+                </li>
+                <li>
+                  <Link to="/instructor" className="hover:text-amber-400 transition">
+                    Instructors
+                  </Link>
+                </li>
+                <li>
+                  <a
+                    href="https://github.com/IlliniOpenEdu/PhysicsSims/wiki"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="hover:text-white transition"
+                  >
+                    Documentations
+                  </a>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    onClick={() => setIsContactOpen(true)}
+                    className="hover:text-white transition"
+                  >
+                    Contact
+                  </button>
+                </li>
+                <li>
+                  <Link to="/partnership" className="hover:text-emerald-400 transition">
+                    Partnership
+                  </Link>
+                </li>
+              </ul>
+              
+            </div>
+
+            <div>
+              <h3 className="font-semibold mb-3 text-sm uppercase tracking-wider text-slate-400">
+                Legal
+              </h3>
+              <ul className="space-y-2 text-sm text-slate-500">
+                <li>
+                  <Link to="/TOS" className="hover:text-white transition">
+                    Terms of Service
+                  </Link>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    onClick={() => setIsPrivacyOpen(true)}
+                    className="hover:text-white transition"
+                  >
+                    Privacy
+                  </button>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    onClick={() => setCookieConsent('unknown')}
+                    className="hover:text-white transition"
+                  >
+                    Cookies
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="border-t border-white/[0.05] pt-8 text-center text-sm text-slate-600">
+            <p>
+              © 2026 PhysicsSim v{packageJson.version} • Made with <Link className="text-red-500" to="/admin">❤</Link>
+            </p>
           </div>
         </div>
       </footer>

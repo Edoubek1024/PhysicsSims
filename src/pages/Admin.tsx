@@ -25,6 +25,7 @@ type AdminTab =
 	| 'publish'
 	| 'content'
 	| 'bug-test'
+	| 'operations'
 	| 'announcements';
 
 const ACCESS_IDENTITIES: AccessIdentity[] = [
@@ -43,6 +44,7 @@ const TABS: Array<{ id: AdminTab; label: string }> = [
 	{ id: 'publish', label: 'Publish Controls' },
 	{ id: 'content', label: 'Content Editing' },
 	{ id: 'bug-test', label: 'Bug/Test Controls' },
+	{ id: 'operations', label: 'Operations' },
 	{ id: 'announcements', label: 'Announcements' },
 ];
 
@@ -57,6 +59,7 @@ export function Admin() {
 	const [controls, setControls] = useState<AdminControlState>(createDefaultAdminState);
 	const [analyticsEvents, setAnalyticsEvents] = useState(loadAnalyticsEvents);
 	const [announcementPreviewOpen, setAnnouncementPreviewOpen] = useState(false);
+	const [opsMessage, setOpsMessage] = useState('');
 
 	const canAccessInternal = isInternalEnvironment();
 
@@ -73,6 +76,7 @@ export function Admin() {
 		() => Object.values(controls.simulationVisibility).filter(Boolean).length,
 		[controls.simulationVisibility],
 	);
+	const unpublishedCount = KNOWN_SIM_PATHS.length - publishedCount;
 
 	const analyticsSummary = useMemo(() => {
 		const pageViews = analyticsEvents.filter((event) => event.type === 'page_view').length;
@@ -594,8 +598,87 @@ export function Admin() {
 										<option value="online">Force online</option>
 										<option value="issues">Force issues</option>
 										<option value="deploying">Force deploying</option>
+										<option value="paused">Force paused</option>
+										<option value="queued">Force queued</option>
 									</select>
 								</label>
+							</div>
+						) : null}
+
+						{activeTab === 'operations' ? (
+							<div className="space-y-4">
+								<div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+									<div className="rounded-xl border border-white/10 bg-slate-900/70 p-4">
+										<p className="text-xs uppercase tracking-[0.16em] text-slate-400">Managed Sims</p>
+										<p className="mt-1 text-2xl font-semibold text-slate-100">{KNOWN_SIM_PATHS.length}</p>
+									</div>
+									<div className="rounded-xl border border-white/10 bg-slate-900/70 p-4">
+										<p className="text-xs uppercase tracking-[0.16em] text-slate-400">Published</p>
+										<p className="mt-1 text-2xl font-semibold text-emerald-200">{publishedCount}</p>
+									</div>
+									<div className="rounded-xl border border-white/10 bg-slate-900/70 p-4">
+										<p className="text-xs uppercase tracking-[0.16em] text-slate-400">Unpublished</p>
+										<p className="mt-1 text-2xl font-semibold text-rose-200">{unpublishedCount}</p>
+									</div>
+									<div className="rounded-xl border border-white/10 bg-slate-900/70 p-4">
+										<p className="text-xs uppercase tracking-[0.16em] text-slate-400">Last Updated</p>
+										<p className="mt-1 text-sm font-semibold text-slate-100">{new Date(controls.updatedAt).toLocaleString()}</p>
+									</div>
+								</div>
+
+								<div className="flex flex-wrap gap-2">
+									<button
+										type="button"
+										onClick={async () => {
+											try {
+												await navigator.clipboard.writeText(JSON.stringify(controls, null, 2));
+												setOpsMessage('Admin state copied to clipboard.');
+											} catch {
+												setOpsMessage('Clipboard access failed.');
+											}
+										}}
+										className="rounded-md border border-cyan-300/40 px-3 py-2 text-xs font-semibold uppercase tracking-[0.1em] text-cyan-100 transition hover:bg-cyan-300/10"
+									>
+										Export State JSON
+									</button>
+									<button
+										type="button"
+										onClick={() => {
+											const keysToRemove: string[] = [];
+											for (let i = 0; i < window.localStorage.length; i += 1) {
+												const key = window.localStorage.key(i);
+												if (key?.startsWith('home-announcement-dismissed:')) {
+													keysToRemove.push(key);
+												}
+											}
+											for (const key of keysToRemove) {
+												window.localStorage.removeItem(key);
+											}
+											setOpsMessage(`Cleared ${keysToRemove.length} dismissed announcement markers.`);
+											pushAnalyticsEvent('admin_action', 'Cleared dismissed announcement markers');
+										}}
+										className="rounded-md border border-amber-300/40 px-3 py-2 text-xs font-semibold uppercase tracking-[0.1em] text-amber-100 transition hover:bg-amber-300/10"
+									>
+										Reset Announcement Dismissals
+									</button>
+									<button
+										type="button"
+										onClick={() => {
+											window.localStorage.removeItem('physicssims-analytics-events');
+											setAnalyticsEvents([]);
+											setOpsMessage('Analytics event log cleared.');
+										}}
+										className="rounded-md border border-rose-300/40 px-3 py-2 text-xs font-semibold uppercase tracking-[0.1em] text-rose-100 transition hover:bg-rose-300/10"
+									>
+										Clear Analytics Log
+									</button>
+								</div>
+
+								{opsMessage ? (
+									<p className="rounded-lg border border-white/10 bg-slate-900/70 px-3 py-2 text-xs text-slate-300">
+										{opsMessage}
+									</p>
+								) : null}
 							</div>
 						) : null}
 

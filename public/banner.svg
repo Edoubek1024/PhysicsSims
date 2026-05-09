@@ -1,0 +1,72 @@
+<svg width="1600" height="400" viewBox="0 0 1600 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1600" y2="400" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#030507"/>
+      <stop offset="55%" stop-color="#07111D"/>
+      <stop offset="100%" stop-color="#02060A"/>
+    </linearGradient>
+
+    <radialGradient id="glowLeft" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(180 210) rotate(20) scale(420 220)">
+      <stop offset="0%" stop-color="#22D3EE" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#22D3EE" stop-opacity="0"/>
+    </radialGradient>
+
+    <radialGradient id="glowRight" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1450 80) rotate(0) scale(260 180)">
+      <stop offset="0%" stop-color="#38BDF8" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#38BDF8" stop-opacity="0"/>
+    </radialGradient>
+
+    <linearGradient id="logoGrad" x1="80" y1="92" x2="280" y2="308" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#60A5FA"/>
+      <stop offset="100%" stop-color="#22D3EE"/>
+    </linearGradient>
+
+    <linearGradient id="textGlow" x1="340" y1="120" x2="1420" y2="300" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#EAF6FF"/>
+    </linearGradient>
+
+    <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="18" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="textShadow" x="-20%" y="-40%" width="140%" height="180%">
+      <feDropShadow dx="0" dy="0" stdDeviation="12" flood-color="#22D3EE" flood-opacity="0.22"/>
+    </filter>
+
+    <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1.4" fill="#38BDF8" fill-opacity="0.22"/>
+    </pattern>
+  </defs>
+
+  <rect width="1600" height="400" fill="url(#bg)"/>
+  <rect width="1600" height="400" fill="url(#glowLeft)"/>
+  <rect width="1600" height="400" fill="url(#glowRight)"/>
+
+  <g opacity="0.22">
+    <path d="M-40 360C260 210 620 210 960 335C1180 415 1400 405 1660 250" stroke="#22D3EE" stroke-width="2"/>
+    <path d="M-10 120C280 10 650 20 1030 135C1240 198 1430 205 1650 150" stroke="#38BDF8" stroke-width="1.5"/>
+    <path d="M1020 -20C1160 40 1270 120 1310 230" stroke="#60A5FA" stroke-width="1.5"/>
+  </g>
+
+  <rect x="1420" y="40" width="120" height="80" fill="url(#dots)" opacity="0.45"/>
+  <rect x="36" y="270" width="120" height="80" fill="url(#dots)" opacity="0.22"/>
+
+  <g filter="url(#softGlow)">
+    <rect x="80" y="92" width="200" height="216" rx="34" fill="url(#logoGrad)"/>
+  </g>
+
+  <g transform="translate(98 104) scale(1.15)">
+    <path d="M79.9403 161.682V64.9489C79.9403 59.0895 81.4851 54.8281 84.5746 52.1648C87.6641 49.4659 92.0852 48.1165 97.8381 48.1165C104.514 48.1165 110.587 49.9276 116.055 53.5497C121.56 57.1364 125.928 62.0547 129.159 68.3047C132.426 74.5192 134.06 81.5682 134.06 89.4517C134.06 95.098 133.19 100.496 131.45 105.645C129.71 110.794 126.957 115.393 123.193 119.441C119.429 123.489 114.493 126.685 108.385 129.029C102.277 131.337 94.8551 132.491 86.1193 132.491C77.5966 132.491 70.37 131.32 64.4396 128.976C58.5447 126.597 53.7685 123.347 50.1108 119.228C46.4531 115.109 43.7898 110.35 42.1207 104.952C40.4872 99.5547 39.6705 93.8196 39.6705 87.7472C39.6705 82.1364 40.3452 76.8629 41.6946 71.9268C43.0795 66.9553 45.1392 62.4631 47.8736 58.4503C50.6435 54.402 54.0881 50.9574 58.2074 48.1165L65.6648 57.7045C62.8239 60.2614 60.4268 63.0312 58.4737 66.0142C56.5561 68.9972 55.0646 72.282 53.9993 75.8686C52.9695 79.4553 52.3835 83.4148 52.2415 87.7472C52.2415 93.358 53.3956 98.6847 55.7038 103.727C58.0476 108.77 61.7053 112.871 66.6768 116.032C71.6839 119.192 78.1648 120.773 86.1193 120.773C94.358 120.773 101.07 119.246 106.254 116.192C111.474 113.138 115.31 109.214 117.76 104.42C120.246 99.6257 121.489 94.6364 121.489 89.4517C121.347 84.054 120.317 79.0824 118.399 74.5369C116.482 69.956 113.783 66.2983 110.303 63.5639C106.822 60.794 102.668 59.4091 97.8381 59.4091C96.027 59.4091 94.6776 59.924 93.7898 60.9538C92.9375 61.9482 92.5114 63.1378 92.5114 64.5227V161.682H79.9403Z" fill="black"/>
+  </g>
+
+  <g filter="url(#textShadow)">
+    <text x="340" y="234" fill="url(#textGlow)" font-family="Inter, Arial, Helvetica, sans-serif" font-size="132" font-weight="800" letter-spacing="-3">
+      PhysicsSims
+    </text>
+  </g>
+</svg>

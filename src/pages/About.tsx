@@ -26,22 +26,22 @@ const principles = [
 	},
 ];
 
-const timeline = [
-	{ phase: 'Development', text: 'Done' },
-	{ phase: 'Initial Release', text: 'Done' },
-	{ phase: 'More Modules', text: 'In Progress' },
-	{ phase: 'Full Release', text: 'Very Soon' },
-];
+// const timeline = [
+// 	{ phase: 'Development', text: 'Done' },
+// 	{ phase: 'Initial Release', text: 'Done' },
+// 	{ phase: 'More Modules', text: 'In Progress' },
+// 	{ phase: 'Full Release', text: 'Very Soon' },
+// ];
 
 const upcomingPatches = [
 	{ title: 'Finalize PHYS 211 page', eta: 'Patch v1.2' },
-	{ title: 'Finalize E&M simulations', eta: 'Patch v1.4' },
-	{ title: 'Finalize all simulation pages', eta: 'Release v1.5' },
+	{ title: 'Finalize PHYS 212 page', eta: 'Patch v1.5.2' },
+	{ title: 'Finalize all simulation pages', eta: 'Release v1.6' },
 ];
 
 const team = [
-	{ name: 'Evan Doubek', role: 'Computer Science', accent: 'from-cyan-300 via-sky-300 to-indigo-300 ', github: 'Edoubek1024' },
-	{ name: 'Bryan Chen', role: 'Systems Engineering and Design', accent: 'from-pink-300 via-amber-300 to-red-400', github: 'bbryanchenn' },
+	{ name: 'Evan Doubek', role: 'Module Developer', accent: 'from-cyan-300 via-sky-300 to-indigo-300 ', github: 'Edoubek1024' },
+	{ name: 'Bryan Chen', role: 'UI/UX and Module Developer', accent: 'from-pink-300 via-amber-300 to-red-400', github: 'bbryanchenn' },
 ];
 
 export function About() {
@@ -135,7 +135,7 @@ export function About() {
 					</div>
 				</section>
 				<div className="grid gap-4 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
-					<section className="rounded-2xl border border-slate-800 bg-slate-900/70 p-4 shadow-lg shadow-slate-950/40">
+					{/* <section className="rounded-2xl border border-slate-800 bg-slate-900/70 p-4 shadow-lg shadow-slate-950/40">
 						<h2 className="text-base font-semibold text-slate-100">Build Timeline</h2>
 						<div className="mt-3 space-y-2.5">
 							{timeline.map((step, idx) => (
@@ -151,9 +151,9 @@ export function About() {
 								</div>
 							))}
 						</div>
-					</section>
+					</section> */}
 
-					<section className="rounded-2xl border border-slate-800 bg-slate-900/70 p-5 shadow-lg shadow-slate-950/40">
+					<section className="rounded-2xl border border-slate-800 bg-slate-900/70 p-5 shadow-lg shadow-slate-950/40 lg:col-span-2">
 						<h2 className="text-lg font-semibold text-slate-100">Future Plans</h2>
 						<p className="mt-1 text-sm text-slate-400">What we are actively preparing next.</p>
 						<div className="mt-4 space-y-3">

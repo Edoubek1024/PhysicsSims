@@ -38,3 +38,7 @@ dist-ssr
 *.flow
 .mcp.json
 roots.sst
+
+# manim
+media/
+manim/scenes/__pycache__/

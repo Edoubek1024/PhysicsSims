@@ -10,7 +10,7 @@ export type FeatureFlags = {
 export type BugTestControls = {
   forceHomeError: boolean;
   simulateSlowNetworkMs: number;
-  mockDeployStatus: 'auto' | 'online' | 'issues' | 'deploying';
+  mockDeployStatus: 'auto' | 'online' | 'issues' | 'deploying' | 'paused' | 'queued';
 };
 
 export type ContentOverrides = {
@@ -68,6 +68,14 @@ export const KNOWN_SIM_PATHS = [
   '/impulse-builder',
   '/momentum-collision-1d',
   '/momentum-collision-2d',
+  '/rotational-taut-string',
+  '/rotational-angular-motion-builder',
+  '/orbital-motion',
+  '/rotational-dynamics-rotating-object-builder',
+  '/rotational-dynamics-bullet-disk-collision',
+  '/rotational-dynamics-torque-seesaw',
+  '/rotational-dynamics-active-torque-disk',
+  '/rolling-energy-split',
   '/columbs-law',
   '/gauss-law',
   '/maxwell',
@@ -77,6 +85,8 @@ export const KNOWN_SIM_PATHS = [
   '/rc-circuit',
   '/mag-field',
   '/lhc',
+  '/wave-3d',
+  '/optics',
   '/beam-balance',
   '/distributed-load',
 ] as const;
